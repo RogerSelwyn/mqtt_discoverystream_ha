@@ -1,10 +1,8 @@
 """Publish simple item state changes via MQTT."""
-import asyncio
 import json
 import logging
 
-import homeassistant.helpers.config_validation as cv
-import voluptuous as vol
+from homeassistant.components import mqtt
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_COLOR_TEMP,
@@ -15,7 +13,6 @@ from homeassistant.components.light import (
     SUPPORT_BRIGHTNESS,
     SUPPORT_EFFECT,
 )
-from homeassistant.components.mqtt import valid_publish_topic
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     CONF_INCLUDE,
@@ -27,52 +24,37 @@ from homeassistant.const import (
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
 )
+from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry, entity_registry
 from homeassistant.helpers.entity import get_supported_features
-from homeassistant.helpers.entityfilter import (
-    INCLUDE_EXCLUDE_BASE_FILTER_SCHEMA,
-    convert_include_exclude_filter,
-)
+from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_track_state_change
 from homeassistant.helpers.json import JSONEncoder
+from homeassistant.helpers.typing import ConfigType
+
+from .const import (
+    ATTR_B,
+    ATTR_COLOR,
+    ATTR_G,
+    ATTR_H,
+    ATTR_R,
+    ATTR_S,
+    ATTR_X,
+    ATTR_Y,
+    CONF_BASE_TOPIC,
+    CONF_DISCOVERY_TOPIC,
+    CONF_PUBLISH_ATTRIBUTES,
+    CONF_PUBLISH_DISCOVERY,
+    CONF_PUBLISH_TIMESTAMPS,
+    DOMAIN,
+)
+from .schema import CONFIG_SCHEMA  # noqa: F401
 
 _LOGGER = logging.getLogger(__name__)
 
-ATTR_COLOR = "color"
-ATTR_H = "h"
-ATTR_S = "s"
-ATTR_X = "x"
-ATTR_Y = "y"
-ATTR_R = "r"
-ATTR_G = "g"
-ATTR_B = "b"
 
-CONF_BASE_TOPIC = "base_topic"
-CONF_DISCOVERY_TOPIC = "discovery_topic"
-CONF_PUBLISH_ATTRIBUTES = "publish_attributes"
-CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
-CONF_PUBLISH_DISCOVERY = "publish_discovery"
-
-DOMAIN = "mqtt_discoverystream"
-
-CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: INCLUDE_EXCLUDE_BASE_FILTER_SCHEMA.extend(
-            {
-                vol.Required(CONF_BASE_TOPIC): valid_publish_topic,
-                vol.Optional(CONF_DISCOVERY_TOPIC): vol.Any(valid_publish_topic, None),
-                vol.Optional(CONF_PUBLISH_ATTRIBUTES, default=False): cv.boolean,
-                vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
-                vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
-            }
-        ),
-    },
-    extra=vol.ALLOW_EXTRA,
-)
-
-
-async def async_setup(hass, config):
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up the MQTT state feed."""
     conf = config.get(DOMAIN)
     publish_filter = convert_include_exclude_filter(conf)
@@ -92,7 +74,7 @@ async def async_setup(hass, config):
     dev_reg = device_registry.async_get(hass)
     ent_reg = entity_registry.async_get(hass)
 
-    async def message_received(msg):
+    async def _message_received(msg):
         """Handle new messages on MQTT."""
         explode_topic = msg.topic.split("/")
         domain = explode_topic[1]
@@ -168,12 +150,6 @@ async def async_setup(hass, config):
                         {entity},
                     )
 
-    async def mqtt_publish(topic, payload, qos=None, retain=None):
-        if asyncio.iscoroutinefunction(hass.components.mqtt.async_publish):
-            await hass.components.mqtt.async_publish(hass, topic, payload, qos, retain)
-        else:
-            hass.components.mqtt.publish(topic, payload, qos, retain)
-
     async def _state_publisher(
         entity_id, old_state, new_state
     ):  # pylint: disable=unused-argument
@@ -187,18 +163,18 @@ async def async_setup(hass, config):
 
         if publish_timestamps:
             if new_state.last_updated:
-                await mqtt_publish(
+                await mqtt.async_publish(
                     f"{mybase}last_updated", new_state.last_updated.isoformat(), 1, True
                 )
             if new_state.last_changed:
-                await mqtt_publish(
+                await mqtt.async_publish(
                     f"{mybase}last_changed", new_state.last_changed.isoformat(), 1, True
                 )
 
         if publish_attributes:
             for key, val in new_state.attributes.items():
                 encoded_val = json.dumps(val, cls=JSONEncoder)
-                await mqtt_publish(mybase + key, encoded_val, 1, True)
+                await mqtt.async_publish(mybase + key, encoded_val, 1, True)
 
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
@@ -309,7 +285,7 @@ async def async_setup(hass, config):
                 entity_disc_topic = (
                     f"{discovery_topic}{entity_id.replace('.', '/')}/config"
                 )
-                await mqtt_publish(entity_disc_topic, encoded, 1, True)
+                await mqtt.async_publish(entity_disc_topic, encoded, 1, True)
                 hass.data[DOMAIN][discovery_topic]["conf_published"].append(entity_id)
 
         if publish_discovery:
@@ -340,7 +316,7 @@ async def async_setup(hass, config):
                 if color:
                     payload["color"] = color
 
-                await mqtt_publish(
+                await mqtt.async_publish(
                     f"{mybase}state", json.dumps(payload, cls=JSONEncoder), 1, True
                 )
 
@@ -349,34 +325,34 @@ async def async_setup(hass, config):
                     if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
                     else "online"
                 )
-                await mqtt_publish(f"{mybase}availability", payload, 1, True)
+                await mqtt.async_publish(f"{mybase}availability", payload, 1, True)
             else:
                 payload = new_state.state
-                await mqtt_publish(f"{mybase}state", payload, 1, True)
+                await mqtt.async_publish(f"{mybase}state", payload, 1, True)
 
                 payload = (
                     "offline"
                     if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
                     else "online"
                 )
-                await mqtt_publish(f"{mybase}availability", payload, 1, True)
+                await mqtt.async_publish(f"{mybase}availability", payload, 1, True)
 
                 attributes = {}
                 for key, val in new_state.attributes.items():
                     attributes[key] = val
                 encoded = json.dumps(attributes, cls=JSONEncoder)
-                await mqtt_publish(f"{mybase}attributes", encoded, 1, True)
+                await mqtt.async_publish(f"{mybase}attributes", encoded, 1, True)
         else:
             payload = new_state.state
-            await mqtt_publish(f"{mybase}state", payload, 1, True)
+            await mqtt.async_publish(f"{mybase}state", payload, 1, True)
 
     if publish_discovery:
         try:
             await hass.components.mqtt.async_subscribe(
-                f"{base_topic}switch/+/set", message_received
+                f"{base_topic}switch/+/set", _message_received
             )
             await hass.components.mqtt.async_subscribe(
-                f"{base_topic}light/+/set_light", message_received
+                f"{base_topic}light/+/set_light", _message_received
             )
         except HomeAssistantError:
             _LOGGER.warning("MQTT Not ready")
