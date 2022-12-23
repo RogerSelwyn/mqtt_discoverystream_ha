@@ -17,6 +17,7 @@ from homeassistant.const import (
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
 )
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_COLOR_TEMP,
@@ -307,9 +308,15 @@ async def async_setup(hass, config):
 
 
     if publish_discovery:
-        await hass.components.mqtt.async_subscribe(f"{base_topic}switch/+/set", message_received)
-        await hass.components.mqtt.async_subscribe(f"{base_topic}light/+/set_light", message_received)
+        try:
+            await hass.components.mqtt.async_subscribe(
+                f"{base_topic}switch/+/set", message_received
+            )
+            await hass.components.mqtt.async_subscribe(
+                f"{base_topic}light/+/set_light", message_received
+            )
+        except HomeAssistantError:
+            _LOGGER.warning("MQTT Not ready")
 
     async_track_state_change(hass, MATCH_ALL, _state_publisher)
     return True
-
