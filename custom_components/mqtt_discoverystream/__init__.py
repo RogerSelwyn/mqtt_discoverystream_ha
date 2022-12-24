@@ -205,6 +205,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 config["unit_of_meas"] = new_state.attributes["unit_of_measurement"]
             if "state_class" in new_state.attributes:
                 config["stat_cla"] = new_state.attributes["state_class"]
+            if "icon" in new_state.attributes:
+                config["icon"] = new_state.attributes["icon"]
 
             publish_config = False
             if ent_domain == "sensor" and (
@@ -235,8 +237,6 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 config[
                     "current_temperature_template"
                 ] = "{{ value_json.current_temperature }}"
-                if "icon" in new_state.attributes:
-                    config["icon"] = new_state.attributes["icon"]
                 config["max_temp"] = new_state.attributes["max_temp"]
                 config["min_temp"] = new_state.attributes["min_temp"]
                 config["modes"] = new_state.attributes["hvac_modes"]
