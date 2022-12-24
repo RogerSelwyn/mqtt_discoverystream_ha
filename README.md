@@ -5,6 +5,11 @@ Besides the functionalities of the hereabove, it also allows to publish and hand
 
 ## Changelog
 
+### 0.10.0 (2022/12/24)
+
+- Added climate entity support
+- Workaround for MQTT failure at startup
+
 ### 0.9
 
 - Fix `async_get_registry` warning
