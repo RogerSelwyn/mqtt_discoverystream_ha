@@ -271,12 +271,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 publish_config = True
 
             if publish_config:
-                for entry in ent_reg.entities.values():
-                    if entry.entity_id != entity_id:
-                        continue
-                    for device in dev_reg.devices.values():
-                        if device.id != entry.device_id:
-                            continue
+                entry = ent_reg.async_get(entity_id)
+                if entry and entry.device_id:
+                    device = dev_reg.async_get(entry.device_id)
+                    if device:
                         config["dev"] = {}
                         if device.manufacturer:
                             config["dev"]["mf"] = device.manufacturer
