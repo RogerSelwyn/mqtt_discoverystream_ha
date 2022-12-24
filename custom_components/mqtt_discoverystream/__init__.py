@@ -164,17 +164,25 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         if publish_timestamps:
             if new_state.last_updated:
                 await mqtt.async_publish(
-                    f"{mybase}last_updated", new_state.last_updated.isoformat(), 1, True
+                    hass,
+                    f"{mybase}last_updated",
+                    new_state.last_updated.isoformat(),
+                    1,
+                    True,
                 )
             if new_state.last_changed:
                 await mqtt.async_publish(
-                    f"{mybase}last_changed", new_state.last_changed.isoformat(), 1, True
+                    hass,
+                    f"{mybase}last_changed",
+                    new_state.last_changed.isoformat(),
+                    1,
+                    True,
                 )
 
         if publish_attributes:
             for key, val in new_state.attributes.items():
                 encoded_val = json.dumps(val, cls=JSONEncoder)
-                await mqtt.async_publish(mybase + key, encoded_val, 1, True)
+                await mqtt.async_publish(hass, mybase + key, encoded_val, 1, True)
 
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
@@ -221,6 +229,8 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 publish_config = True
 
             elif ent_domain == "climate":
+                config["action_topic"] = f"{mybase}attributes"
+                config["action_template"] = "{{ value_json.hvac_action }}"
                 config["current_temperature_topic"] = f"{mybase}attributes"
                 config[
                     "current_temperature_template"
@@ -285,7 +295,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                 entity_disc_topic = (
                     f"{discovery_topic}{entity_id.replace('.', '/')}/config"
                 )
-                await mqtt.async_publish(entity_disc_topic, encoded, 1, True)
+                await mqtt.async_publish(hass, entity_disc_topic, encoded, 1, True)
                 hass.data[DOMAIN][discovery_topic]["conf_published"].append(entity_id)
 
         if publish_discovery:
@@ -317,7 +327,11 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     payload["color"] = color
 
                 await mqtt.async_publish(
-                    f"{mybase}state", json.dumps(payload, cls=JSONEncoder), 1, True
+                    hass,
+                    f"{mybase}state",
+                    json.dumps(payload, cls=JSONEncoder),
+                    1,
+                    True,
                 )
 
                 payload = (
@@ -325,26 +339,30 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
                     else "online"
                 )
-                await mqtt.async_publish(f"{mybase}availability", payload, 1, True)
+                await mqtt.async_publish(
+                    hass, f"{mybase}availability", payload, 1, True
+                )
             else:
                 payload = new_state.state
-                await mqtt.async_publish(f"{mybase}state", payload, 1, True)
+                await mqtt.async_publish(hass, f"{mybase}state", payload, 1, True)
 
                 payload = (
                     "offline"
                     if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
                     else "online"
                 )
-                await mqtt.async_publish(f"{mybase}availability", payload, 1, True)
+                await mqtt.async_publish(
+                    hass, f"{mybase}availability", payload, 1, True
+                )
 
                 attributes = {}
                 for key, val in new_state.attributes.items():
                     attributes[key] = val
                 encoded = json.dumps(attributes, cls=JSONEncoder)
-                await mqtt.async_publish(f"{mybase}attributes", encoded, 1, True)
+                await mqtt.async_publish(hass, f"{mybase}attributes", encoded, 1, True)
         else:
             payload = new_state.state
-            await mqtt.async_publish(f"{mybase}state", payload, 1, True)
+            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, True)
 
     if publish_discovery:
         try:
