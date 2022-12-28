@@ -3,58 +3,6 @@
 This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration.  
 Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
 
-## Changelog
-
-### 0.10.0 (2022/12/24)
-
-- Added climate entity support
-- Workaround for MQTT failure at startup
-
-### 0.9
-
-- Fix `async_get_registry` warning
-
-### 0.8
-
-- Add "discovery_topic" to split config and state topics
-
-### 0.7
-
-- Fix availability for lights
-
-### 0.6
-
-- Adapt to 2021.12
-
-### 0.5
-
-- Add device support
-- FIX color support
-- Add availability support
-
-### 0.4
-
-
-- Add device_tracker
-- Add light transitions
-- Initial HACS release
-
-### 0.3
-
-- Manage color temperature
-
-### 0.3
-
-- Fix binary_sensors
-
-### 0.1
-
-- Initial release:
-  Handles:
-    - sensors
-    - switches
-    - lights (partial)
-
 ## Pre-requisites
 
 1. MQTT configured
