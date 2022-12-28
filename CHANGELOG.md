@@ -36,7 +36,7 @@
 ## 0.5
 
 - Add device support
-- FIX color support
+- Fix color support
 - Add availability support
 
 ## 0.4
