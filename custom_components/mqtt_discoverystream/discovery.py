@@ -1,6 +1,7 @@
 """Discovery for MQTT Discovery Stream."""
 import json
 import logging
+from datetime import timedelta
 
 from homeassistant.components import mqtt
 from homeassistant.const import (
@@ -15,6 +16,7 @@ from homeassistant.const import (
 )
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry, entity_registry
+from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.json import JSONEncoder
 
 from .classes.binary_sensor import BinarySensor
@@ -47,6 +49,7 @@ class Discovery:
         self._climate = Climate()
         self._light = Light(hass)
         self._switch = Switch()
+        hass.async_create_task(self._async_subscribe(None))
 
     async def async_state_publish(self, entity_id, new_state, mybase):
         """Publish state for MQTT Duscovery Statestream."""
@@ -167,7 +170,7 @@ class Discovery:
 
         return config_device
 
-    async def async_subscribe(self):
+    async def _async_subscribe(self, recalltime):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         try:
             await self._hass.components.mqtt.async_subscribe(
@@ -176,8 +179,14 @@ class Discovery:
             await self._hass.components.mqtt.async_subscribe(
                 f"{self._base_topic}light/+/set_light", self._async_message_received
             )
+            _LOGGER.debug("MQTT subscribe successful")
         except HomeAssistantError:
-            _LOGGER.warning("MQTT Not ready")
+            seconds = 10
+            retrytime = timedelta(seconds=seconds)
+            _LOGGER.warning(
+                "MQTT subscribe unsuccessful - retrying in %s seconds", seconds
+            )
+            async_call_later(self._hass, retrytime, self._async_subscribe)
 
     async def _async_message_received(self, msg):
         """Handle new messages on MQTT."""

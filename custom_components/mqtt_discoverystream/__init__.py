@@ -36,7 +36,6 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     publish_discovery = conf.get(CONF_PUBLISH_DISCOVERY)
     if publish_discovery:
         discovery = Discovery(hass, base_topic, conf)
-        await discovery.async_subscribe()
 
     async def _state_publisher(
         entity_id, old_state, new_state
