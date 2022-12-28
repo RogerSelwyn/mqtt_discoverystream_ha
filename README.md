@@ -3,6 +3,14 @@
 This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration.  
 Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
 
+## Supported entities
+Provides discovery support for:
+- Binary Sensor
+- Climate
+- Light
+- Sensor
+- Switch
+
 ## Pre-requisites
 
 1. MQTT configured
