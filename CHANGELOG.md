@@ -1,7 +1,15 @@
 # Changelog
 
-## 0.10.1 (2022/12/28)
+## 0.10.2 (2022/12/29)
+### Fixes
+- [Fix subscription failure - retry in 10 seconds](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/53baa29c4e89673561c04c3a6dcdafab0ecb3d0b) - @RogerSelwyn
 
+### Maintenance
+- [Bring more in line with core statestream](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/edd54ec94f3aa846c533b491012568c0dba2d888) - @RogerSelwyn
+- [Bump to 0.10.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8943750da9e2e67457b1e31c8aa56a2aa03f705f) - @RogerSelwyn
+
+
+## 0.10.1 (2022/12/28)
 ### Enhancements
 - [Add icon as standard attribute](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ae08fef9626c01c90b2fa61c59ced97750f354f0) - @RogerSelwyn
 
@@ -10,7 +18,6 @@
 - [Bump to  0.10.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b19bc0d4ecb7a1c4c1806d5521e692a2a34abb5a) - @RogerSelwyn
 
 ## 0.10.0 (2022/12/24)
-
 ### Enhancements
 - Added climate entity support
 
