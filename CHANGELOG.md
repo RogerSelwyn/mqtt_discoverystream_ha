@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.3 (2023/01/03)
+### Maintenance
+- [Code improvements](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b7352e7338402148caabe7c07689ed99ab65e025) - @RogerSelwyn
+- [Bump to v0.10.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a9c439158bbb256197a7aa00c897693c7e84fc17) - @RogerSelwyn
+
 ## 0.10.2 (2022/12/29)
 ### Fixes
 - [Fix subscription failure - retry in 10 seconds](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/53baa29c4e89673561c04c3a6dcdafab0ecb3d0b) - @RogerSelwyn
