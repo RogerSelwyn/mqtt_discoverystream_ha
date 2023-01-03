@@ -16,6 +16,7 @@ from homeassistant.const import (
 )
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry, entity_registry
+from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.json import JSONEncoder
 
@@ -23,7 +24,8 @@ from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.light import Light
 from .classes.switch import Switch
-from .const import CONF_BASE_TOPIC, CONF_DISCOVERY_TOPIC, DOMAIN
+from .const import CONF_BASE_TOPIC, CONF_DISCOVERY_TOPIC, CONF_JSON_ATTRS_TOPIC, DOMAIN
+from .utils import async_publish_base_attributes
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -46,9 +48,10 @@ class Discovery:
         self._hass.data[DOMAIN] = {self._discovery_topic: {}}
         self._hass.data[DOMAIN][self._discovery_topic]["conf_published"] = []
         self._binary_sensor = BinarySensor()
-        self._climate = Climate()
+        self._climate = Climate(hass)
         self._light = Light(hass)
         self._switch = Switch()
+        self._publish_filter = convert_include_exclude_filter(conf)
         hass.async_create_task(self._async_subscribe(None))
 
     async def async_state_publish(self, entity_id, new_state, mybase):
@@ -60,20 +63,14 @@ class Discovery:
             entity_id
             not in self._hass.data[DOMAIN][self._discovery_topic]["conf_published"]
         ):
-            await self._async_discovery_publish(entity_id, new_state, mybase)
+            await self._async_discovery_publish(entity_id, new_state.attributes, mybase)
 
         if ent_domain == "light":
-            payload = self._light.build_state(new_state)
+            await self._light.async_publish_state(new_state, mybase)
+        elif ent_domain == "climate":
+            await self._climate.async_publish_state(new_state, mybase)
         else:
-            attributes = dict(new_state.attributes.items())
-            encoded = json.dumps(attributes, cls=JSONEncoder)
-            await mqtt.async_publish(
-                self._hass, f"{mybase}attributes", encoded, 1, True
-            )
-
-            payload = new_state.state
-
-        await mqtt.async_publish(self._hass, f"{mybase}state", payload, 1, True)
+            await async_publish_base_attributes(self._hass, new_state, mybase)
 
         payload = (
             "offline"
@@ -82,20 +79,20 @@ class Discovery:
         )
         await mqtt.async_publish(self._hass, f"{mybase}availability", payload, 1, True)
 
-    async def _async_discovery_publish(self, entity_id, new_state, mybase):
+    async def _async_discovery_publish(self, entity_id, attributes, mybase):
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        config = self._build_base(entity_id, new_state, mybase)
+        config = self._build_base(entity_id, attributes, mybase)
 
         publish_config = False
         if ent_domain == "sensor" and (
-            self._has_includes or "device_class" in new_state.attributes
+            self._has_includes or "device_class" in attributes
         ):
             publish_config = True
 
         elif ent_domain == "binary_sensor" and (
-            self._has_includes or "device_class" in new_state.attributes
+            self._has_includes or "device_class" in attributes
         ):
             self._binary_sensor.build_config(config)
             publish_config = True
@@ -108,11 +105,11 @@ class Discovery:
             publish_config = True
 
         elif ent_domain == "climate":
-            self._climate.build_config(config, new_state, mybase)
+            self._climate.build_config(config, attributes, mybase)
             publish_config = True
 
         elif ent_domain == "light":
-            self._light.build_config(config, entity_id, new_state, mybase)
+            self._light.build_config(config, entity_id, attributes, mybase)
             publish_config = True
 
         if publish_config:
@@ -128,7 +125,7 @@ class Discovery:
                 entity_id
             )
 
-    def _build_base(self, entity_id, new_state, mybase):
+    def _build_base(self, entity_id, attributes, mybase):
         ent_parts = entity_id.split(".")
         ent_id = ent_parts[1]
 
@@ -136,17 +133,17 @@ class Discovery:
             "uniq_id": f"mqtt_{entity_id}",
             "name": ent_id.replace("_", " ").title(),
             "stat_t": f"{mybase}state",
-            "json_attr_t": f"{mybase}attributes",
+            CONF_JSON_ATTRS_TOPIC: f"{mybase}attributes",
             "avty_t": f"{mybase}availability",
         }
-        if "device_class" in new_state.attributes:
-            config["dev_cla"] = new_state.attributes["device_class"]
-        if "unit_of_measurement" in new_state.attributes:
-            config["unit_of_meas"] = new_state.attributes["unit_of_measurement"]
-        if "state_class" in new_state.attributes:
-            config["stat_cla"] = new_state.attributes["state_class"]
-        if "icon" in new_state.attributes:
-            config["icon"] = new_state.attributes["icon"]
+        if "device_class" in attributes:
+            config["dev_cla"] = attributes["device_class"]
+        if "unit_of_measurement" in attributes:
+            config["unit_of_meas"] = attributes["unit_of_measurement"]
+        if "state_class" in attributes:
+            config["stat_cla"] = attributes["state_class"]
+        if "icon" in attributes:
+            config["icon"] = attributes["icon"]
 
         return config
 
@@ -179,7 +176,7 @@ class Discovery:
             await self._hass.components.mqtt.async_subscribe(
                 f"{self._base_topic}light/+/set_light", self._async_message_received
             )
-            _LOGGER.debug("MQTT subscribe successful")
+            _LOGGER.info("MQTT subscribe successful")
         except HomeAssistantError:
             seconds = 10
             retrytime = timedelta(seconds=seconds)

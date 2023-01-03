@@ -2,6 +2,7 @@
 import json
 import logging
 
+from homeassistant.components import mqtt
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_COLOR_TEMP,
@@ -21,7 +22,17 @@ from homeassistant.const import (
 from homeassistant.helpers.entity import get_supported_features
 from homeassistant.helpers.json import JSONEncoder
 
-from ..const import ATTR_B, ATTR_COLOR, ATTR_G, ATTR_H, ATTR_R, ATTR_S, ATTR_X, ATTR_Y
+from ..const import (
+    ATTR_B,
+    ATTR_COLOR,
+    ATTR_G,
+    ATTR_H,
+    ATTR_R,
+    ATTR_S,
+    ATTR_X,
+    ATTR_Y,
+    CONF_JSON_ATTRS_TOPIC,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -33,9 +44,9 @@ class Light:
         """Initialise the light class."""
         self._hass = hass
 
-    def build_config(self, config, entity_id, new_state, mybase):
+    def build_config(self, config, entity_id, attributes, mybase):
         """Build the config for a light."""
-        del config["json_attr_t"]
+        del config[CONF_JSON_ATTRS_TOPIC]
         config["cmd_t"] = f"{mybase}set_light"
         config["schema"] = "json"
 
@@ -44,13 +55,11 @@ class Light:
             config["brightness"] = True
         if supported_features & SUPPORT_EFFECT:
             config["effect"] = True
-        if "supported_color_modes" in new_state.attributes:
+        if "supported_color_modes" in attributes:
             config["color_mode"] = True
-            config["supported_color_modes"] = new_state.attributes[
-                "supported_color_modes"
-            ]
+            config["supported_color_modes"] = attributes["supported_color_modes"]
 
-    def build_state(self, new_state):
+    async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""
         payload = {
             "state": "ON" if new_state.state == STATE_ON else "OFF",
@@ -78,7 +87,8 @@ class Light:
         if color:
             payload["color"] = color
 
-        return json.dumps(payload, cls=JSONEncoder)
+        payload = json.dumps(payload, cls=JSONEncoder)
+        await mqtt.async_publish(self._hass, f"{mybase}state", payload, 1, True)
 
     async def async_handle_message(self, domain, entity, msg):
         """Handle a message for a light."""
