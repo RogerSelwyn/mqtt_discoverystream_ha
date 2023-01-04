@@ -13,17 +13,12 @@ from homeassistant.components.mqtt.const import (
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
-    ATTR_ENTITY_ID,
     ATTR_FRIENDLY_NAME,
     ATTR_ICON,
     ATTR_STATE,
     ATTR_UNIT_OF_MEASUREMENT,
     CONF_INCLUDE,
     CONF_NAME,
-    SERVICE_TURN_OFF,
-    SERVICE_TURN_ON,
-    STATE_OFF,
-    STATE_ON,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
     Platform,
@@ -41,8 +36,6 @@ from .classes.switch import Switch
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
-    ATTR_SET,
-    ATTR_SET_LIGHT,
     CONF_AVTY_T,
     CONF_BASE_TOPIC,
     CONF_CNS,
@@ -85,7 +78,7 @@ class Discovery:
         self._hass.data[DOMAIN] = {self._discovery_topic: {}}
         self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED] = []
         self._binary_sensor = BinarySensor()
-        self._climate = Climate(hass)
+        self._climate = Climate(hass, base_topic)
         self._light = Light(hass, base_topic)
         self._switch = Switch(hass, base_topic)
         self._publish_filter = convert_include_exclude_filter(conf)
@@ -215,8 +208,9 @@ class Discovery:
     async def _async_subscribe(self, recalltime):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         try:
-            await self._switch.async_subscribe()
+            await self._climate.async_subscribe()
             await self._light.async_subscribe()
+            await self._switch.async_subscribe()
             _LOGGER.info("MQTT subscribe successful")
         except HomeAssistantError:
             seconds = 10
