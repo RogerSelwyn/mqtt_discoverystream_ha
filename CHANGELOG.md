@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.4 (2023/01/04)
+### Enhancements
+- [Support friendly name](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/18cf6f1a94f5f72bb0e7b8dfbe0cc93c45e190ec) - @RogerSelwyn
+
+### Maintenance
+- [Convert strings to constants](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/eb83759ce944516aea33c3fd5d22c27859eae72f) - @RogerSelwyn
+- [Bump to v0.10.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0941c09b772a53c8a78de05b0d2d89d3a07a557c) - @RogerSelwyn
+
 ## 0.10.3 (2023/01/03)
 ### Maintenance
 - [Code improvements](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b7352e7338402148caabe7c07689ed99ab65e025) - @RogerSelwyn
