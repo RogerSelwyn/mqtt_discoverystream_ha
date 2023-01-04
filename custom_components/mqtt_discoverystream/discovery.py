@@ -86,8 +86,8 @@ class Discovery:
         self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED] = []
         self._binary_sensor = BinarySensor()
         self._climate = Climate(hass)
-        self._light = Light(hass)
-        self._switch = Switch()
+        self._light = Light(hass, base_topic)
+        self._switch = Switch(hass, base_topic)
         self._publish_filter = convert_include_exclude_filter(conf)
         hass.async_create_task(self._async_subscribe(None))
 
@@ -165,6 +165,7 @@ class Discovery:
             )
 
     def _build_base(self, entity_id, attributes, mybase):
+        # sourcery skip: assign-if-exp, merge-dict-assign
         ent_parts = entity_id.split(".")
         ent_id = ent_parts[1]
 
@@ -214,14 +215,8 @@ class Discovery:
     async def _async_subscribe(self, recalltime):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         try:
-            await self._hass.components.mqtt.async_subscribe(
-                f"{self._base_topic}{Platform.SWITCH}/+/{ATTR_SET}",
-                self._async_message_received,
-            )
-            await self._hass.components.mqtt.async_subscribe(
-                f"{self._base_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
-                self._async_message_received,
-            )
+            await self._switch.async_subscribe()
+            await self._light.async_subscribe()
             _LOGGER.info("MQTT subscribe successful")
         except HomeAssistantError:
             seconds = 10
@@ -230,32 +225,3 @@ class Discovery:
                 "MQTT subscribe unsuccessful - retrying in %s seconds", seconds
             )
             async_call_later(self._hass, retrytime, self._async_subscribe)
-
-    async def _async_message_received(self, msg):
-        """Handle new messages on MQTT."""
-        explode_topic = msg.topic.split("/")
-        domain = explode_topic[1]
-        entity = explode_topic[2]
-        element = explode_topic[3]
-
-        _LOGGER.debug(
-            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
-        )
-        if element == ATTR_SET:
-            if msg.payload == STATE_ON:
-                await self._hass.services.async_call(
-                    domain, SERVICE_TURN_ON, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
-                )
-            elif msg.payload == STATE_OFF:
-                await self._hass.services.async_call(
-                    domain, SERVICE_TURN_OFF, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
-                )
-            else:
-                _LOGGER.error(
-                    'Invalid service for "%s" - payload: %s for %s',
-                    ATTR_SET,
-                    {msg.payload},
-                    {entity},
-                )
-        elif element == ATTR_SET_LIGHT:
-            await self._light.async_handle_message(domain, entity, msg)

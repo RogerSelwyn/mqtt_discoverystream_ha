@@ -23,6 +23,7 @@ from homeassistant.const import (
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
     STATE_ON,
+    Platform,
 )
 from homeassistant.helpers.entity import get_supported_features
 from homeassistant.helpers.json import JSONEncoder
@@ -50,9 +51,10 @@ _LOGGER = logging.getLogger(__name__)
 class Light:
     """Light class."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, base_topic):
         """Initialise the light class."""
         self._hass = hass
+        self._base_topic = base_topic
 
     def build_config(self, config, entity_id, attributes, mybase):
         """Build the config for a light."""
@@ -102,8 +104,19 @@ class Light:
         payload = json.dumps(payload, cls=JSONEncoder)
         await mqtt.async_publish(self._hass, f"{mybase}{ATTR_STATE}", payload, 1, True)
 
-    async def async_handle_message(self, domain, entity, msg):
+    async def async_subscribe(self):
+        """Subscribe to messages for a light."""
+        await self._hass.components.mqtt.async_subscribe(
+            f"{self._base_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
+            self._async_handle_message,
+        )
+
+    async def _async_handle_message(self, msg):
         """Handle a message for a light."""
+        explode_topic = msg.topic.split("/")
+        domain = explode_topic[1]
+        entity = explode_topic[2]
+
         payload_json = json.loads(msg.payload)
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
