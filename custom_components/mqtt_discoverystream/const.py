@@ -39,6 +39,8 @@ CONF_STAT_CLA = "stat_cla"
 CONF_UNIQ_ID = "uniq_id"
 CONF_STAT_T = "stat_t"
 CONF_AVTY_T = "avty_t"
+CONF_OBJ_ID = "obj_id"
+
 CONF_MDL = "mdl"
 CONF_MF = "mf"
 CONF_SW = "sw"

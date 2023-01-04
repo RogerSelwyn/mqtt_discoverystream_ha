@@ -14,6 +14,7 @@ from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
     ATTR_ENTITY_ID,
+    ATTR_FRIENDLY_NAME,
     ATTR_ICON,
     ATTR_STATE,
     ATTR_UNIT_OF_MEASUREMENT,
@@ -52,6 +53,7 @@ from .const import (
     CONF_JSON_ATTR_T,
     CONF_MDL,
     CONF_MF,
+    CONF_OBJ_ID,
     CONF_PUBLISHED,
     CONF_STAT_CLA,
     CONF_STAT_T,
@@ -90,7 +92,7 @@ class Discovery:
         hass.async_create_task(self._async_subscribe(None))
 
     async def async_state_publish(self, entity_id, new_state, mybase):
-        """Publish state for MQTT Duscovery Statestream."""
+        """Publish state for MQTT Discovery Statestream."""
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
@@ -168,11 +170,16 @@ class Discovery:
 
         config = {
             CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_id}",
-            CONF_NAME: ent_id.replace("_", " ").title(),
+            CONF_OBJ_ID: ent_id,
             CONF_STAT_T: f"{mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
             CONF_AVTY_T: f"{mybase}{CONF_AVAILABILITY}",
         }
+
+        if ATTR_FRIENDLY_NAME in attributes:
+            config[CONF_NAME] = attributes[ATTR_FRIENDLY_NAME]
+        else:
+            config[CONF_NAME] = ent_id.replace("_", " ").title()
         if ATTR_DEVICE_CLASS in attributes:
             config[CONF_DEV_CLA] = attributes[ATTR_DEVICE_CLASS]
         if ATTR_UNIT_OF_MEASUREMENT in attributes:
