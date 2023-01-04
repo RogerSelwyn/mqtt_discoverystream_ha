@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.5 (2023/01/04)
+### Enhancements
+- [Add mode/preset/temperature setting](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/71b967e2674fee43c99e135ad4424abac5dd3d7f) - @RogerSelwyn
+
+### Maintenance
+- [Segregate code to add clarity for adding climate](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5a274b97c6b657f3be627f76d96f8a507996214f) - @RogerSelwyn
+- [Bump to v0.10.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bfa53600f170c347eaa5be201ea0b2637c932bd8) - @RogerSelwyn
+
 ## 0.10.4 (2023/01/04)
 ### Enhancements
 - [Support friendly name](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/18cf6f1a94f5f72bb0e7b8dfbe0cc93c45e190ec) - @RogerSelwyn
