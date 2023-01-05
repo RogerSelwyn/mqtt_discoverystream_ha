@@ -2,6 +2,14 @@
 
 ## 0.10.5 (2023/01/04)
 ### Enhancements
+- [Added the ability to break out commands into a separate topic structure](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2f10f38c933d11338e93f39624687d86e5a4af91) - @RogerSelwyn
+- [Add temperature step, default 0.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/672773a476dc538d9658d0db6c156061501d2991) - @RogerSelwyn
+### Maintenance
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fa7c671073cba4d511bc6bcf1beed5b3fe76bd91) - @RogerSelwyn
+- [Bump to v0.10.6](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9202ab59de10cf99c6db82891f789b172441c4e2) - @RogerSelwyn
+
+## 0.10.5 (2023/01/04)
+### Enhancements
 - [Add mode/preset/temperature setting](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/71b967e2674fee43c99e135ad4424abac5dd3d7f) - @RogerSelwyn
 
 ### Maintenance
