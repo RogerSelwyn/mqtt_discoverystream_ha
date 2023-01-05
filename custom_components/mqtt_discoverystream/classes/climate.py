@@ -1,4 +1,5 @@
 """climate methods for MQTT Discovery Statestream."""
+import logging
 
 from homeassistant.components import mqtt
 from homeassistant.components.climate import (
@@ -40,38 +41,39 @@ from homeassistant.const import (
 from ..const import ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND
 from ..utils import async_publish_base_attributes
 
+_LOGGER = logging.getLogger(__name__)
+
 
 class Climate:
     """Climate class."""
 
-    def __init__(self, hass, base_topic):
+    def __init__(self, hass):
         """Initialise the climate class."""
         self._hass = hass
-        self._base_topic = base_topic
 
-    def build_config(self, config, attributes, mybase):
+    def build_config(self, config, attributes, mybase, mycommand):
         """Build the config for a climate."""
         config[CONF_ACTION_TOPIC] = f"{mybase}{ATTR_HVAC_ACTION}"
         config[CONF_CURRENT_TEMP_TOPIC] = f"{mybase}{ATTR_CURRENT_TEMPERATURE}"
         config[CONF_TEMP_MAX] = attributes[ATTR_MAX_TEMP]
         config[CONF_TEMP_MIN] = attributes[ATTR_MIN_TEMP]
-        config[CONF_MODE_COMMAND_TOPIC] = f"{mybase}{ATTR_MODE_COMMAND}"
+        config[CONF_MODE_COMMAND_TOPIC] = f"{mycommand}{ATTR_MODE_COMMAND}"
         config[CONF_MODE_LIST] = attributes[ATTR_HVAC_MODES]
         config[CONF_MODE_STATE_TOPIC] = f"{mybase}{ATTR_HVAC_MODE}"
         preset_modes = attributes[ATTR_PRESET_MODES]
         if PRESET_NONE in preset_modes:
             preset_modes.remove(PRESET_NONE)
         config[CONF_PRESET_MODES_LIST] = preset_modes
-        config[CONF_PRESET_MODE_COMMAND_TOPIC] = f"{mybase}{ATTR_PRESET_COMMAND}"
+        config[CONF_PRESET_MODE_COMMAND_TOPIC] = f"{mycommand}{ATTR_PRESET_COMMAND}"
         config[CONF_PRESET_MODE_STATE_TOPIC] = f"{mybase}{ATTR_PRESET_MODE}"
-        config[CONF_TEMP_COMMAND_TOPIC] = f"{mybase}{ATTR_TEMP_COMMAND}"
+        config[CONF_TEMP_COMMAND_TOPIC] = f"{mycommand}{ATTR_TEMP_COMMAND}"
         config[CONF_TEMP_STATE_TOPIC] = f"{mybase}{ATTR_TEMPERATURE}"
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a light."""
-        await self._async_publish_attribute(new_state, mybase, ATTR_HVAC_ACTION)
+        await self._async_publish_attribute(new_state, mybase, ATTR_HVAC_ACTION, True)
         await self._async_publish_attribute(new_state, mybase, ATTR_CURRENT_TEMPERATURE)
-        await self._async_publish_attribute(new_state, mybase, ATTR_PRESET_MODE)
+        await self._async_publish_attribute(new_state, mybase, ATTR_PRESET_MODE, True)
         await self._async_publish_attribute(new_state, mybase, ATTR_TEMPERATURE)
 
         await async_publish_base_attributes(self._hass, new_state, mybase)
@@ -83,28 +85,33 @@ class Climate:
             self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, True
         )
 
-    async def _async_publish_attribute(self, new_state, mybase, attribute_name):
+    async def _async_publish_attribute(
+        self, new_state, mybase, attribute_name, strip=False
+    ):
         if attribute_name in new_state.attributes:
+            value = new_state.attributes[attribute_name]
+            if value and strip:
+                value = value.strip('"')
             await mqtt.async_publish(
                 self._hass,
                 f"{mybase}{attribute_name}",
-                new_state.attributes[attribute_name],
+                value,
                 1,
                 True,
             )
 
-    async def async_subscribe(self):
+    async def async_subscribe(self, command_topic):
         """Subscribe to messages for climate."""
         await self._hass.components.mqtt.async_subscribe(
-            f"{self._base_topic}{Platform.CLIMATE}/+/{ATTR_MODE_COMMAND}",
+            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_MODE_COMMAND}",
             self._async_handle_message,
         )
         await self._hass.components.mqtt.async_subscribe(
-            f"{self._base_topic}{Platform.CLIMATE}/+/{ATTR_PRESET_COMMAND}",
+            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_PRESET_COMMAND}",
             self._async_handle_message,
         )
         await self._hass.components.mqtt.async_subscribe(
-            f"{self._base_topic}{Platform.CLIMATE}/+/{ATTR_TEMP_COMMAND}",
+            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_TEMP_COMMAND}",
             self._async_handle_message,
         )
 
@@ -114,6 +121,10 @@ class Climate:
         domain = explode_topic[1]
         entity = explode_topic[2]
         element = explode_topic[3]
+
+        _LOGGER.debug(
+            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
+        )
 
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",

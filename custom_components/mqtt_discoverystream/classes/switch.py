@@ -18,21 +18,20 @@ _LOGGER = logging.getLogger(__name__)
 class Switch:
     """Switch class."""
 
-    def __init__(self, hass, base_topic):
+    def __init__(self, hass):
         """Initialise the switch class."""
         self._hass = hass
-        self._base_topic = base_topic
 
-    def build_config(self, config, mybase):
+    def build_config(self, config, mycommand):
         """Build the config for a switch."""
         config[CONF_PL_OFF] = STATE_OFF
         config[CONF_PL_ON] = STATE_ON
-        config[CONF_CMD_T] = f"{mybase}{ATTR_SET}"
+        config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
 
-    async def async_subscribe(self):
+    async def async_subscribe(self, command_topic):
         """Subscribe to messages for a switch."""
         await self._hass.components.mqtt.async_subscribe(
-            f"{self._base_topic}{Platform.SWITCH}/+/{ATTR_SET}",
+            f"{command_topic}{Platform.SWITCH}/+/{ATTR_SET}",
             self._async_handle_message,
         )
 
@@ -41,6 +40,10 @@ class Switch:
         explode_topic = msg.topic.split("/")
         domain = explode_topic[1]
         entity = explode_topic[2]
+
+        _LOGGER.debug(
+            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
+        )
 
         if msg.payload == STATE_ON:
             await self._hass.services.async_call(

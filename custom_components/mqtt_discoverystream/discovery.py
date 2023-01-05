@@ -39,6 +39,7 @@ from .const import (
     CONF_AVTY_T,
     CONF_BASE_TOPIC,
     CONF_CNS,
+    CONF_COMMAND_TOPIC,
     CONF_DEV,
     CONF_DEV_CLA,
     CONF_DISCOVERY_TOPIC,
@@ -71,6 +72,9 @@ class Discovery:
         self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
             CONF_BASE_TOPIC
         )
+        self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
+        if not self._command_topic.endswith("/"):
+            self._command_topic = f"{self._command_topic}/"
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
         if not self._discovery_topic.endswith("/"):
@@ -78,9 +82,9 @@ class Discovery:
         self._hass.data[DOMAIN] = {self._discovery_topic: {}}
         self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED] = []
         self._binary_sensor = BinarySensor()
-        self._climate = Climate(hass, base_topic)
-        self._light = Light(hass, base_topic)
-        self._switch = Switch(hass, base_topic)
+        self._climate = Climate(hass)
+        self._light = Light(hass)
+        self._switch = Switch(hass)
         self._publish_filter = convert_include_exclude_filter(conf)
         hass.async_create_task(self._async_subscribe(None))
 
@@ -112,6 +116,7 @@ class Discovery:
         )
 
     async def _async_discovery_publish(self, entity_id, attributes, mybase):
+        mycommand = f"{self._command_topic}{entity_id.replace('.', '/')}/"
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
@@ -130,18 +135,18 @@ class Discovery:
             publish_config = True
 
         elif ent_domain == Platform.SWITCH:
-            self._switch.build_config(config, mybase)
+            self._switch.build_config(config, mycommand)
             publish_config = True
 
         elif ent_domain == Platform.DEVICE_TRACKER:
             publish_config = True
 
         elif ent_domain == Platform.CLIMATE:
-            self._climate.build_config(config, attributes, mybase)
+            self._climate.build_config(config, attributes, mybase, mycommand)
             publish_config = True
 
         elif ent_domain == Platform.LIGHT:
-            self._light.build_config(config, entity_id, attributes, mybase)
+            self._light.build_config(config, entity_id, attributes, mycommand)
             publish_config = True
 
         if publish_config:
@@ -208,9 +213,9 @@ class Discovery:
     async def _async_subscribe(self, recalltime):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         try:
-            await self._climate.async_subscribe()
-            await self._light.async_subscribe()
-            await self._switch.async_subscribe()
+            await self._climate.async_subscribe(self._command_topic)
+            await self._light.async_subscribe(self._command_topic)
+            await self._switch.async_subscribe(self._command_topic)
             _LOGGER.info("MQTT subscribe successful")
         except HomeAssistantError:
             seconds = 10

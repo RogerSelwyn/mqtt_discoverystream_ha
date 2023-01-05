@@ -21,6 +21,7 @@ ATTR_CONFIG = "config"
 
 CONF_BASE_TOPIC = "base_topic"
 CONF_DISCOVERY_TOPIC = "discovery_topic"
+CONF_COMMAND_TOPIC = "command_topic"
 CONF_PUBLISH_ATTRIBUTES = "publish_attributes"
 CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"

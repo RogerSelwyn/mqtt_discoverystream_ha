@@ -51,15 +51,14 @@ _LOGGER = logging.getLogger(__name__)
 class Light:
     """Light class."""
 
-    def __init__(self, hass, base_topic):
+    def __init__(self, hass):
         """Initialise the light class."""
         self._hass = hass
-        self._base_topic = base_topic
 
-    def build_config(self, config, entity_id, attributes, mybase):
+    def build_config(self, config, entity_id, attributes, mycommand):
         """Build the config for a light."""
         del config[CONF_JSON_ATTR_T]
-        config[CONF_CMD_T] = f"{mybase}{ATTR_SET_LIGHT}"
+        config[CONF_CMD_T] = f"{ mycommand}{ATTR_SET_LIGHT}"
         config[CONF_SCHEMA] = ATTR_JSON
 
         supported_features = get_supported_features(self._hass, entity_id)
@@ -104,10 +103,10 @@ class Light:
         payload = json.dumps(payload, cls=JSONEncoder)
         await mqtt.async_publish(self._hass, f"{mybase}{ATTR_STATE}", payload, 1, True)
 
-    async def async_subscribe(self):
+    async def async_subscribe(self, command_topic):
         """Subscribe to messages for a light."""
         await self._hass.components.mqtt.async_subscribe(
-            f"{self._base_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
+            f"{command_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
             self._async_handle_message,
         )
 
@@ -116,6 +115,10 @@ class Light:
         explode_topic = msg.topic.split("/")
         domain = explode_topic[1]
         entity = explode_topic[2]
+
+        _LOGGER.debug(
+            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
+        )
 
         payload_json = json.loads(msg.payload)
         service_payload = {
