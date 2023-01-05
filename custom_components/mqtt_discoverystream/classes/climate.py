@@ -10,6 +10,7 @@ from homeassistant.components.climate import (
     ATTR_MIN_TEMP,
     ATTR_PRESET_MODE,
     ATTR_PRESET_MODES,
+    ATTR_TARGET_TEMP_STEP,
     PRESET_NONE,
     SERVICE_SET_HVAC_MODE,
     SERVICE_SET_PRESET_MODE,
@@ -29,6 +30,7 @@ from homeassistant.components.mqtt.climate import (
     CONF_TEMP_MAX,
     CONF_TEMP_MIN,
     CONF_TEMP_STATE_TOPIC,
+    CONF_TEMP_STEP,
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -68,6 +70,11 @@ class Climate:
         config[CONF_PRESET_MODE_STATE_TOPIC] = f"{mybase}{ATTR_PRESET_MODE}"
         config[CONF_TEMP_COMMAND_TOPIC] = f"{mycommand}{ATTR_TEMP_COMMAND}"
         config[CONF_TEMP_STATE_TOPIC] = f"{mybase}{ATTR_TEMPERATURE}"
+        if ATTR_TARGET_TEMP_STEP in attributes:
+            step = attributes[ATTR_TARGET_TEMP_STEP]
+        else:
+            step = 0.5
+        config[CONF_TEMP_STEP] = step
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a light."""
