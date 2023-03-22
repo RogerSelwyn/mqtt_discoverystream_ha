@@ -78,6 +78,7 @@ class Climate:
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a light."""
+        _LOGGER.debug("New State %s;", new_state)
         await self._async_publish_attribute(new_state, mybase, ATTR_HVAC_ACTION, True)
         await self._async_publish_attribute(new_state, mybase, ATTR_CURRENT_TEMPERATURE)
         await self._async_publish_attribute(new_state, mybase, ATTR_PRESET_MODE, True)
