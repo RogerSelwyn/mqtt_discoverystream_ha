@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.7 (2023/03/22)
+### Maintenance
+- [Create stale.yml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6186f6713bfc4b6283bd5a115d6cdaa22daa6f9f) - @RogerSelwyn
+- [Create dependant.yml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/91d048dc3bc8d8c2fe3f35e35caec74e6ae69637) - @RogerSelwyn
+- [Create dependabot.yml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/246ef7ac15d1abe2edfb23ee9a29c5d9535d01e8) - @RogerSelwyn
+- [Delete dependant.yml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d09decd0e22e6b9a1b69c537e41b021219bab70c) - @RogerSelwyn
+- [Update validate_hacs.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0524a7cf284dbc20c9119a25704984ec72dacf61) - @RogerSelwyn
+- [Update validate_hassfest.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e895c77f9df2bb5213b739ba99a96322a9e6f0b5) - @RogerSelwyn
+- [Update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3f02beb53cbf020ae44d337e120769dbea60b41e) - @RogerSelwyn
+- [Add numpy as requirement](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/18ee4bce536f0d2add0b0c0a84708a29e61b7631) - @RogerSelwyn
+- [Keep in line with mqtt_statestream](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/706fb779e64f84e588698c6e96bdc925ac54ffb7) - @RogerSelwyn
+- [Bump to v0.10.7](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/33e5ace19f85a3cdcbc1047cbde084d4ed77db75) - @RogerSelwyn
+- [Auto update requirements.txt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/530e4e41ad96d064ff1b3dd197068fe59198fa39) - @actions-user
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/399698cc9910a4bd9fa44c279dc10e2496908aeb) - @actions-user
+
 ## 0.10.5 (2023/01/04)
 ### Enhancements
 - [Added the ability to break out commands into a separate topic structure](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2f10f38c933d11338e93f39624687d86e5a4af91) - @RogerSelwyn
