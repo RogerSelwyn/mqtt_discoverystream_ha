@@ -15,7 +15,7 @@
 - [Auto update requirements.txt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/530e4e41ad96d064ff1b3dd197068fe59198fa39) - @actions-user
 - [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/399698cc9910a4bd9fa44c279dc10e2496908aeb) - @actions-user
 
-## 0.10.5 (2023/01/04)
+## 0.10.6 (2023/01/05)
 ### Enhancements
 - [Added the ability to break out commands into a separate topic structure](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2f10f38c933d11338e93f39624687d86e5a4af91) - @RogerSelwyn
 - [Add temperature step, default 0.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/672773a476dc538d9658d0db6c156061501d2991) - @RogerSelwyn
