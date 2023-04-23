@@ -1,16 +1,31 @@
 """cover methods for MQTT Discovery Statestream."""
 import logging
 
+from homeassistant.components import mqtt
+from homeassistant.components.cover import (
+    ATTR_CURRENT_POSITION,
+    ATTR_CURRENT_TILT_POSITION,
+)
+from homeassistant.components.mqtt.cover import (
+    CONF_GET_POSITION_TEMPLATE,
+    CONF_GET_POSITION_TOPIC,
+    CONF_TILT_STATUS_TEMPLATE,
+    CONF_TILT_STATUS_TOPIC,
+    DEFAULT_PAYLOAD_CLOSE,
+    DEFAULT_PAYLOAD_OPEN,
+    DEFAULT_PAYLOAD_STOP,
+)
 from homeassistant.const import (
     ATTR_ENTITY_ID,
+    ATTR_STATE,
     SERVICE_CLOSE_COVER,
     SERVICE_OPEN_COVER,
-    STATE_CLOSED,
-    STATE_OPEN,
+    SERVICE_STOP_COVER,
     Platform,
 )
 
-from ..const import ATTR_SET, CONF_CMD_T, CONF_PL_CLOSED, CONF_PL_OPEN
+from ..const import ATTR_ATTRIBUTES, ATTR_SET, CONF_CMD_T
+from ..utils import async_publish_base_attributes
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,11 +37,28 @@ class Cover:
         """Initialise the cover class."""
         self._hass = hass
 
-    def build_config(self, config, mycommand):
+    def build_config(self, config, attributes, mybase, mycommand):
         """Build the config for a cover."""
-        config[CONF_PL_CLOSED] = STATE_CLOSED
-        config[CONF_PL_OPEN] = STATE_OPEN
         config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
+
+        if ATTR_CURRENT_POSITION in attributes:
+            config[CONF_GET_POSITION_TOPIC] = f"{mybase}{ATTR_ATTRIBUTES}"
+            config[CONF_GET_POSITION_TEMPLATE] = (
+                "{{ value_json['" + ATTR_CURRENT_POSITION + "'] }}"
+            )
+        if ATTR_CURRENT_TILT_POSITION in attributes:
+            config[CONF_TILT_STATUS_TOPIC] = f"{mybase}{ATTR_ATTRIBUTES}"
+            config[CONF_TILT_STATUS_TEMPLATE] = (
+                "{{ value_json['" + ATTR_CURRENT_TILT_POSITION + "'] }}"
+            )
+
+    async def async_publish_state(self, new_state, mybase):
+        """Build the state for a light."""
+        await async_publish_base_attributes(self._hass, new_state, mybase)
+
+        await mqtt.async_publish(
+            self._hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, True
+        )
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a cover."""
@@ -45,13 +77,17 @@ class Cover:
             "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
         )
 
-        if msg.payload == STATE_OPEN:
+        if msg.payload == DEFAULT_PAYLOAD_OPEN:
             await self._hass.services.async_call(
                 domain, SERVICE_OPEN_COVER, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
             )
-        elif msg.payload == STATE_CLOSED:
+        elif msg.payload == DEFAULT_PAYLOAD_CLOSE:
             await self._hass.services.async_call(
                 domain, SERVICE_CLOSE_COVER, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
+            )
+        elif msg.payload == DEFAULT_PAYLOAD_STOP:
+            await self._hass.services.async_call(
+                domain, SERVICE_STOP_COVER, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
             )
         else:
             _LOGGER.error(

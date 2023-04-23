@@ -41,7 +41,7 @@ from homeassistant.const import (
 )
 
 from ..const import ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND
-from ..utils import async_publish_base_attributes
+from ..utils import async_publish_attribute, async_publish_base_attributes
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -77,12 +77,18 @@ class Climate:
         config[CONF_TEMP_STEP] = step
 
     async def async_publish_state(self, new_state, mybase):
-        """Publish the state for a light."""
+        """Publish the state for a climate."""
         _LOGGER.debug("New State %s;", new_state)
-        await self._async_publish_attribute(new_state, mybase, ATTR_HVAC_ACTION, True)
-        await self._async_publish_attribute(new_state, mybase, ATTR_CURRENT_TEMPERATURE)
-        await self._async_publish_attribute(new_state, mybase, ATTR_PRESET_MODE, True)
-        await self._async_publish_attribute(new_state, mybase, ATTR_TEMPERATURE)
+        await async_publish_attribute(
+            self._hass, new_state, mybase, ATTR_HVAC_ACTION, True
+        )
+        await async_publish_attribute(
+            self._hass, new_state, mybase, ATTR_CURRENT_TEMPERATURE
+        )
+        await async_publish_attribute(
+            self._hass, new_state, mybase, ATTR_PRESET_MODE, True
+        )
+        await async_publish_attribute(self._hass, new_state, mybase, ATTR_TEMPERATURE)
 
         await async_publish_base_attributes(self._hass, new_state, mybase)
 
@@ -92,21 +98,6 @@ class Climate:
         await mqtt.async_publish(
             self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, True
         )
-
-    async def _async_publish_attribute(
-        self, new_state, mybase, attribute_name, strip=False
-    ):
-        if attribute_name in new_state.attributes:
-            value = new_state.attributes[attribute_name]
-            if value and strip:
-                value = value.strip('"')
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{attribute_name}",
-                value,
-                1,
-                True,
-            )
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for climate."""

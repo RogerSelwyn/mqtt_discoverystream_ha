@@ -31,9 +31,9 @@ from homeassistant.helpers.json import JSONEncoder
 
 from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
+from .classes.cover import Cover
 from .classes.light import Light
 from .classes.switch import Switch
-from .classes.cover import Cover
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
@@ -105,6 +105,8 @@ class Discovery:
             await self._light.async_publish_state(new_state, mybase)
         elif ent_domain == Platform.CLIMATE:
             await self._climate.async_publish_state(new_state, mybase)
+        elif ent_domain == Platform.COVER:
+            await self._cover.async_publish_state(new_state, mybase)
         else:
             await async_publish_base_attributes(self._hass, new_state, mybase)
 
@@ -141,8 +143,8 @@ class Discovery:
             publish_config = True
 
         elif ent_domain == Platform.COVER:
-            self._cover.build_config(config, mycommand)
-            publish_config = True             
+            self._cover.build_config(config, attributes, mybase, mycommand)
+            publish_config = True
 
         elif ent_domain == Platform.DEVICE_TRACKER:
             publish_config = True
