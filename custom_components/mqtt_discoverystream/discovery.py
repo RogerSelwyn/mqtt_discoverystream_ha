@@ -33,6 +33,7 @@ from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.light import Light
 from .classes.switch import Switch
+from .classes.cover import Cover
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
@@ -85,6 +86,7 @@ class Discovery:
         self._climate = Climate(hass)
         self._light = Light(hass)
         self._switch = Switch(hass)
+        self._cover = Cover(hass)
         self._publish_filter = convert_include_exclude_filter(conf)
         hass.async_create_task(self._async_subscribe(None))
 
@@ -137,6 +139,10 @@ class Discovery:
         elif ent_domain == Platform.SWITCH:
             self._switch.build_config(config, mycommand)
             publish_config = True
+
+        elif ent_domain == Platform.COVER:
+            self._cover.build_config(config, mycommand)
+            publish_config = True             
 
         elif ent_domain == Platform.DEVICE_TRACKER:
             publish_config = True
@@ -216,6 +222,7 @@ class Discovery:
             await self._climate.async_subscribe(self._command_topic)
             await self._light.async_subscribe(self._command_topic)
             await self._switch.async_subscribe(self._command_topic)
+            await self._cover.async_subscribe(self._command_topic)
             _LOGGER.info("MQTT subscribe successful")
         except HomeAssistantError:
             seconds = 10
