@@ -1,6 +1,6 @@
 """Publishiong discovery for MQTT Discovery Stream."""
 from homeassistant.components.light import SUPPORT_BRIGHTNESS, SUPPORT_EFFECT
-from homeassistant.const import STATE_OFF, STATE_ON
+from homeassistant.const import STATE_OFF, STATE_ON, STATE_OPEN, STATE_CLOSED
 from homeassistant.helpers.entity import get_supported_features
 
 
@@ -39,6 +39,12 @@ async def async_publish_discovery(hass, has_includes, mybase, new_state, entity_
     elif ent_domain == "switch":
         config["pl_off"] = STATE_OFF
         config["pl_on"] = STATE_ON
+        config["cmd_t"] = f"{mybase}set"
+        publish_config = True
+
+    elif ent_domain == "cover":
+        config["pl_closed"] = STATE_CLOSED
+        config["pl_open"] = STATE_OPEN
         config["cmd_t"] = f"{mybase}set"
         publish_config = True
 
