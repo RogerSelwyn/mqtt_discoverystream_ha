@@ -4,9 +4,8 @@
 ### Enhancements
 - [Add support for covers (open/close)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/pull/2) - @pergolafabio
 - [Improve Cover entity type addition](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5d73e17e308f0d9841b9e564cc0063827743442c) - @RogerSelwyn
-### Fixes
-### Maintenance
 
+### Maintenance
 - [Keep in line with core mqtt_statestream](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/34459e78b0fb633a9d70786725bdc1ad6a4ba6c2) - @RogerSelwyn
 - [Revert change](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bab801d8e988f7e59e32070acc16379bbd642856) - @RogerSelwyn
 - [Bump to v0.10.8](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ed4d7dd27c52a802c8c8ce0492fb843d24370476) - @RogerSelwyn
