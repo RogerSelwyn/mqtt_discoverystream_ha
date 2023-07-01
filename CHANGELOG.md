@@ -4,7 +4,7 @@
 ## 0.10.9 (2023/07/01)
 ### Maintenance
 - [Standardise method of waiting for MQTT client](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3d248d20b3c148355145c7bc8a31e2e050c34f7b) - @RogerSelwyn
-- [Update in line with change to Koyring version](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ab7ebda3156f870439c5eef664d1f8496d3bc089) - @RogerSelwyn
+- [Update in line with changes to Koyring version](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ab7ebda3156f870439c5eef664d1f8496d3bc089) - @RogerSelwyn
 - [Bump to v0.10.9](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bae44af02f079f0665a40a48e45eeba2898b80f8) - @RogerSelwyn
 
 ## 0.10.8 (2023/04/23)
