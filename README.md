@@ -13,6 +13,7 @@ Besides the functionalities of the hereabove, it also allows to publish and hand
 Provides discovery support for:
 - Binary Sensor
 - Climate
+- Cover
 - Light
 - Sensor
 - Switch
