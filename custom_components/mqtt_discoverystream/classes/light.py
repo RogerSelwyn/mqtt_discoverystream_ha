@@ -62,13 +62,14 @@ class Light:
         config[CONF_SCHEMA] = ATTR_JSON
 
         supported_features = get_supported_features(self._hass, entity_id)
-        if supported_features & SUPPORT_BRIGHTNESS:
+        if (supported_features & SUPPORT_BRIGHTNESS) or (ATTR_BRIGHTNESS in attributes):
             config[ATTR_BRIGHTNESS] = True
         if supported_features & SUPPORT_EFFECT:
             config[ATTR_EFFECT] = True
         if ATTR_SUPPORTED_COLOR_MODES in attributes:
             config[ATTR_COLOR_MODE] = True
             config[ATTR_SUPPORTED_COLOR_MODES] = attributes[ATTR_SUPPORTED_COLOR_MODES]
+            config[ATTR_BRIGHTNESS] = True
 
     async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""

@@ -1,9 +1,9 @@
 """Discovery for MQTT Discovery Stream."""
 import json
 import logging
-from datetime import timedelta
 
 from homeassistant.components import mqtt
+from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
     DATA_MQTT,
@@ -23,11 +23,10 @@ from homeassistant.const import (
     STATE_UNKNOWN,
     Platform,
 )
-from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import device_registry, entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
-from homeassistant.helpers.event import async_call_later
 from homeassistant.helpers.json import JSONEncoder
+from homeassistant.setup import async_when_setup
 
 from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
@@ -88,7 +87,7 @@ class Discovery:
         self._switch = Switch(hass)
         self._cover = Cover(hass)
         self._publish_filter = convert_include_exclude_filter(conf)
-        hass.async_create_task(self._async_subscribe(None))
+        async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
 
     async def async_state_publish(self, entity_id, new_state, mybase):
         """Publish state for MQTT Discovery Statestream."""
@@ -218,18 +217,12 @@ class Discovery:
 
         return config_device
 
-    async def _async_subscribe(self, recalltime):  # pylint: disable=unused-argument
+    async def _async_subscribe(
+        self, hass, component
+    ):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
-        try:
-            await self._climate.async_subscribe(self._command_topic)
-            await self._light.async_subscribe(self._command_topic)
-            await self._switch.async_subscribe(self._command_topic)
-            await self._cover.async_subscribe(self._command_topic)
-            _LOGGER.info("MQTT subscribe successful")
-        except HomeAssistantError:
-            seconds = 10
-            retrytime = timedelta(seconds=seconds)
-            _LOGGER.warning(
-                "MQTT subscribe unsuccessful - retrying in %s seconds", seconds
-            )
-            async_call_later(self._hass, retrytime, self._async_subscribe)
+        await self._climate.async_subscribe(self._command_topic)
+        await self._light.async_subscribe(self._command_topic)
+        await self._switch.async_subscribe(self._command_topic)
+        await self._cover.async_subscribe(self._command_topic)
+        _LOGGER.info("MQTT subscribe successful")
