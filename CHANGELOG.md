@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.13 (2023/08/03)
+### Fixes
+- [Fix AttributeError: 'NoneType' object has no attribute 'entity_category'](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/382503aa8a4818785f6d470a02a56a8e0bf31852) - @RogerSelwyn
+
+### Maintenance
+- [Bump to v0.10.13](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e86c5e0400c052666d23ee6de8e10ed7bdcb7336) - @RogerSelwyn
+
 ## 0.10.12 (2023/08/03)
 ### Fixes
 - [Fix AttributeError: 'NoneType' object has no attribute 'device_id'](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8f9eaa0b4002303e7aa9758df824abcb513215f1) - @RogerSelwyn 
