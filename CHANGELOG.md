@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.12 (2023/08/03)
+### Fixes
+- [Fix AttributeError: 'NoneType' object has no attribute 'device_id'](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8f9eaa0b4002303e7aa9758df824abcb513215f1) - @RogerSelwyn 
+
+### Maintenance
+- [Bump to v0.10.12](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8052517038ebb94eb421edcb40aef3cdd4bd51e1) - @RogerSelwyn
+
 ## 0.10.11 (2023/08/03)
 ### Maintenance
 - [Improve entity naming validation](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/911f7358d126638033692754cdb77dc063faeb2e) - @RogerSelwyn
