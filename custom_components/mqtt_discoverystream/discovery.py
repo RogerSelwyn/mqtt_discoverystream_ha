@@ -13,6 +13,7 @@ from homeassistant.components.mqtt.const import (
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
+    ATTR_FRIENDLY_NAME,
     ATTR_ICON,
     ATTR_STATE,
     ATTR_UNIT_OF_MEASUREMENT,
@@ -181,11 +182,19 @@ class Discovery:
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
             CONF_AVTY_T: f"{mybase}{CONF_AVAILABILITY}",
         }
+        name = None
+        if ATTR_FRIENDLY_NAME in attributes:
+            name = attributes[ATTR_FRIENDLY_NAME]
+        else:
+            name = ent_id.replace("_", " ").title()
         entry = self._ent_reg.async_get(entity_id)
-        if entry.name:
-            config[CONF_NAME] = entry.name
-        elif not entry.device_id:
-            config[CONF_NAME] = entry.original_name
+        if entry.device_id and name:
+            device = self._dev_reg.async_get(entry.device_id)
+            if device and name.startswith(device.name):
+                name = name[len(device.name) + 1 :].strip()
+                if name == "":
+                    name = None
+        config[CONF_NAME] = name
         if entry.entity_category:
             config[CONF_ENT_CAT] = entry.entity_category
         if entry.original_device_class:
