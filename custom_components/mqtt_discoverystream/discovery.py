@@ -188,7 +188,7 @@ class Discovery:
         else:
             name = ent_id.replace("_", " ").title()
         entry = self._ent_reg.async_get(entity_id)
-        if entry.device_id and name:
+        if entry and entry.device_id and name:
             device = self._dev_reg.async_get(entry.device_id)
             if device and name.startswith(device.name):
                 name = name[len(device.name) + 1 :].strip()
