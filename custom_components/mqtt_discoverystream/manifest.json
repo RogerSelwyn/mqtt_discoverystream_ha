@@ -13,5 +13,5 @@
   "requirements": [
     "numpy>=1.23.2"
   ],
-  "version": "v0.10.10"
+  "version": "v0.10.11"
 }
