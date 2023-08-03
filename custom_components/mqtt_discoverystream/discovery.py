@@ -187,20 +187,20 @@ class Discovery:
             name = attributes[ATTR_FRIENDLY_NAME]
         else:
             name = ent_id.replace("_", " ").title()
-        entry = self._ent_reg.async_get(entity_id)
-        if entry and entry.device_id and name:
-            device = self._dev_reg.async_get(entry.device_id)
-            if device and name.startswith(device.name):
-                name = name[len(device.name) + 1 :].strip()
-                if name == "":
-                    name = None
+        if entry := self._ent_reg.async_get(entity_id):
+            if entry.device_id and name:
+                device = self._dev_reg.async_get(entry.device_id)
+                if device and name.startswith(device.name):
+                    name = name[len(device.name) + 1 :].strip()
+                    if name == "":
+                        name = None
+            if entry.entity_category:
+                config[CONF_ENT_CAT] = entry.entity_category
+            if entry.original_device_class:
+                config[CONF_DEV_CLA] = entry.original_device_class
+            elif entry.device_class:
+                config[CONF_DEV_CLA] = entry.device_class
         config[CONF_NAME] = name
-        if entry.entity_category:
-            config[CONF_ENT_CAT] = entry.entity_category
-        if entry.original_device_class:
-            config[CONF_DEV_CLA] = entry.original_device_class
-        elif entry.device_class:
-            config[CONF_DEV_CLA] = entry.device_class
 
         if ATTR_UNIT_OF_MEASUREMENT in attributes:
             config[CONF_UNIT_OF_MEAS] = attributes[ATTR_UNIT_OF_MEASUREMENT]
