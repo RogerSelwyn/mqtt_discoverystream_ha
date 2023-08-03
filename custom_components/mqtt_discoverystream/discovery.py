@@ -13,7 +13,6 @@ from homeassistant.components.mqtt.const import (
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
-    ATTR_FRIENDLY_NAME,
     ATTR_ICON,
     ATTR_STATE,
     ATTR_UNIT_OF_MEASUREMENT,
@@ -43,6 +42,7 @@ from .const import (
     CONF_DEV,
     CONF_DEV_CLA,
     CONF_DISCOVERY_TOPIC,
+    CONF_ENT_CAT,
     CONF_IDS,
     CONF_JSON_ATTR_T,
     CONF_MDL,
@@ -181,13 +181,18 @@ class Discovery:
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
             CONF_AVTY_T: f"{mybase}{CONF_AVAILABILITY}",
         }
+        entry = self._ent_reg.async_get(entity_id)
+        if entry.name:
+            config[CONF_NAME] = entry.name
+        elif not entry.device_id:
+            config[CONF_NAME] = entry.original_name
+        if entry.entity_category:
+            config[CONF_ENT_CAT] = entry.entity_category
+        if entry.original_device_class:
+            config[CONF_DEV_CLA] = entry.original_device_class
+        elif entry.device_class:
+            config[CONF_DEV_CLA] = entry.device_class
 
-        if ATTR_FRIENDLY_NAME in attributes:
-            config[CONF_NAME] = attributes[ATTR_FRIENDLY_NAME]
-        else:
-            config[CONF_NAME] = ent_id.replace("_", " ").title()
-        if ATTR_DEVICE_CLASS in attributes:
-            config[CONF_DEV_CLA] = attributes[ATTR_DEVICE_CLASS]
         if ATTR_UNIT_OF_MEASUREMENT in attributes:
             config[CONF_UNIT_OF_MEAS] = attributes[ATTR_UNIT_OF_MEASUREMENT]
         if ATTR_STATE_CLASS in attributes:
