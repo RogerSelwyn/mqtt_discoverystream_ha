@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.10.11 (2023/08/03)
+### Maintenance
+- [Improve entity naming validation](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/911f7358d126638033692754cdb77dc063faeb2e) - @RogerSelwyn
+- [Bump to v0.10.11](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2b6108415019ce07339711c98e51eb1be569da3f) - @RogerSelwyn
+
 ## 0.10.10 (2023/08/03)
 ### Fixes
 - [Correct the sending of entity name for 2023.8.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/58bc723b44d590d8dd344da20a914dbcef5e3b86) - @RogerSelwyn
