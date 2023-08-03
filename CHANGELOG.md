@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.10 (2023/08/03)
+### Fixes
+- [Correct the sending of entity name for 2023.8.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/58bc723b44d590d8dd344da20a914dbcef5e3b86) - @RogerSelwyn
+
+### Maintenance
+- [Remove redundant code](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/986d08c2cd1241467113bd53e9138f000763db49) - @RogerSelwyn
+- [Update validate_hacs.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3f788964de1a7a59ffacf1bac2addedd670ce0d1) - @RogerSelwyn
+- [Bump to v0.10.10](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5af73d48c834eaae667cc4bf01d80ad598feff72) - @RogerSelwyn
+
+### Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e7db855b39f36362a22b2544321d41a4024fb928) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/03b35f3183b9ab3383ee47e8cf9a816495eb47f8) - @RogerSelwyn
 
 ## 0.10.9 (2023/07/01)
 ### Maintenance
