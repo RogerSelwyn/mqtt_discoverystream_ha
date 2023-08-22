@@ -17,7 +17,7 @@ from .const import (
     CONF_PUBLISH_TIMESTAMPS,
     DOMAIN,
 )
-from .discovery import Discovery
+from .publisher import Publisher
 from .schema import CONFIG_SCHEMA  # noqa: F401
 
 _LOGGER = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
     publish_discovery = conf.get(CONF_PUBLISH_DISCOVERY)
     if publish_discovery:
-        discovery = Discovery(hass, base_topic, conf)
+        publisher = Publisher(hass, conf)
 
     async def _state_publisher(evt: Event) -> None:
         entity_id: str = evt.data["entity_id"]
@@ -49,7 +49,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         mybase = f"{base_topic}{entity_id.replace('.', '/')}/"
         if publish_discovery:
-            await discovery.async_state_publish(entity_id, new_state, mybase)
+            await publisher.async_state_publish(entity_id, new_state, mybase)
         else:
             payload = new_state.state
             await mqtt.async_publish(hass, f"{mybase}state", payload, 1, True)

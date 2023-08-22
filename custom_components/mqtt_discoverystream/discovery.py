@@ -1,15 +1,8 @@
-"""Discovery for MQTT Discovery Stream."""
+"""Publishing for MQTT Discovery Stream."""
 import json
-import logging
 
 from homeassistant.components import mqtt
-from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
-from homeassistant.components.mqtt.const import (
-    CONF_AVAILABILITY,
-    DATA_MQTT,
-    DEFAULT_PAYLOAD_AVAILABLE,
-    DEFAULT_PAYLOAD_NOT_AVAILABLE,
-)
+from homeassistant.components.mqtt.const import CONF_AVAILABILITY, DATA_MQTT
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
@@ -19,14 +12,10 @@ from homeassistant.const import (
     ATTR_UNIT_OF_MEASUREMENT,
     CONF_INCLUDE,
     CONF_NAME,
-    STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
     Platform,
 )
 from homeassistant.helpers import device_registry, entity_registry
-from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.json import JSONEncoder
-from homeassistant.setup import async_when_setup
 
 from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
@@ -57,69 +46,31 @@ from .const import (
     CONF_UNIT_OF_MEAS,
     DOMAIN,
 )
-from .utils import async_publish_base_attributes
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class Discovery:
     """Manage discovery publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, base_topic, conf):
+    def __init__(self, hass, conf):
         """Initiate discovery."""
         self._hass = hass
-        self._base_topic = base_topic
+        self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         self._has_includes = bool(conf.get(CONF_INCLUDE))
+        self._dev_reg = device_registry.async_get(hass)
+        self._ent_reg = entity_registry.async_get(hass)
         self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
             CONF_BASE_TOPIC
         )
-        self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
-        if not self._command_topic.endswith("/"):
-            self._command_topic = f"{self._command_topic}/"
-        self._dev_reg = device_registry.async_get(hass)
-        self._ent_reg = entity_registry.async_get(hass)
         if not self._discovery_topic.endswith("/"):
             self._discovery_topic = f"{self._discovery_topic}/"
-        self._hass.data[DOMAIN] = {self._discovery_topic: {}}
-        self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED] = []
         self._binary_sensor = BinarySensor()
         self._climate = Climate(hass)
         self._light = Light(hass)
         self._switch = Switch(hass)
         self._cover = Cover(hass)
-        self._publish_filter = convert_include_exclude_filter(conf)
-        async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
 
-    async def async_state_publish(self, entity_id, new_state, mybase):
-        """Publish state for MQTT Discovery Statestream."""
-        ent_parts = entity_id.split(".")
-        ent_domain = ent_parts[0]
-
-        if (
-            entity_id
-            not in self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED]
-        ):
-            await self._async_discovery_publish(entity_id, new_state.attributes, mybase)
-
-        if ent_domain == Platform.LIGHT:
-            await self._light.async_publish_state(new_state, mybase)
-        elif ent_domain == Platform.CLIMATE:
-            await self._climate.async_publish_state(new_state, mybase)
-        elif ent_domain == Platform.COVER:
-            await self._cover.async_publish_state(new_state, mybase)
-        else:
-            await async_publish_base_attributes(self._hass, new_state, mybase)
-
-        payload = (
-            DEFAULT_PAYLOAD_NOT_AVAILABLE
-            if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
-            else DEFAULT_PAYLOAD_AVAILABLE
-        )
-        await mqtt.async_publish(
-            self._hass, f"{mybase}{CONF_AVAILABILITY}", payload, 1, True
-        )
-
-    async def _async_discovery_publish(self, entity_id, attributes, mybase):
+    async def async_discovery_publish(self, entity_id, attributes, mybase):
+        """Publish Discovery information for entitiy."""
         mycommand = f"{self._command_topic}{entity_id.replace('.', '/')}/"
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
@@ -166,9 +117,7 @@ class Discovery:
                 f"{self._discovery_topic}{entity_id.replace('.', '/')}/{ATTR_CONFIG}"
             )
             await mqtt.async_publish(self._hass, entity_disc_topic, encoded, 1, True)
-            self._hass.data[DOMAIN][self._discovery_topic][CONF_PUBLISHED].append(
-                entity_id
-            )
+            self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 
     def _build_base(self, entity_id, attributes, mybase):
         # sourcery skip: assign-if-exp, merge-dict-assign
@@ -230,13 +179,3 @@ class Discovery:
                     config_device[CONF_CNS] = device.connections
 
         return config_device
-
-    async def _async_subscribe(
-        self, hass, component
-    ):  # pylint: disable=unused-argument
-        """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
-        await self._climate.async_subscribe(self._command_topic)
-        await self._light.async_subscribe(self._command_topic)
-        await self._switch.async_subscribe(self._command_topic)
-        await self._cover.async_subscribe(self._command_topic)
-        _LOGGER.info("MQTT subscribe successful")
