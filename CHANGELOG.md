@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.11.00 (2023/08/22)
+### Maintenance
+- [Split discovery publishing from state publishing for ease of maintenance](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/47b3949013e7bc5b472056c67330951ee8c30b86) - @RogerSelwyn
+- [Bump to v0.11.00](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1a5a83e42552dfe6fa9af4ddbebeeb9db28e3f3f) - @RogerSelwyn
+
 ## 0.10.13 (2023/08/03)
 ### Fixes
 - [Fix AttributeError: 'NoneType' object has no attribute 'entity_category'](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/382503aa8a4818785f6d470a02a56a8e0bf31852) - @RogerSelwyn
