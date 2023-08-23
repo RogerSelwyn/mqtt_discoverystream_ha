@@ -21,6 +21,7 @@ from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.cover import Cover
 from .classes.light import Light
+from .classes.sensor import Sensor
 from .classes.switch import Switch
 from .const import (
     ATTR_ATTRIBUTES,
@@ -66,6 +67,7 @@ class Discovery:
         self._binary_sensor = BinarySensor()
         self._climate = Climate(hass)
         self._light = Light(hass)
+        self._sensor = Sensor(hass)
         self._switch = Switch(hass)
         self._cover = Cover(hass)
 
@@ -81,6 +83,7 @@ class Discovery:
         if ent_domain == Platform.SENSOR and (
             self._has_includes or ATTR_DEVICE_CLASS in attributes
         ):
+            self._sensor.build_config(config, entity_id)
             publish_config = True
 
         elif ent_domain == Platform.BINARY_SENSOR and (

@@ -11,7 +11,6 @@ from homeassistant.components.mqtt.const import (
 from homeassistant.const import CONF_INCLUDE, STATE_UNAVAILABLE, STATE_UNKNOWN, Platform
 from homeassistant.setup import async_when_setup
 
-from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.cover import Cover
 from .classes.light import Light
@@ -43,7 +42,6 @@ class Publisher:
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
-        self._binary_sensor = BinarySensor()
         self._climate = Climate(hass)
         self._light = Light(hass)
         self._switch = Switch(hass)
