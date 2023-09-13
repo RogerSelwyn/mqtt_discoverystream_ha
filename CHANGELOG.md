@@ -1,16 +1,16 @@
 # Changelog
 
 ## 0.11.01 (2023/09/13)
-### ✨ Enhancements
+## ✨ Enhancements
 - [Add suggested_display_precision to sensor](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5e4ec8a139606ea22d5fb5c3f4d2b6bbbee54b4b) - @RogerSelwyn
 
 ### 🐛 Fixes
 - [Fix topic prefix validation](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62b2ea4026c44d92481c3aefdc39b173e98fab7f) - @miguelangel-nubla
+- [Add back empty requirements](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9091665f78519350d032ff9f2af4feb583a61a51) - @RogerSelwyn
 
 ### 🔨 Maintenance
 - [Bump to v0.11.01](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1be24e2169602e6fd433a4ae9c0f87c1149ed477) - @RogerSelwyn
 - [Remove numpy as requirement](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/18dc2a3f2fa61e464fc8fa45e4116c31d563908f) - @RogerSelwyn
-
 
 ## 0.11.00 (2023/08/22)
 ### Maintenance
