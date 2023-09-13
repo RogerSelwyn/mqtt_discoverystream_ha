@@ -56,6 +56,8 @@ class Discovery:
         """Initiate discovery."""
         self._hass = hass
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
+        if not self._command_topic.endswith("/"):
+            self._command_topic = f"{self._command_topic}/"
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
