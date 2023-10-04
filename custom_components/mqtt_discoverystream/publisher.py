@@ -59,6 +59,16 @@ class Publisher:
                 entity_id, new_state.attributes, mybase
             )
 
+        if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None):
+            await mqtt.async_publish(
+                self._hass,
+                f"{mybase}{CONF_AVAILABILITY}",
+                DEFAULT_PAYLOAD_NOT_AVAILABLE,
+                1,
+                True,
+            )
+            return
+
         if ent_domain == Platform.LIGHT:
             await self._light.async_publish_state(new_state, mybase)
         elif ent_domain == Platform.CLIMATE:
@@ -68,13 +78,12 @@ class Publisher:
         else:
             await async_publish_base_attributes(self._hass, new_state, mybase)
 
-        payload = (
-            DEFAULT_PAYLOAD_NOT_AVAILABLE
-            if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None)
-            else DEFAULT_PAYLOAD_AVAILABLE
-        )
         await mqtt.async_publish(
-            self._hass, f"{mybase}{CONF_AVAILABILITY}", payload, 1, True
+            self._hass,
+            f"{mybase}{CONF_AVAILABILITY}",
+            DEFAULT_PAYLOAD_AVAILABLE,
+            1,
+            True,
         )
 
     async def _async_subscribe(
