@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.02 (2023/10/04)
+### 🐛 Fixes
+- [Fix mqtt errors when entity unavailable. Don't publish state, just availability](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8ac141768fb2096127b7153e7eec7a9f44d35967) - @RogerSelwyn
+
+### 🔨 Maintenance
+- [Update dependabot.yml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d777274d247d86fe6b8940351dcd230a1b6d76a6) - @RogerSelwyn
+- [Bump to v0.11.02](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9ab1afba8e05b85c34184f4334b4c4763e978dca) - @RogerSelwyn
+- [Bump actions/checkout from 2 to 4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a72527d098c095acbb67ca64dcb6fe760c2e772c) - @dependabot[bot]
+
 ## 0.11.01 (2023/09/13)
 ## ✨ Enhancements
 - [Add suggested_display_precision to sensor](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5e4ec8a139606ea22d5fb5c3f4d2b6bbbee54b4b) - @RogerSelwyn
