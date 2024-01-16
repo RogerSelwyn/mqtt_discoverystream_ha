@@ -80,24 +80,24 @@ class Light:
             if new_state.state == STATE_ON
             else STATE_CAPITAL_OFF,
         }
-        if (
-            ATTR_BRIGHTNESS in new_state.attributes
-            and new_state.attributes[ATTR_BRIGHTNESS]
-        ):
-            payload[ATTR_BRIGHTNESS] = new_state.attributes[ATTR_BRIGHTNESS]
-        if (
-            ATTR_COLOR_MODE in new_state.attributes
-            and new_state.attributes[ATTR_COLOR_MODE]
-        ):
-            payload[ATTR_COLOR_MODE] = new_state.attributes[ATTR_COLOR_MODE]
-        if (
-            ATTR_COLOR_TEMP in new_state.attributes
-            and new_state.attributes[ATTR_COLOR_TEMP]
-        ):
-            payload[ATTR_COLOR_TEMP] = new_state.attributes[ATTR_COLOR_TEMP]
-        if ATTR_EFFECT in new_state.attributes and new_state.attributes[ATTR_EFFECT]:
-            payload[ATTR_EFFECT] = new_state.attributes[ATTR_EFFECT]
+        self._add_attribute(payload, new_state, ATTR_BRIGHTNESS)
+        self._add_attribute(payload, new_state, ATTR_COLOR_MODE)
+        self._add_attribute(payload, new_state, ATTR_COLOR_TEMP)
+        self._add_attribute(payload, new_state, ATTR_EFFECT)
+        self._add_attribute(payload, new_state, ATTR_BRIGHTNESS)
+        self._add_attribute(payload, new_state, ATTR_BRIGHTNESS)
 
+        if color := self._add_colors(new_state):
+            payload[ATTR_COLOR] = color
+
+        payload = json.dumps(payload, cls=JSONEncoder)
+        await mqtt.async_publish(self._hass, f"{mybase}{ATTR_STATE}", payload, 1, True)
+
+    def _add_attribute(self, payload, new_state, attribute):
+        if attribute in new_state.attributes and new_state.attributes[attribute]:
+            payload[attribute] = new_state.attributes[attribute]
+
+    def _add_colors(self, new_state):
         color = {}
         if (
             ATTR_HS_COLOR in new_state.attributes
@@ -118,11 +118,8 @@ class Light:
             color[ATTR_R] = new_state.attributes[ATTR_RGB_COLOR][0]
             color[ATTR_G] = new_state.attributes[ATTR_RGB_COLOR][1]
             color[ATTR_B] = new_state.attributes[ATTR_RGB_COLOR][2]
-        if color:
-            payload[ATTR_COLOR] = color
 
-        payload = json.dumps(payload, cls=JSONEncoder)
-        await mqtt.async_publish(self._hass, f"{mybase}{ATTR_STATE}", payload, 1, True)
+        return color
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a light."""
