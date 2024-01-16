@@ -78,13 +78,22 @@ class Light:
             if new_state.state == STATE_ON
             else STATE_CAPITAL_OFF,
         }
-        if ATTR_BRIGHTNESS in new_state.attributes:
+        if (
+            ATTR_BRIGHTNESS in new_state.attributes
+            and new_state.attributes[ATTR_BRIGHTNESS]
+        ):
             payload[ATTR_BRIGHTNESS] = new_state.attributes[ATTR_BRIGHTNESS]
-        if ATTR_COLOR_MODE in new_state.attributes:
+        if (
+            ATTR_COLOR_MODE in new_state.attributes
+            and new_state.attributes[ATTR_COLOR_MODE]
+        ):
             payload[ATTR_COLOR_MODE] = new_state.attributes[ATTR_COLOR_MODE]
-        if ATTR_COLOR_TEMP in new_state.attributes:
+        if (
+            ATTR_COLOR_TEMP in new_state.attributes
+            and new_state.attributes[ATTR_COLOR_TEMP]
+        ):
             payload[ATTR_COLOR_TEMP] = new_state.attributes[ATTR_COLOR_TEMP]
-        if ATTR_EFFECT in new_state.attributes:
+        if ATTR_EFFECT in new_state.attributes and new_state.attributes[ATTR_EFFECT]:
             payload[ATTR_EFFECT] = new_state.attributes[ATTR_EFFECT]
 
         color = {}
