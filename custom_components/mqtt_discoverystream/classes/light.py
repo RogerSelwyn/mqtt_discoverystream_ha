@@ -88,13 +88,22 @@ class Light:
             payload[ATTR_EFFECT] = new_state.attributes[ATTR_EFFECT]
 
         color = {}
-        if ATTR_HS_COLOR in new_state.attributes:
+        if (
+            ATTR_HS_COLOR in new_state.attributes
+            and new_state.attributes[ATTR_HS_COLOR]
+        ):
             color[ATTR_H] = new_state.attributes[ATTR_HS_COLOR][0]
             color[ATTR_S] = new_state.attributes[ATTR_HS_COLOR][1]
-        if ATTR_XY_COLOR in new_state.attributes:
+        if (
+            ATTR_XY_COLOR in new_state.attributes
+            and new_state.attributes[ATTR_XY_COLOR]
+        ):
             color[ATTR_X] = new_state.attributes[ATTR_XY_COLOR][0]
             color[ATTR_Y] = new_state.attributes[ATTR_XY_COLOR][1]
-        if ATTR_RGB_COLOR in new_state.attributes:
+        if (
+            ATTR_RGB_COLOR in new_state.attributes
+            and new_state.attributes[ATTR_RGB_COLOR]
+        ):
             color[ATTR_R] = new_state.attributes[ATTR_RGB_COLOR][0]
             color[ATTR_G] = new_state.attributes[ATTR_RGB_COLOR][1]
             color[ATTR_B] = new_state.attributes[ATTR_RGB_COLOR][2]
