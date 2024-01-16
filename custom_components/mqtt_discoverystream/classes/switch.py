@@ -10,7 +10,14 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import ATTR_SET, CONF_CMD_T, CONF_PL_OFF, CONF_PL_ON
+from ..const import (
+    ATTR_SET,
+    CONF_CMD_T,
+    CONF_PL_OFF,
+    CONF_PL_ON,
+    CONF_PUBLISHED,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -40,6 +47,10 @@ class Switch:
         explode_topic = msg.topic.split("/")
         domain = explode_topic[1]
         entity = explode_topic[2]
+
+        # Only handle service calls for discoveries we published
+        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+            return
 
         _LOGGER.debug(
             "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}

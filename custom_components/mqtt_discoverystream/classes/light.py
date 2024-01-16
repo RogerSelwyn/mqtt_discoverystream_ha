@@ -41,6 +41,8 @@ from ..const import (
     ATTR_Y,
     CONF_CMD_T,
     CONF_JSON_ATTR_T,
+    CONF_PUBLISHED,
+    DOMAIN,
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
@@ -134,6 +136,10 @@ class Light:
         explode_topic = msg.topic.split("/")
         domain = explode_topic[1]
         entity = explode_topic[2]
+
+        # Only handle service calls for discoveries we published
+        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+            return
 
         _LOGGER.debug(
             "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}

@@ -40,7 +40,13 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND
+from ..const import (
+    ATTR_MODE_COMMAND,
+    ATTR_PRESET_COMMAND,
+    ATTR_TEMP_COMMAND,
+    CONF_PUBLISHED,
+    DOMAIN,
+)
 from ..utils import async_publish_attribute, async_publish_base_attributes
 
 _LOGGER = logging.getLogger(__name__)
@@ -120,6 +126,10 @@ class Climate:
         domain = explode_topic[1]
         entity = explode_topic[2]
         element = explode_topic[3]
+
+        # Only handle service calls for discoveries we published
+        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+            return
 
         _LOGGER.debug(
             "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
