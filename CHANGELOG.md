@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.11.03 (2024/01/16)
+### 🐛 Fixes
+- [Handle changes in core related to attribute passing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9b0e1859a1f2d30d488fc11a9a3b26680a457621) - @RogerSelwyn
+- [Handle changes in core related to attribute passing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c60675989badc48a1845947414769b5789a0abc2) - @RogerSelwyn
+- [Only handle service calls for discoveries we published](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e8646abb05466052ac26928f960270699f78ac76) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/43ba493c8a73ca073199a4b8c19022c8ebd8d2c4) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v0.11.03](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bf2a8750fc7ae30a510fd889adfc1500af32000a) - @RogerSelwyn
+
 ## 0.11.02 (2023/10/04)
 ### 🐛 Fixes
 - [Fix mqtt errors when entity unavailable. Don't publish state, just availability](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8ac141768fb2096127b7153e7eec7a9f44d35967) - @RogerSelwyn
