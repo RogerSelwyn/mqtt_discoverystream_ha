@@ -123,7 +123,8 @@ class Light:
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a light."""
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
             self._async_handle_message,
         )

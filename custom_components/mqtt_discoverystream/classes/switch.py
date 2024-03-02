@@ -1,6 +1,7 @@
 """switch methods for MQTT Discovery Statestream."""
 import logging
 
+from homeassistant.components import mqtt
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     SERVICE_TURN_OFF,
@@ -37,7 +38,8 @@ class Switch:
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a switch."""
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.SWITCH}/+/{ATTR_SET}",
             self._async_handle_message,
         )

@@ -107,15 +107,18 @@ class Climate:
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for climate."""
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.CLIMATE}/+/{ATTR_MODE_COMMAND}",
             self._async_handle_message,
         )
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.CLIMATE}/+/{ATTR_PRESET_COMMAND}",
             self._async_handle_message,
         )
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.CLIMATE}/+/{ATTR_TEMP_COMMAND}",
             self._async_handle_message,
         )

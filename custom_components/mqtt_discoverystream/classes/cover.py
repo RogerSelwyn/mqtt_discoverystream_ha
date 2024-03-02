@@ -62,7 +62,8 @@ class Cover:
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a cover."""
-        await self._hass.components.mqtt.async_subscribe(
+        await mqtt.async_subscribe(
+            self._hass,
             f"{command_topic}{Platform.COVER}/+/{ATTR_SET}",
             self._async_handle_message,
         )
