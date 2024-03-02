@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.11.04 (2024/03/02)
+### 🐛 Fixes
+- [Fix deprecation alert for MQTT component usage](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4a68373788ab97589391d1a8c79a7f6b18956776) - @RogerSelwyn
+
+### 🔨 Maintenance
+- [Code improvement](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cdf0bebd9820f6ada8832ee356cca3b7915662b3) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v0.11.04](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9bab85c66791bbbd78e2dc6f6ab1442d110a02ec) - @RogerSelwyn
+
 ## 0.11.03 (2024/01/16)
 ### 🐛 Fixes
 - [Handle changes in core related to attribute passing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9b0e1859a1f2d30d488fc11a9a3b26680a457621) - @RogerSelwyn
