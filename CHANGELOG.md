@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.11.05 (2024/03/05)
+### 🐛 Fixes
+- [Fix warning from deprecation of color_mode flag](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5a23cbf018f38feaa2ea93a50227c3d6fcdf6032) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v0.11.05](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/12f7732adf8745857bc29a438c325b75092b7d44) - @RogerSelwyn
+
 ## 0.11.04 (2024/03/02)
 ### 🐛 Fixes
 - [Fix deprecation alert for MQTT component usage](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4a68373788ab97589391d1a8c79a7f6b18956776) - @RogerSelwyn
