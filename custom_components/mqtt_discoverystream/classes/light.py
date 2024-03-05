@@ -69,9 +69,15 @@ class Light:
         if supported_features & SUPPORT_EFFECT:
             config[ATTR_EFFECT] = True
         if ATTR_SUPPORTED_COLOR_MODES in attributes:
-            config[ATTR_COLOR_MODE] = True
             config[ATTR_SUPPORTED_COLOR_MODES] = attributes[ATTR_SUPPORTED_COLOR_MODES]
             config[ATTR_BRIGHTNESS] = True
+        else:
+            config[ATTR_COLOR_MODE] = False
+            _LOGGER.warning(
+                "Light '%s' has no '%s' attribute which is mandatory. Please report to owner.",
+                entity_id,
+                ATTR_SUPPORTED_COLOR_MODES,
+            )
 
     async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""
