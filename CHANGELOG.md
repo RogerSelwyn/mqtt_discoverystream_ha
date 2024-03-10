@@ -5,6 +5,12 @@
 - [Add service to trigger re-publication of discovery and state information](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/08c39e65ff2e2d7a5aabf34c3eb4f22ae88532fe) - @RogerSelwyn
 - [Add publication of discover and current state after HA startup](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e308f5deded08a1ce38bec20d22974feb3d2683a) - @RogerSelwyn
 
+### 🧰 Maintenance
+- [Add services.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5d5ee5a10dfabdfd9ac7e952ccf051e0763b8487) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/32f16334e5bbfeb5a7eed4dba07e9c2dd0f2ab5a) - @RogerSelwyn
+
 ### 🔖 Release
 - [Release v0.12.00](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f99f7b883580137125c1beceb69d3e614d3e8046) - @RogerSelwyn
 
