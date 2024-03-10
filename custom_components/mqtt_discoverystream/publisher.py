@@ -9,6 +9,8 @@ from homeassistant.components.mqtt.const import (
     DEFAULT_PAYLOAD_NOT_AVAILABLE,
 )
 from homeassistant.const import CONF_INCLUDE, STATE_UNAVAILABLE, STATE_UNKNOWN, Platform
+from homeassistant.helpers import entity_registry
+from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.setup import async_when_setup
 
 from .classes.climate import Climate
@@ -31,9 +33,10 @@ _LOGGER = logging.getLogger(__name__)
 class Publisher:
     """Manage publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf):
+    def __init__(self, hass, conf, base_topic):
         """Initiate publishing."""
         self._hass = hass
+        self._base_topic = base_topic
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
             CONF_BASE_TOPIC
@@ -47,14 +50,16 @@ class Publisher:
         self._switch = Switch(hass)
         self._cover = Cover(hass)
         self._discovery = Discovery(hass, conf)
+        self._publish_filter = convert_include_exclude_filter(conf)
         async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
 
-    async def async_state_publish(self, entity_id, new_state, mybase):
+    async def async_state_publish(self, entity_id, new_state, force_discovery=False):
         """Publish state for MQTT Discovery Statestream."""
+        mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+        if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED] or force_discovery:
             await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
@@ -86,12 +91,25 @@ class Publisher:
             True,
         )
 
-    async def _async_subscribe(
-        self, hass, component
-    ):  # pylint: disable=unused-argument
+    async def _async_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         await self._climate.async_subscribe(self._command_topic)
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
+        self._register_services()
         _LOGGER.info("MQTT subscribe successful")
+
+    def _register_services(self):
+        self._hass.services.async_register(
+            DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
+        )
+
+    async def _async_publish_discovery_state(self, call):  # pylint: disable=unused-argument
+        ent_reg = entity_registry.async_get(self._hass)
+        for entity_id in ent_reg.entities:
+            if self._publish_filter(entity_id):
+                if current_state := self._hass.states.get(entity_id):
+                    await self.async_state_publish(
+                        entity_id, current_state, force_discovery=True
+                    )

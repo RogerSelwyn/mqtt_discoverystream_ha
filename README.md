@@ -59,7 +59,7 @@ mqtt_discoverystream:
 
 ### Options
 
-This integration can only be configuration via YAML.
+This integration can only be configured via YAML.
 The base options are the same as the mqtt_statestream one. 
 
 | key                | default | required | description                                                                  |
@@ -71,6 +71,11 @@ The base options are the same as the mqtt_statestream one.
 | publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.         |
 | publish_discovery  | false   | no       | Publish the discovery topic ("config").                                      |
 | include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.  |
+
+### Services
+
+A service called `publish_discovery_state` is provided when `publish_discovery` is enabled in the configuration. The service triggers a re-publication of the discovery and current state information for each entity that matches the inclusion/exclusion filter. There are no attributes/parameters for the service.
+
 
 ## Credits
 
