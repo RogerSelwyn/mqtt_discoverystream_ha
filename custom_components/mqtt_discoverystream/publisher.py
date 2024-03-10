@@ -8,7 +8,13 @@ from homeassistant.components.mqtt.const import (
     DEFAULT_PAYLOAD_AVAILABLE,
     DEFAULT_PAYLOAD_NOT_AVAILABLE,
 )
-from homeassistant.const import CONF_INCLUDE, STATE_UNAVAILABLE, STATE_UNKNOWN, Platform
+from homeassistant.const import (
+    CONF_INCLUDE,
+    EVENT_HOMEASSISTANT_STARTED,
+    STATE_UNAVAILABLE,
+    STATE_UNKNOWN,
+    Platform,
+)
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.setup import async_when_setup
@@ -52,6 +58,8 @@ class Publisher:
         self._discovery = Discovery(hass, conf)
         self._publish_filter = convert_include_exclude_filter(conf)
         async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
+        self._register_services()
+        self._listen_for_hass_started()
 
     async def async_state_publish(self, entity_id, new_state, force_discovery=False):
         """Publish state for MQTT Discovery Statestream."""
@@ -97,7 +105,6 @@ class Publisher:
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
-        self._register_services()
         _LOGGER.info("MQTT subscribe successful")
 
     def _register_services(self):
@@ -113,3 +120,12 @@ class Publisher:
                     await self.async_state_publish(
                         entity_id, current_state, force_discovery=True
                     )
+        _LOGGER.info("Discovery and states published")
+
+    def _listen_for_hass_started(self):
+        self._hass.bus.async_listen_once(
+            EVENT_HOMEASSISTANT_STARTED, self._async_run_discovery
+        )
+
+    async def _async_run_discovery(self, call):  # pylint: disable=unused-argument
+        await self._async_publish_discovery_state(None)
