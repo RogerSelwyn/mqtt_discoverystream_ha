@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.00 (2024/03/10)
+### ✨ Enhancements
+- [Add service to trigger re-publication of discovery and state information](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/08c39e65ff2e2d7a5aabf34c3eb4f22ae88532fe) - @RogerSelwyn
+- [Add publication of discover and current state after HA startup](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e308f5deded08a1ce38bec20d22974feb3d2683a) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v0.12.00](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f99f7b883580137125c1beceb69d3e614d3e8046) - @RogerSelwyn
+
 ## 0.11.05 (2024/03/05)
 ### 🐛 Fixes
 - [Fix warning from deprecation of color_mode flag](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5a23cbf018f38feaa2ea93a50227c3d6fcdf6032) - @RogerSelwyn
