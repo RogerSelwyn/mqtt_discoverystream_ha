@@ -92,6 +92,63 @@ Discovery and state messages will be published under 4 situations:
 1. Initiation of `publish_discovery_state` service
 1. First change of state of an entity, where none of the first 3 items has occurred 
 
+## Flowchart
+
+### Startup
+```mermaid
+sequenceDiagram
+participant H as Home Assistant
+participant M as Master
+participant S as Slave
+opt
+  H->>+M: Entity changed state
+  M->>S: Publish discovery<br/>(discovery_topic)
+  M->>S: Publish state<br/>(base_topic)
+  M->>-H: End
+end
+H->>+M: Home Assistant Started
+loop 
+  M->>S: Publish discovery<br/>(discovery_topic)
+  M->>S: Publish state<br/>(base_topic)
+end
+M->>-H: End
+```
+
+### Running
+```mermaid
+sequenceDiagram
+participant H as Home Assistant
+participant M as Master
+participant S as Slave
+opt
+  H->>+M: Entity changed state
+  M->>S: Publish discovery<br/>(discovery_topic)
+  M->>S: Publish state<br/>(base_topic)
+  M->>-H: End
+end
+
+opt
+  S->>+M: Publish birth<br/>(birth_topic)
+  loop 
+    M->>S: Publish discovery<br/>(discovery_topic)
+    M->>S: Publish state<br/>(base_topic)
+  end
+  M->>-S: End
+end
+opt
+  S->>M: Publish commands<br/>(command_topic)
+  M->>H: Perform command on entity
+end
+
+opt
+  H->>+M: Service request
+  M->>S: Publish discovery<br/>(discovery_topic)
+  M->>S: Publish state<br/>(base_topic)
+  M->>-H: End
+end
+```
+
+
 ## Credits
 
 - This custom component is based upon the `mqtt_statestream` one from HA Core.  
