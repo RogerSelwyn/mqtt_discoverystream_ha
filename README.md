@@ -62,16 +62,16 @@ mqtt_discoverystream:
 This integration can only be configured via YAML.
 The base options are the same as the mqtt_statestream one. 
 
-| key                | default | required | description                                                                    |
-| ------------------ | ------- | -------- | ------------------------------------------------------------------------------ |
-| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                  |
-| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic   |
-| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic      |
-| lwt_topic          | none    | no       | Topic where LWT message will be subscribed. Defaults to base_topic + `/status` |
-| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                         |
-| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.           |
-| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                        |
-| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.    |
+| key                | default | required | description                                                                      |
+| ------------------ | ------- | -------- | -------------------------------------------------------------------------------- |
+| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                    |
+| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic     |
+| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic        |
+| birth_topic        | none    | no       | Topic where birth message will be subscribed. Defaults to base_topic + `/status` |
+| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                           |
+| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.             |
+| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                          |
+| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.      |
 
 ## Services
 
@@ -82,13 +82,13 @@ A service called `publish_discovery_state` is provided when `publish_discovery` 
 * Discovery messages will be published to the `discovery_topic` when `publish_discovery` is enabled. 
 * State messages will be sent to the `base_topic`.
 * Commands from entities at the slave site will be subscribed to on the `command_topic`.
-* Last Will and Testament messages from the slave site will be subscribed to on the `lwt_topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
+* Last Will and Testament messages from the slave site will be subscribed to on the `birth_topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
 
 ## Discovery of entities and Publication of states
 
 Discovery and state messages will be published under 4 situations:
 1. Completion of Home Assistant startup
-1. Connection of slave broker and receipt of `online` message at the `lwt_topic`
+1. Connection of slave broker and receipt of `online` message at the `birth_topic`
 1. Initiation of `publish_discovery_state` service
 1. First change of state of an entity, where none of the first 3 items has occurred 
 
@@ -97,19 +97,24 @@ Discovery and state messages will be published under 4 situations:
 ### Startup
 ```mermaid
 sequenceDiagram
-participant H as Home Assistant
-participant M as Master
-participant S as Slave
+participant H as Home Assistant Master
+participant M as Master Broker
+participant S as Slave Broker
+participant R as Home Assistant Slave
 opt
   H->>+M: Entity changed state
   M->>S: Publish discovery<br/>(discovery_topic)
+  S->>R: Create entity
   M->>S: Publish state<br/>(base_topic)
+  S->>R: Set state
   M->>-H: End
 end
 H->>+M: Home Assistant Started
 loop 
   M->>S: Publish discovery<br/>(discovery_topic)
+  S->>R: Create entity
   M->>S: Publish state<br/>(base_topic)
+  S->>R: Set state
 end
 M->>-H: End
 ```
@@ -117,13 +122,14 @@ M->>-H: End
 ### Running
 ```mermaid
 sequenceDiagram
-participant H as Home Assistant
-participant M as Master
-participant S as Slave
+participant H as Home Assistant Master
+participant M as Master Broker
+participant S as Slave Broker
+participant R as Home Assistant Slave
 opt
   H->>+M: Entity changed state
-  M->>S: Publish discovery<br/>(discovery_topic)
   M->>S: Publish state<br/>(base_topic)
+  S->>R: Set state
   M->>-H: End
 end
 
@@ -131,19 +137,27 @@ opt
   S->>+M: Publish birth<br/>(birth_topic)
   loop 
     M->>S: Publish discovery<br/>(discovery_topic)
+    S->>R: Create entity
     M->>S: Publish state<br/>(base_topic)
+    S->>R: Set state
   end
   M->>-S: End
 end
 opt
+  R->>S: Command initiated
   S->>M: Publish commands<br/>(command_topic)
   M->>H: Perform command on entity
+  H->>+M: Entity changed state
+  M->>S: Publish state<br/>(base_topic)
+  S->>R: Set state
 end
 
 opt
   H->>+M: Service request
   M->>S: Publish discovery<br/>(discovery_topic)
+  S->>R: Create entity
   M->>S: Publish state<br/>(base_topic)
+  S->>R: Set state
   M->>-H: End
 end
 ```
