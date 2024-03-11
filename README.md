@@ -62,20 +62,35 @@ mqtt_discoverystream:
 This integration can only be configured via YAML.
 The base options are the same as the mqtt_statestream one. 
 
-| key                | default | required | description                                                                  |
-| ------------------ | ------- | -------- | ---------------------------------------------------------------------------- |
-| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                |
-| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic |
-| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic |
-| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                       |
-| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.         |
-| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                      |
-| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.  |
+| key                | default | required | description                                                                    |
+| ------------------ | ------- | -------- | ------------------------------------------------------------------------------ |
+| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                  |
+| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic   |
+| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic      |
+| lwt_topic          | none    | no       | Topic where LWT message will be subscribed. Defaults to base_topic + `/status` |
+| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                         |
+| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.           |
+| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                        |
+| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.    |
 
-### Services
+## Services
 
 A service called `publish_discovery_state` is provided when `publish_discovery` is enabled in the configuration. The service triggers a re-publication of the discovery and current state information for each entity that matches the inclusion/exclusion filter. There are no attributes/parameters for the service.
 
+## Topic Handling
+
+* Discovery messages will be published to the `discovery_topic` when `publish_discovery` is enabled. 
+* State messages will be sent to the `base_topic`.
+* Commands from entities at the slave site will be subscribed to on the `command_topic`.
+* Last Will and Testament messages from the slave site will be subscribed to on the `lwt_topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
+
+## Discovery of entities and Publication of states
+
+Discovery and state messages will be published under 4 situations:
+1. Completion of Home Assistant startup
+1. Connection of slave broker and receipt of `online` message at the `lwt_topic`
+1. Initiation of `publish_discovery_state` service
+1. First change of state of an entity, where none of the first 3 items has occurred 
 
 ## Credits
 

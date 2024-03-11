@@ -27,6 +27,7 @@ from .const import (
     CONF_BASE_TOPIC,
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
+    CONF_LWT_TOPIC,
     CONF_PUBLISHED,
     DOMAIN,
 )
@@ -50,6 +51,9 @@ class Publisher:
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
+        self._lwt_topic = conf.get(CONF_LWT_TOPIC) or conf.get(CONF_BASE_TOPIC)
+        if not self._lwt_topic.endswith("/status"):
+            self._lwt_topic = f"{self._lwt_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
         self._climate = Climate(hass)
         self._light = Light(hass)
@@ -105,14 +109,27 @@ class Publisher:
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
+        await self._async_lwt_subscribe()
         _LOGGER.info("MQTT subscribe successful")
+
+    async def _async_lwt_subscribe(self):
+        """Subscribe to lwt messages."""
+        await mqtt.async_subscribe(
+            self._hass,
+            f"{self._lwt_topic}",
+            self._async_handle_lwt_message,
+        )
+
+    async def _async_handle_lwt_message(self, msg):
+        if msg.payload == "online":
+            await self._async_run_discovery()
 
     def _register_services(self):
         self._hass.services.async_register(
             DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
         )
 
-    async def _async_publish_discovery_state(self, call):  # pylint: disable=unused-argument
+    async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
         ent_reg = entity_registry.async_get(self._hass)
         for entity_id in ent_reg.entities:
             if self._publish_filter(entity_id):
@@ -127,5 +144,5 @@ class Publisher:
             EVENT_HOMEASSISTANT_STARTED, self._async_run_discovery
         )
 
-    async def _async_run_discovery(self, call):  # pylint: disable=unused-argument
-        await self._async_publish_discovery_state(None)
+    async def _async_run_discovery(self, call=None):  # pylint: disable=unused-argument
+        await self._async_publish_discovery_state()
