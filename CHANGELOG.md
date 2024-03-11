@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.0 (2024/03/11)
+### ✨ Enhancements
+- [Subscribe to Birth messages to initiate Discovery](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9218d299e4ca86162a6a271e4f292f6dc0985517) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Change lwt to birth](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fcdf39c802795b8a310fbd4b641b79cd237de3cb) - @RogerSelwyn
+
+### 📚 Documentation
+- [Added flowcharts](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1fef1e59f375d80a5142f1a2281c5b7f3a8315e6) - @RogerSelwyn
+- [Updated flowcharts](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bd390e59db762d1618e7c643b89a0e47b6393f62) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.0.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1a0a38ce93e8a3f49f7154018902fc638332b0f4) - @RogerSelwyn
+
 ## 0.12.00 (2024/03/10)
 ### ✨ Enhancements
 - [Add service to trigger re-publication of discovery and state information](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/08c39e65ff2e2d7a5aabf34c3eb4f22ae88532fe) - @RogerSelwyn
