@@ -25,9 +25,9 @@ from .classes.light import Light
 from .classes.switch import Switch
 from .const import (
     CONF_BASE_TOPIC,
+    CONF_BIRTH_TOPIC,
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
-    CONF_LWT_TOPIC,
     CONF_PUBLISHED,
     DOMAIN,
 )
@@ -51,7 +51,7 @@ class Publisher:
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
-        self._lwt_topic = conf.get(CONF_LWT_TOPIC) or conf.get(CONF_BASE_TOPIC)
+        self._lwt_topic = conf.get(CONF_BIRTH_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._lwt_topic.endswith("/status"):
             self._lwt_topic = f"{self._lwt_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
