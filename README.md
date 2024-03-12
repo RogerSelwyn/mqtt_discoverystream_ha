@@ -158,10 +158,12 @@ end
 
 opt
   H->>+M: Service request
-  M->>S: Publish discovery<br/>(discovery_topic)
-  S->>R: Create entity
-  M->>S: Publish state<br/>(base_topic)
-  S->>R: Set state
+  loop
+    M->>S: Publish discovery<br/>(discovery_topic)
+    S->>R: Create entity
+    M->>S: Publish state<br/>(base_topic)
+    S->>R: Set state
+  end
   M->>-H: End
 end
 ```
