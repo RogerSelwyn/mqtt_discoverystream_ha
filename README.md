@@ -135,6 +135,7 @@ opt
 end
 
 opt
+  R->>S: Home Assistant Started
   S->>+M: Publish birth<br/>(birth_topic)
   loop 
     M->>S: Publish discovery<br/>(discovery_topic)
