@@ -139,6 +139,9 @@ opt
   loop 
     M->>S: Publish discovery<br/>(discovery_topic)
     S->>R: Create entity
+  end
+note right of M: Wait 5 seconds
+  loop 
     M->>S: Publish state<br/>(base_topic)
     S->>R: Set state
   end
