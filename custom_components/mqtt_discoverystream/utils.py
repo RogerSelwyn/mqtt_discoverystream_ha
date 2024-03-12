@@ -5,16 +5,20 @@ from homeassistant.components import mqtt
 from homeassistant.const import ATTR_STATE
 from homeassistant.helpers.json import JSONEncoder
 
-from .const import ATTR_ATTRIBUTES
+from .const import ATTR_ATTRIBUTES, DEFAULT_RETAIN
 
 
 async def async_publish_base_attributes(hass, new_state, mybase):
     """Publish the basic attributes for the entity state."""
-    await mqtt.async_publish(hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, True)
+    await mqtt.async_publish(
+        hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, DEFAULT_RETAIN
+    )
 
     attributes = dict(new_state.attributes.items())
     encoded = json.dumps(attributes, cls=JSONEncoder)
-    await mqtt.async_publish(hass, f"{mybase}{ATTR_ATTRIBUTES}", encoded, 1, True)
+    await mqtt.async_publish(
+        hass, f"{mybase}{ATTR_ATTRIBUTES}", encoded, 1, DEFAULT_RETAIN
+    )
 
 
 async def async_publish_attribute(hass, new_state, mybase, attribute_name, strip=False):
@@ -28,5 +32,5 @@ async def async_publish_attribute(hass, new_state, mybase, attribute_name, strip
             f"{mybase}{attribute_name}",
             value,
             1,
-            True,
+            DEFAULT_RETAIN,
         )

@@ -42,6 +42,7 @@ from ..const import (
     CONF_CMD_T,
     CONF_JSON_ATTR_T,
     CONF_PUBLISHED,
+    DEFAULT_RETAIN,
     DOMAIN,
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
@@ -97,7 +98,9 @@ class Light:
             payload[ATTR_COLOR] = color
 
         payload = json.dumps(payload, cls=JSONEncoder)
-        await mqtt.async_publish(self._hass, f"{mybase}{ATTR_STATE}", payload, 1, True)
+        await mqtt.async_publish(
+            self._hass, f"{mybase}{ATTR_STATE}", payload, 1, DEFAULT_RETAIN
+        )
 
     def _add_attribute(self, payload, new_state, attribute):
         if attribute in new_state.attributes and new_state.attributes[attribute]:

@@ -45,6 +45,7 @@ from .const import (
     CONF_SW,
     CONF_UNIQ_ID,
     CONF_UNIT_OF_MEAS,
+    DEFAULT_RETAIN,
     DOMAIN,
 )
 
@@ -121,7 +122,9 @@ class Discovery:
             entity_disc_topic = (
                 f"{self._discovery_topic}{entity_id.replace('.', '/')}/{ATTR_CONFIG}"
             )
-            await mqtt.async_publish(self._hass, entity_disc_topic, encoded, 1, True)
+            await mqtt.async_publish(
+                self._hass, entity_disc_topic, encoded, 1, DEFAULT_RETAIN
+            )
             self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 
     def _build_base(self, entity_id, attributes, mybase):

@@ -15,6 +15,7 @@ from .const import (
     CONF_PUBLISH_ATTRIBUTES,
     CONF_PUBLISH_DISCOVERY,
     CONF_PUBLISH_TIMESTAMPS,
+    DEFAULT_RETAIN,
     DOMAIN,
 )
 from .publisher import Publisher
@@ -52,7 +53,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             await publisher.async_state_publish(entity_id, new_state)
         else:
             payload = new_state.state
-            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, True)
+            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, DEFAULT_RETAIN)
 
         if publish_timestamps:
             if new_state.last_updated:
@@ -61,7 +62,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     f"{mybase}last_updated",
                     new_state.last_updated.isoformat(),
                     1,
-                    True,
+                    DEFAULT_RETAIN,
                 )
             if new_state.last_changed:
                 await mqtt.async_publish(
@@ -69,13 +70,15 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     f"{mybase}last_changed",
                     new_state.last_changed.isoformat(),
                     1,
-                    True,
+                    DEFAULT_RETAIN,
                 )
 
         if publish_attributes:
             for key, val in new_state.attributes.items():
                 encoded_val = json.dumps(val, cls=JSONEncoder)
-                await mqtt.async_publish(hass, mybase + key, encoded_val, 1, True)
+                await mqtt.async_publish(
+                    hass, mybase + key, encoded_val, 1, DEFAULT_RETAIN
+                )
 
     @callback
     def _ha_started(hass: HomeAssistant) -> None:

@@ -29,6 +29,8 @@ CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"
 CONF_PUBLISHED = "conf_published"
 
+DEFAULT_RETAIN = False
+
 DOMAIN = "mqtt_discoverystream"
 
 STATE_CAPITAL_ON = "ON"

@@ -29,6 +29,7 @@ from .const import (
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
     CONF_PUBLISHED,
+    DEFAULT_RETAIN,
     DOMAIN,
 )
 from .discovery import Discovery
@@ -51,9 +52,9 @@ class Publisher:
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
-        self._lwt_topic = conf.get(CONF_BIRTH_TOPIC) or conf.get(CONF_BASE_TOPIC)
-        if not self._lwt_topic.endswith("/status"):
-            self._lwt_topic = f"{self._lwt_topic}/status"
+        self._birth_topic = conf.get(CONF_BIRTH_TOPIC) or conf.get(CONF_BASE_TOPIC)
+        if not self._birth_topic.endswith("/status"):
+            self._birth_topic = f"{self._birth_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
         self._climate = Climate(hass)
         self._light = Light(hass)
@@ -82,7 +83,7 @@ class Publisher:
                 f"{mybase}{CONF_AVAILABILITY}",
                 DEFAULT_PAYLOAD_NOT_AVAILABLE,
                 1,
-                True,
+                DEFAULT_RETAIN,
             )
             return
 
@@ -100,7 +101,7 @@ class Publisher:
             f"{mybase}{CONF_AVAILABILITY}",
             DEFAULT_PAYLOAD_AVAILABLE,
             1,
-            True,
+            DEFAULT_RETAIN,
         )
 
     async def _async_subscribe(self, hass, component):  # pylint: disable=unused-argument
@@ -109,18 +110,18 @@ class Publisher:
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
-        await self._async_lwt_subscribe()
+        await self._async_birth_subscribe()
         _LOGGER.info("MQTT subscribe successful")
 
-    async def _async_lwt_subscribe(self):
-        """Subscribe to lwt messages."""
+    async def _async_birth_subscribe(self):
+        """Subscribe birth messages."""
         await mqtt.async_subscribe(
             self._hass,
-            f"{self._lwt_topic}",
-            self._async_handle_lwt_message,
+            f"{self._birth_topic}",
+            self._async_handle_birth_message,
         )
 
-    async def _async_handle_lwt_message(self, msg):
+    async def _async_handle_birth_message(self, msg):
         if msg.payload == "online":
             await self._async_run_discovery()
 

@@ -24,7 +24,14 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import ATTR_ATTRIBUTES, ATTR_SET, CONF_CMD_T, CONF_PUBLISHED, DOMAIN
+from ..const import (
+    ATTR_ATTRIBUTES,
+    ATTR_SET,
+    CONF_CMD_T,
+    CONF_PUBLISHED,
+    DEFAULT_RETAIN,
+    DOMAIN,
+)
 from ..utils import async_publish_base_attributes
 
 _LOGGER = logging.getLogger(__name__)
@@ -57,7 +64,7 @@ class Cover:
         await async_publish_base_attributes(self._hass, new_state, mybase)
 
         await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, True
+            self._hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, DEFAULT_RETAIN
         )
 
     async def async_subscribe(self, command_topic):

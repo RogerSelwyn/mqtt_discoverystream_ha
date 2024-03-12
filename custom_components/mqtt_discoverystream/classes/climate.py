@@ -45,6 +45,7 @@ from ..const import (
     ATTR_PRESET_COMMAND,
     ATTR_TEMP_COMMAND,
     CONF_PUBLISHED,
+    DEFAULT_RETAIN,
     DOMAIN,
 )
 from ..utils import async_publish_attribute, async_publish_base_attributes
@@ -102,7 +103,7 @@ class Climate:
         if payload == STATE_UNAVAILABLE:
             payload = STATE_OFF
         await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, True
+            self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, DEFAULT_RETAIN
         )
 
     async def async_subscribe(self, command_topic):
