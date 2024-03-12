@@ -132,7 +132,7 @@ class Publisher:
 
     async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
         ent_reg = entity_registry.async_get(self._hass)
-        for entity_id in ent_reg.entities:
+        for entity_id in list(ent_reg.entities):
             if self._publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
                     await self.async_state_publish(
