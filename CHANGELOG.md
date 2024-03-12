@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.1 (2024/03/12)
+### 💥 Breaking Changes
+- [Set retain bit on messages to False](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c4a1deeaed24b4b022f89bfef5fd553f194c572c) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Fix issue with entity registry changing during publish](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9fad04fc93c64a74c4ac8f57252f533c13f2b0fb) - @RogerSelwyn
+- [Fix state publishing after birth discovery publish](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ad6569ed4e77e08c60f3f11c1be1db558b7d48a0) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.0.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e15855fa1eef53224ab5c84c1464461a2a6ced31) - @RogerSelwyn
+
 ## 1.0.0 (2024/03/11)
 ### ✨ Enhancements
 - [Subscribe to Birth messages to initiate Discovery](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9218d299e4ca86162a6a271e4f292f6dc0985517) - @RogerSelwyn
