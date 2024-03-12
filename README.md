@@ -149,7 +149,7 @@ note right of M: Wait 5 seconds
 end
 opt
   R->>S: Command initiated
-  S->>M: Publish commands<br/>(command_topic)
+  S->>M: Publish command<br/>(command_topic)
   M->>H: Perform command on entity
   H->>+M: Entity changed state
   M->>S: Publish state<br/>(base_topic)
