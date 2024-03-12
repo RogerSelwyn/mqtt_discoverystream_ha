@@ -42,7 +42,6 @@ from ..const import (
     CONF_CMD_T,
     CONF_JSON_ATTR_T,
     CONF_PUBLISHED,
-    DEFAULT_RETAIN,
     DOMAIN,
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
@@ -54,9 +53,10 @@ _LOGGER = logging.getLogger(__name__)
 class Light:
     """Light class."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, publish_retain):
         """Initialise the light class."""
         self._hass = hass
+        self._publish_retain = publish_retain
 
     def build_config(self, config, entity_id, attributes, mycommand):
         """Build the config for a light."""
@@ -99,7 +99,7 @@ class Light:
 
         payload = json.dumps(payload, cls=JSONEncoder)
         await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_STATE}", payload, 1, DEFAULT_RETAIN
+            self._hass, f"{mybase}{ATTR_STATE}", payload, 1, self._publish_retain
         )
 
     def _add_attribute(self, payload, new_state, attribute):

@@ -28,6 +28,7 @@ CONF_PUBLISH_ATTRIBUTES = "publish_attributes"
 CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"
 CONF_PUBLISHED = "conf_published"
+CONF_PUBLISH_RETAIN = "publish_retain"
 
 DEFAULT_RETAIN = False
 

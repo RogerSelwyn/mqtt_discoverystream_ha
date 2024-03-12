@@ -45,7 +45,6 @@ from ..const import (
     ATTR_PRESET_COMMAND,
     ATTR_TEMP_COMMAND,
     CONF_PUBLISHED,
-    DEFAULT_RETAIN,
     DOMAIN,
 )
 from ..utils import async_publish_attribute, async_publish_base_attributes
@@ -56,9 +55,10 @@ _LOGGER = logging.getLogger(__name__)
 class Climate:
     """Climate class."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, publish_retain):
         """Initialise the climate class."""
         self._hass = hass
+        self._publish_retain = publish_retain
 
     def build_config(self, config, attributes, mybase, mycommand):
         """Build the config for a climate."""
@@ -87,23 +87,31 @@ class Climate:
         """Publish the state for a climate."""
         _LOGGER.debug("New State %s;", new_state)
         await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_HVAC_ACTION, True
+            self._hass, new_state, mybase, ATTR_HVAC_ACTION, self._publish_retain
         )
         await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_CURRENT_TEMPERATURE
+            self._hass,
+            new_state,
+            mybase,
+            ATTR_CURRENT_TEMPERATURE,
+            self._publish_retain,
         )
         await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_PRESET_MODE, True
+            self._hass, new_state, mybase, ATTR_PRESET_MODE, self._publish_retain
         )
-        await async_publish_attribute(self._hass, new_state, mybase, ATTR_TEMPERATURE)
+        await async_publish_attribute(
+            self._hass, new_state, mybase, ATTR_TEMPERATURE, self._publish_retain
+        )
 
-        await async_publish_base_attributes(self._hass, new_state, mybase)
+        await async_publish_base_attributes(
+            self._hass, new_state, mybase, self._publish_retain
+        )
 
         payload = new_state.state
         if payload == STATE_UNAVAILABLE:
             payload = STATE_OFF
         await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, DEFAULT_RETAIN
+            self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, self._publish_retain
         )
 
     async def async_subscribe(self, command_topic):

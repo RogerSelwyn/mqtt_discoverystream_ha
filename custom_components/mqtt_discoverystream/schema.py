@@ -11,7 +11,9 @@ from .const import (
     CONF_DISCOVERY_TOPIC,
     CONF_PUBLISH_ATTRIBUTES,
     CONF_PUBLISH_DISCOVERY,
+    CONF_PUBLISH_RETAIN,
     CONF_PUBLISH_TIMESTAMPS,
+    DEFAULT_RETAIN,
     DOMAIN,
 )
 
@@ -26,6 +28,7 @@ CONFIG_SCHEMA = vol.Schema(
                 vol.Optional(CONF_PUBLISH_ATTRIBUTES, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
+                vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
             }
         ),
     },

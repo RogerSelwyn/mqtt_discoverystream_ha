@@ -39,13 +39,13 @@ from .const import (
     CONF_MDL,
     CONF_MF,
     CONF_OBJ_ID,
+    CONF_PUBLISH_RETAIN,
     CONF_PUBLISHED,
     CONF_STAT_CLA,
     CONF_STAT_T,
     CONF_SW,
     CONF_UNIQ_ID,
     CONF_UNIT_OF_MEAS,
-    DEFAULT_RETAIN,
     DOMAIN,
 )
 
@@ -56,6 +56,7 @@ class Discovery:
     def __init__(self, hass, conf):
         """Initiate discovery."""
         self._hass = hass
+        self._publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
@@ -68,11 +69,11 @@ class Discovery:
         if not self._discovery_topic.endswith("/"):
             self._discovery_topic = f"{self._discovery_topic}/"
         self._binary_sensor = BinarySensor()
-        self._climate = Climate(hass)
-        self._light = Light(hass)
+        self._climate = Climate(hass, self._publish_retain)
+        self._light = Light(hass, self._publish_retain)
         self._sensor = Sensor(hass)
         self._switch = Switch(hass)
-        self._cover = Cover(hass)
+        self._cover = Cover(hass, self._publish_retain)
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -123,7 +124,7 @@ class Discovery:
                 f"{self._discovery_topic}{entity_id.replace('.', '/')}/{ATTR_CONFIG}"
             )
             await mqtt.async_publish(
-                self._hass, entity_disc_topic, encoded, 1, DEFAULT_RETAIN
+                self._hass, entity_disc_topic, encoded, 1, self._publish_retain
             )
             self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 

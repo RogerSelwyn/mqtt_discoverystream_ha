@@ -29,7 +29,6 @@ from ..const import (
     ATTR_SET,
     CONF_CMD_T,
     CONF_PUBLISHED,
-    DEFAULT_RETAIN,
     DOMAIN,
 )
 from ..utils import async_publish_base_attributes
@@ -40,9 +39,10 @@ _LOGGER = logging.getLogger(__name__)
 class Cover:
     """Cover class."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, publish_retain):
         """Initialise the cover class."""
         self._hass = hass
+        self._publish_retain = publish_retain
 
     def build_config(self, config, attributes, mybase, mycommand):
         """Build the config for a cover."""
@@ -61,10 +61,16 @@ class Cover:
 
     async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""
-        await async_publish_base_attributes(self._hass, new_state, mybase)
+        await async_publish_base_attributes(
+            self._hass, new_state, mybase, self._publish_retain
+        )
 
         await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, DEFAULT_RETAIN
+            self._hass,
+            f"{mybase}{ATTR_STATE}",
+            new_state.state,
+            1,
+            self._publish_retain,
         )
 
     async def async_subscribe(self, command_topic):

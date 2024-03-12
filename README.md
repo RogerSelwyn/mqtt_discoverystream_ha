@@ -71,6 +71,7 @@ The base options are the same as the mqtt_statestream one.
 | publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                           |
 | publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.             |
 | publish_discovery  | false   | no       | Publish the discovery topic ("config").                                          |
+| publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                   |
 | include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.      |
 
 ## Services
@@ -82,7 +83,7 @@ A service called `publish_discovery_state` is provided when `publish_discovery` 
 * Discovery messages will be published to the `discovery_topic` when `publish_discovery` is enabled. 
 * State messages will be sent to the `base_topic`.
 * Commands from entities at the slave site will be subscribed to on the `command_topic`.
-* Last Will and Testament messages from the slave site will be subscribed to on the `birth_topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
+* Birth messages from the slave site will be subscribed to on the `birth_topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
 
 ## Discovery of entities and Publication of states
 

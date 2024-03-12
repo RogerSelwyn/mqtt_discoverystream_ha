@@ -14,8 +14,8 @@ from .const import (
     CONF_BASE_TOPIC,
     CONF_PUBLISH_ATTRIBUTES,
     CONF_PUBLISH_DISCOVERY,
+    CONF_PUBLISH_RETAIN,
     CONF_PUBLISH_TIMESTAMPS,
-    DEFAULT_RETAIN,
     DOMAIN,
 )
 from .publisher import Publisher
@@ -37,12 +37,13 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     base_topic: str = conf.get(CONF_BASE_TOPIC)
     publish_attributes: bool = conf.get(CONF_PUBLISH_ATTRIBUTES)
     publish_timestamps: bool = conf.get(CONF_PUBLISH_TIMESTAMPS)
+    publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
     if not base_topic.endswith("/"):
         base_topic = f"{base_topic}/"
 
     publish_discovery = conf.get(CONF_PUBLISH_DISCOVERY)
     if publish_discovery:
-        publisher = Publisher(hass, conf, base_topic)
+        publisher = Publisher(hass, conf, base_topic, publish_retain)
 
     async def _state_publisher(evt: Event) -> None:
         entity_id: str = evt.data["entity_id"]
@@ -50,10 +51,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
         mybase = f"{base_topic}{entity_id.replace('.', '/')}/"
         if publish_discovery:
-            await publisher.async_state_publish(entity_id, new_state)
+            await publisher.async_state_publish(entity_id, new_state, mybase)
         else:
             payload = new_state.state
-            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, DEFAULT_RETAIN)
+            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, publish_retain)
 
         if publish_timestamps:
             if new_state.last_updated:
@@ -62,7 +63,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     f"{mybase}last_updated",
                     new_state.last_updated.isoformat(),
                     1,
-                    DEFAULT_RETAIN,
+                    publish_retain,
                 )
             if new_state.last_changed:
                 await mqtt.async_publish(
@@ -70,14 +71,14 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
                     f"{mybase}last_changed",
                     new_state.last_changed.isoformat(),
                     1,
-                    DEFAULT_RETAIN,
+                    publish_retain,
                 )
 
         if publish_attributes:
             for key, val in new_state.attributes.items():
                 encoded_val = json.dumps(val, cls=JSONEncoder)
                 await mqtt.async_publish(
-                    hass, mybase + key, encoded_val, 1, DEFAULT_RETAIN
+                    hass, mybase + key, encoded_val, 1, publish_retain
                 )
 
     @callback

@@ -1,4 +1,5 @@
 """Discovery for MQTT Discovery Stream."""
+import asyncio
 import logging
 
 from homeassistant.components import mqtt
@@ -29,7 +30,6 @@ from .const import (
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
     CONF_PUBLISHED,
-    DEFAULT_RETAIN,
     DOMAIN,
 )
 from .discovery import Discovery
@@ -41,10 +41,11 @@ _LOGGER = logging.getLogger(__name__)
 class Publisher:
     """Manage publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf, base_topic):
+    def __init__(self, hass, conf, base_topic, publish_retain):
         """Initiate publishing."""
         self._hass = hass
         self._base_topic = base_topic
+        self._publish_retain = publish_retain
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
             CONF_BASE_TOPIC
@@ -56,23 +57,22 @@ class Publisher:
         if not self._birth_topic.endswith("/status"):
             self._birth_topic = f"{self._birth_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
-        self._climate = Climate(hass)
-        self._light = Light(hass)
+        self._climate = Climate(hass, self._publish_retain)
+        self._light = Light(hass, self._publish_retain)
         self._switch = Switch(hass)
-        self._cover = Cover(hass)
+        self._cover = Cover(hass, self._publish_retain)
         self._discovery = Discovery(hass, conf)
         self._publish_filter = convert_include_exclude_filter(conf)
         async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
         self._register_services()
         self._listen_for_hass_started()
 
-    async def async_state_publish(self, entity_id, new_state, force_discovery=False):
+    async def async_state_publish(self, entity_id, new_state, mybase):
         """Publish state for MQTT Discovery Statestream."""
-        mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED] or force_discovery:
+        if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
             await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
@@ -83,7 +83,7 @@ class Publisher:
                 f"{mybase}{CONF_AVAILABILITY}",
                 DEFAULT_PAYLOAD_NOT_AVAILABLE,
                 1,
-                DEFAULT_RETAIN,
+                self._publish_retain,
             )
             return
 
@@ -94,14 +94,16 @@ class Publisher:
         elif ent_domain == Platform.COVER:
             await self._cover.async_publish_state(new_state, mybase)
         else:
-            await async_publish_base_attributes(self._hass, new_state, mybase)
+            await async_publish_base_attributes(
+                self._hass, new_state, mybase, self._publish_retain
+            )
 
         await mqtt.async_publish(
             self._hass,
             f"{mybase}{CONF_AVAILABILITY}",
             DEFAULT_PAYLOAD_AVAILABLE,
             1,
-            DEFAULT_RETAIN,
+            self._publish_retain,
         )
 
     async def _async_subscribe(self, hass, component):  # pylint: disable=unused-argument
@@ -123,27 +125,36 @@ class Publisher:
 
     async def _async_handle_birth_message(self, msg):
         if msg.payload == "online":
-            await self._async_run_discovery()
+            await self._async_run_discovery(birth=True)
 
     def _register_services(self):
         self._hass.services.async_register(
             DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
         )
 
-    async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
+    async def _async_publish_discovery_state(self, call=None, birth=False):  # pylint: disable=unused-argument
         ent_reg = entity_registry.async_get(self._hass)
+        entity_states = {}
         for entity_id in list(ent_reg.entities):
             if self._publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
-                    await self.async_state_publish(
-                        entity_id, current_state, force_discovery=True
+                    mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+                    await self._discovery.async_discovery_publish(
+                        entity_id, current_state.attributes, mybase
                     )
-        _LOGGER.info("Discovery and states published")
+                    entity_states[entity_id] = current_state
+        _LOGGER.info("Discovery published")
+        if birth:
+            await asyncio.sleep(5)
+        for entity_id, current_state in entity_states.items():
+            mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+            await self.async_state_publish(entity_id, current_state, mybase)
+        _LOGGER.info("States published")
 
     def _listen_for_hass_started(self):
         self._hass.bus.async_listen_once(
             EVENT_HOMEASSISTANT_STARTED, self._async_run_discovery
         )
 
-    async def _async_run_discovery(self, call=None):  # pylint: disable=unused-argument
-        await self._async_publish_discovery_state()
+    async def _async_run_discovery(self, call=None, birth=False):  # pylint: disable=unused-argument
+        await self._async_publish_discovery_state(birth=birth)
