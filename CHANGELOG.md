@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.2 (2024/03/17)
+### 🐛 Fixes
+- [Fix issue with color_mode (not deprecated yet)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bff7d9d93ba40207de4480ee97e6acef646b51cb) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fbd42bc91e23fb86666bac34c1780f9373dfdc29) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0b6f3549ee69d62084c5312411005bcab531f34d) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ecde8334dd562d6a6b64f3a0b0dc5d45dc61435f) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.0.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/36c5eadeef0e6a7b6c66f41cdb1364d9b53bd2cf) - @RogerSelwyn
+
 ## 1.0.1 (2024/03/12)
 ### 💥 Breaking Changes
 - [Set retain bit on messages to False](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c4a1deeaed24b4b022f89bfef5fd553f194c572c) - @RogerSelwyn
