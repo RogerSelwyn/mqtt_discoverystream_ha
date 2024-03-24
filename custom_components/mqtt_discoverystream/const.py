@@ -1,5 +1,7 @@
 """Constants for MQTT Discovery Stream."""
 
+from datetime import timedelta
+
 ATTR_COLOR = "color"
 ATTR_H = "h"
 ATTR_S = "s"
@@ -29,10 +31,15 @@ CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"
 CONF_PUBLISHED = "conf_published"
 CONF_PUBLISH_RETAIN = "publish_retain"
+CONF_REPUBLISH_TIME = "republish_time"
 
+DEFAULT_LOOP_TIME = timedelta(minutes=5)
 DEFAULT_RETAIN = False
+DEFAULT_STATE_SLEEP = 1
+
 
 DOMAIN = "mqtt_discoverystream"
+
 
 STATE_CAPITAL_ON = "ON"
 STATE_CAPITAL_OFF = "OFF"

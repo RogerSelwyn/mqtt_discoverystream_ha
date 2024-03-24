@@ -18,6 +18,7 @@ from homeassistant.const import (
 )
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
+from homeassistant.helpers.event import async_call_later
 from homeassistant.setup import async_when_setup
 
 from .classes.climate import Climate
@@ -30,6 +31,8 @@ from .const import (
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
     CONF_PUBLISHED,
+    CONF_REPUBLISH_TIME,
+    DEFAULT_STATE_SLEEP,
     DOMAIN,
 )
 from .discovery import Discovery
@@ -47,6 +50,7 @@ class Publisher:
         self._base_topic = base_topic
         self._publish_retain = publish_retain
         self._has_includes = bool(conf.get(CONF_INCLUDE))
+        self._loop_time = conf.get(CONF_REPUBLISH_TIME)
         self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
             CONF_BASE_TOPIC
         )
@@ -76,6 +80,7 @@ class Publisher:
             await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
+            await asyncio.sleep(DEFAULT_STATE_SLEEP)
 
         if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None):
             await mqtt.async_publish(
@@ -125,14 +130,14 @@ class Publisher:
 
     async def _async_handle_birth_message(self, msg):
         if msg.payload == "online":
-            await self._async_run_discovery(birth=True)
+            await self._async_publish_discovery_state()
 
     def _register_services(self):
         self._hass.services.async_register(
             DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
         )
 
-    async def _async_publish_discovery_state(self, call=None, birth=False):  # pylint: disable=unused-argument
+    async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
         ent_reg = entity_registry.async_get(self._hass)
         entity_states = {}
         for entity_id in list(ent_reg.entities):
@@ -144,8 +149,7 @@ class Publisher:
                     )
                     entity_states[entity_id] = current_state
         _LOGGER.info("Discovery published")
-        if birth:
-            await asyncio.sleep(5)
+        await asyncio.sleep(DEFAULT_STATE_SLEEP)
         for entity_id, current_state in entity_states.items():
             mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
             await self.async_state_publish(entity_id, current_state, mybase)
@@ -153,8 +157,10 @@ class Publisher:
 
     def _listen_for_hass_started(self):
         self._hass.bus.async_listen_once(
-            EVENT_HOMEASSISTANT_STARTED, self._async_run_discovery
+            EVENT_HOMEASSISTANT_STARTED, self._async_publish_discovery_state
         )
+        async_call_later(self._hass, self._loop_time, self._async_schedule_publish)
 
-    async def _async_run_discovery(self, call=None, birth=False):  # pylint: disable=unused-argument
-        await self._async_publish_discovery_state(birth=birth)
+    async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
+        await self._async_publish_discovery_state()
+        async_call_later(self._hass, self._loop_time, self._async_schedule_publish)

@@ -13,6 +13,8 @@ from .const import (
     CONF_PUBLISH_DISCOVERY,
     CONF_PUBLISH_RETAIN,
     CONF_PUBLISH_TIMESTAMPS,
+    CONF_REPUBLISH_TIME,
+    DEFAULT_LOOP_TIME,
     DEFAULT_RETAIN,
     DOMAIN,
 )
@@ -29,6 +31,9 @@ CONFIG_SCHEMA = vol.Schema(
                 vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
+                vol.Optional(
+                    CONF_REPUBLISH_TIME, default=DEFAULT_LOOP_TIME
+                ): cv.time_period,
             }
         ),
     },

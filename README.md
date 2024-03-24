@@ -62,17 +62,18 @@ mqtt_discoverystream:
 This integration can only be configured via YAML.
 The base options are the same as the mqtt_statestream one. 
 
-| key                | default | required | description                                                                      |
-| ------------------ | ------- | -------- | -------------------------------------------------------------------------------- |
-| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                    |
-| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic     |
-| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic        |
-| birth_topic        | none    | no       | Topic where birth message will be subscribed. Defaults to base_topic + `/status` |
-| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                           |
-| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.             |
-| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                          |
-| publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                   |
-| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.      |
+| key                | default | required | description                                                                        |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------- |
+| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                      |
+| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic       |
+| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic          |
+| birth_topic        | none    | no       | Topic where birth message will be subscribed. Defaults to base_topic + `/status`   |
+| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                             |
+| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.               |
+| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                            |
+| publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                     |
+| republish_time     | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
+| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.        |
 
 ## Services
 
