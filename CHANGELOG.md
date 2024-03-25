@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0 (2024/03/25)
+### 💥 Breaking Changes
+- [Add ability to make slave entities unavailable if master offline](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d9385e52d989c20c1ff222265f11db08a48528fd) - @RogerSelwyn
+
+### ✨ Enhancements
+- [Add scheduled re-publishing of discovery/state](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6a62f0b818c5c16b68c737d5609d360e1e269ce8) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Correct location of GitHub repository](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8ecafe234df6b41893eccc39d99ed92b80d78078) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.1.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/82729f2dd212f2966b237750c4af833bdf184831) - @RogerSelwyn
+
 ## 1.0.2 (2024/03/17)
 ### 🐛 Fixes
 - [Fix issue with color_mode (not deprecated yet)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bff7d9d93ba40207de4480ee97e6acef646b51cb) - @RogerSelwyn
