@@ -8,7 +8,7 @@ from homeassistant.components.mqtt.const import (
     DATA_MQTT,
 )
 from homeassistant.components.mqtt.mixins import (
-    AVAILABILITY_ALL,
+    AVAILABILITY_LATEST,
     CONF_PAYLOAD_AVAILABLE,
     CONF_PAYLOAD_NOT_AVAILABLE,
 )
@@ -170,7 +170,7 @@ class Discovery:
             CONF_STAT_T: f"{mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
             CONF_AVTY: availability,
-            CONF_AVTY_MODE: AVAILABILITY_ALL,
+            CONF_AVTY_MODE: AVAILABILITY_LATEST,
         }
         name = None
         if ATTR_FRIENDLY_NAME in attributes:
