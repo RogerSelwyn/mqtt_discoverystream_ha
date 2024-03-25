@@ -25,17 +25,20 @@ ATTR_SUGGESTED_DISPLAY_PRECISION = "suggested_display_precision"
 CONF_BASE_TOPIC = "base_topic"
 CONF_COMMAND_TOPIC = "command_topic"
 CONF_DISCOVERY_TOPIC = "discovery_topic"
-CONF_BIRTH_TOPIC = "birth_topic"
+CONF_LOCAL_STATUS = "local_status"
+CONF_OFFLINE_STATUS = "offline_status"
+CONF_ONLINE_STATUS = "online_status"
 CONF_PUBLISH_ATTRIBUTES = "publish_attributes"
 CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"
 CONF_PUBLISHED = "conf_published"
 CONF_PUBLISH_RETAIN = "publish_retain"
+CONF_REMOTE_STATUS = "remote_status"
 CONF_REPUBLISH_TIME = "republish_time"
 
 DEFAULT_LOOP_TIME = timedelta(minutes=5)
 DEFAULT_RETAIN = False
-DEFAULT_STATE_SLEEP = 1
+DEFAULT_STATE_SLEEP = 1.5
 
 
 DOMAIN = "mqtt_discoverystream"
@@ -45,7 +48,8 @@ STATE_CAPITAL_ON = "ON"
 STATE_CAPITAL_OFF = "OFF"
 
 # These constants are translated via abberviations in mqtt.abbreviations
-CONF_AVTY_T = "avty_t"
+CONF_AVTY = "avty"
+CONF_AVTY_MODE = "avty_mode"
 CONF_CMD_T = "cmd_t"
 CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"

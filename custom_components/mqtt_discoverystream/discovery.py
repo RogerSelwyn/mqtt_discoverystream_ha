@@ -2,7 +2,16 @@
 import json
 
 from homeassistant.components import mqtt
-from homeassistant.components.mqtt.const import CONF_AVAILABILITY, DATA_MQTT
+from homeassistant.components.mqtt.const import (
+    CONF_AVAILABILITY,
+    CONF_TOPIC,
+    DATA_MQTT,
+)
+from homeassistant.components.mqtt.mixins import (
+    AVAILABILITY_ALL,
+    CONF_PAYLOAD_AVAILABLE,
+    CONF_PAYLOAD_NOT_AVAILABLE,
+)
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
@@ -26,7 +35,8 @@ from .classes.switch import Switch
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
-    CONF_AVTY_T,
+    CONF_AVTY,
+    CONF_AVTY_MODE,
     CONF_BASE_TOPIC,
     CONF_CNS,
     CONF_COMMAND_TOPIC,
@@ -36,9 +46,12 @@ from .const import (
     CONF_ENT_CAT,
     CONF_IDS,
     CONF_JSON_ATTR_T,
+    CONF_LOCAL_STATUS,
     CONF_MDL,
     CONF_MF,
     CONF_OBJ_ID,
+    CONF_OFFLINE_STATUS,
+    CONF_ONLINE_STATUS,
     CONF_PUBLISH_RETAIN,
     CONF_PUBLISHED,
     CONF_STAT_CLA,
@@ -60,6 +73,15 @@ class Discovery:
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
+        self._local_status = conf.get(CONF_LOCAL_STATUS)
+        if self._local_status:
+            self._local_status_topic = self._local_status.get(CONF_TOPIC) or conf.get(
+                CONF_BASE_TOPIC
+            )
+            self._local_online_status = self._local_status.get(CONF_ONLINE_STATUS)
+            self._local_offline_status = self._local_status.get(CONF_OFFLINE_STATUS)
+            if not self._local_status_topic.endswith("/status"):
+                self._local_status_topic = f"{self._local_status_topic}/status"
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
@@ -132,13 +154,23 @@ class Discovery:
         # sourcery skip: assign-if-exp, merge-dict-assign
         ent_parts = entity_id.split(".")
         ent_id = ent_parts[1]
+        availability = [{CONF_TOPIC: f"{mybase}{CONF_AVAILABILITY}"}]
+        if self._local_status:
+            availability.append(
+                {
+                    CONF_TOPIC: self._local_status_topic,
+                    CONF_PAYLOAD_AVAILABLE: self._local_online_status,
+                    CONF_PAYLOAD_NOT_AVAILABLE: self._local_offline_status,
+                }
+            )
 
         config = {
             CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_id}",
             CONF_OBJ_ID: ent_id,
             CONF_STAT_T: f"{mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
-            CONF_AVTY_T: f"{mybase}{CONF_AVAILABILITY}",
+            CONF_AVTY: availability,
+            CONF_AVTY_MODE: AVAILABILITY_ALL,
         }
         name = None
         if ATTR_FRIENDLY_NAME in attributes:

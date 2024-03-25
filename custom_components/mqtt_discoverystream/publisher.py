@@ -6,6 +6,7 @@ from homeassistant.components import mqtt
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
+    CONF_TOPIC,
     DEFAULT_PAYLOAD_AVAILABLE,
     DEFAULT_PAYLOAD_NOT_AVAILABLE,
 )
@@ -27,10 +28,11 @@ from .classes.light import Light
 from .classes.switch import Switch
 from .const import (
     CONF_BASE_TOPIC,
-    CONF_BIRTH_TOPIC,
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
+    CONF_ONLINE_STATUS,
     CONF_PUBLISHED,
+    CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
     DEFAULT_STATE_SLEEP,
     DOMAIN,
@@ -57,9 +59,14 @@ class Publisher:
         self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
         if not self._command_topic.endswith("/"):
             self._command_topic = f"{self._command_topic}/"
-        self._birth_topic = conf.get(CONF_BIRTH_TOPIC) or conf.get(CONF_BASE_TOPIC)
-        if not self._birth_topic.endswith("/status"):
-            self._birth_topic = f"{self._birth_topic}/status"
+        self._remote_status = conf.get(CONF_REMOTE_STATUS)
+        if self._remote_status:
+            self._remote_status_topic = self._remote_status.get(CONF_TOPIC) or conf.get(
+                CONF_BASE_TOPIC
+            )
+            self._remote_online_status = self._remote_status.get(CONF_ONLINE_STATUS)
+            if not self._remote_status_topic.endswith("/status"):
+                self._remote_status_topic = f"{self._remote_status_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
         self._climate = Climate(hass, self._publish_retain)
         self._light = Light(hass, self._publish_retain)
@@ -117,19 +124,20 @@ class Publisher:
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
-        await self._async_birth_subscribe()
+        if self._remote_status:
+            await self._async_birth_subscribe()
         _LOGGER.info("MQTT subscribe successful")
 
     async def _async_birth_subscribe(self):
         """Subscribe birth messages."""
         await mqtt.async_subscribe(
             self._hass,
-            f"{self._birth_topic}",
+            f"{self._remote_status_topic}",
             self._async_handle_birth_message,
         )
 
     async def _async_handle_birth_message(self, msg):
-        if msg.payload == "online":
+        if msg.payload == self._remote_online_status:
             await self._async_publish_discovery_state()
 
     def _register_services(self):

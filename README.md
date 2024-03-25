@@ -65,15 +65,50 @@ The base options are the same as the mqtt_statestream one.
 | key                | default | required | description                                                                        |
 | ------------------ | ------- | -------- | ---------------------------------------------------------------------------------- |
 | base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                      |
-| discovery_topic    | none    | no       | Topic where the configuration topics will be created. Defaults to base_topic       |
-| command_topic      | none    | no       | Topic where any command responses will be created. Defaults to base_topic          |
-| birth_topic        | none    | no       | Topic where birth message will be subscribed. Defaults to base_topic + `/status`   |
+| discovery_topic    | --->    | no       | Topic where the configuration topics will be created. Defaults to base_topic       |
+| command_topic      | --->    | no       | Topic where any command responses will be created. Defaults to base_topic          |
 | publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                             |
 | publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.               |
 | publish_discovery  | false   | no       | Publish the discovery topic ("config").                                            |
 | publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                     |
 | republish_time     | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
 | include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.        |
+| local_status       | none    | no       | See below                                                                          |
+| remote_status      | none    | no       | See below                                                                          |
+
+
+#### local_status
+
+In order for the remote HA instance to be informed when the local HA instance goes offline (and therefore its entities are unavailable), the local HA status needs to be available at the remote broker. By default, at the local end it is located at `homeassistant/status`, which users will likely rewrite to a different location on the remote broker.
+
+| key                | default | required | description                                                                        |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------- |
+| topic              | none    | no       | Topic at the slave for master's HA status. Defaults to base_topic + `/status`.     |
+| online_status      | online  | no       | As configured in MQTT integration for master's HA online status.                   |
+| offline_status     | offline | no       | As configured in MQTT integration for master's HA offline status.                  |
+
+```yaml
+  local_status:
+    topic: master/status
+    online_status: online
+    offline_status: offline
+```
+
+
+#### remote_status
+
+In order for the master HA instance to be informed when the remote HA instance has come online (and therefore that it should resend discovery information), the remote HA status needs to be available at the local broker. By default, at the remote end it is located at `homeassistant/status`, which users will likely rewrite to a different location on the local broker.
+
+| key                | default | required | description                                                                        |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------- |
+| topic              | none    | no       | Topic at the master for slave's HA status. Defaults to base_topic + `/status`.     |
+| online_status      | online  | no       | As configured in MQTT integration for slave's HA online status.                    |
+
+```yaml
+  remote_status:
+    topic: master/status
+    online_status: online
+```
 
 ## Services
 
