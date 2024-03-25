@@ -2,8 +2,6 @@
 
 ![GitHub release](https://img.shields.io/github/v/release/RogerSelwyn/mqtt_discoverystream_ha) [![maintained](https://img.shields.io/maintenance/yes/2024.svg)](#) [![maintainer](https://img.shields.io/badge/maintainer-%20%40RogerSelwyn-blue.svg)](https://github.com/RogerSelwyn) [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration) 
 
-### This is a very substantial re-write of the version by @koying which adds Climate and Cover support as well as providing a couple of fixes. It is available to be merged back if desired.
-
 # MQTT DiscoveryStream integration for Home Assistant
 
 This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration.  
