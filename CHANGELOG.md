@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1 (2024/03/25)
+### 🐛 Fixes
+- [Change online status subscribe to `latest` instead of `all`](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/47e95d5260cd6656ee91a737653eaa294333b3cd) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.1.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fdad0a7d894703d74482dac2509075694fb682e9) - @RogerSelwyn
+
 ## 1.1.0 (2024/03/25)
 ### 💥 Breaking Changes
 - [Add ability to make slave entities unavailable if master offline](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d9385e52d989c20c1ff222265f11db08a48528fd) - @RogerSelwyn
