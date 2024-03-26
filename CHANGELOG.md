@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.2 (2024/03/26)
+### ✨ Enhancements
+- [Mark entities unavailable at HA shutdown](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e1c7334b9979bc375a848e7c92e79a871fe8fce7) - @RogerSelwyn
+
+### 🔖 Release
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d0556eca7bdd295a19ca3d34f4e59c4bf7256570) - @actions-user
+- [Release v1.1.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e4c517a4554c46270dc9ee8fe1878a45b6b9cb70) - @RogerSelwyn
+
 ## 1.1.1 (2024/03/25)
 ### 🐛 Fixes
 - [Change online status subscribe to `latest` instead of `all`](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/47e95d5260cd6656ee91a737653eaa294333b3cd) - @RogerSelwyn
