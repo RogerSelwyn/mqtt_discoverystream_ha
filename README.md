@@ -140,17 +140,14 @@ opt
   H->>+M: Entity changed state
   M->>S: Publish discovery<br/>(discovery_topic)
   S->>R: Create entity
+note right of M: Wait 1.5 seconds
   M->>S: Publish state<br/>(base_topic)
   S->>R: Set state
   M->>-H: End
 end
+H->>S: Publish Home Assistant online
 H->>+M: Home Assistant Started
-loop 
-  M->>S: Publish discovery<br/>(discovery_topic)
-  S->>R: Create entity
-  M->>S: Publish state<br/>(base_topic)
-  S->>R: Set state
-end
+note right of M: Perform Discovery and State Publication
 M->>-H: End
 ```
 
@@ -170,16 +167,8 @@ end
 
 opt
   R->>S: Home Assistant Started
-  S->>+M: Publish birth<br/>(birth_topic)
-  loop 
-    M->>S: Publish discovery<br/>(discovery_topic)
-    S->>R: Create entity
-  end
-note right of M: Wait 5 seconds
-  loop 
-    M->>S: Publish state<br/>(base_topic)
-    S->>R: Set state
-  end
+  S->>+M: Publish HA Online<br/>(birth_topic)
+note right of M: Perform Discovery and State Publication
   M->>-S: End
 end
 opt
@@ -190,19 +179,37 @@ opt
   M->>S: Publish state<br/>(base_topic)
   S->>R: Set state
 end
-
 opt
   H->>+M: Service request
+note right of M: Perform Discovery and State Publication
+  M->>-H: End
+end
+opt
+  H->>S: Publish Home Assistant offline
+  H->>+M: Home Assistant Shutdown
   loop
+    M->>S: Publish availability offline<br/>(base_topic)
+  end
+end
+```
+### Discovery and State Publication
+```mermaid
+sequenceDiagram
+participant H as Home Assistant Master
+participant M as Master Broker
+participant S as Slave Broker
+participant R as Home Assistant Slave
+  S->>+M: Publish birth<br/>(birth_topic)
+  loop 
     M->>S: Publish discovery<br/>(discovery_topic)
     S->>R: Create entity
+  end
+note right of M: Wait 1.5 seconds
+  loop 
     M->>S: Publish state<br/>(base_topic)
     S->>R: Set state
   end
-  M->>-H: End
-end
 ```
-
 
 ## Credits
 
