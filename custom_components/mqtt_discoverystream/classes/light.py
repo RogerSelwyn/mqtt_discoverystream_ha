@@ -9,6 +9,7 @@ from homeassistant.components.light import (
     ATTR_COLOR_MODE,
     ATTR_COLOR_TEMP,
     ATTR_EFFECT,
+    ATTR_EFFECT_LIST,
     ATTR_HS_COLOR,
     ATTR_RGB_COLOR,
     ATTR_SUPPORTED_COLOR_MODES,
@@ -70,6 +71,7 @@ class Light:
             config[ATTR_BRIGHTNESS] = True
         if supported_features & SUPPORT_EFFECT:
             config[ATTR_EFFECT] = True
+            config[ATTR_EFFECT_LIST] = attributes[ATTR_EFFECT_LIST]
         if ATTR_SUPPORTED_COLOR_MODES in attributes:
             config[ATTR_SUPPORTED_COLOR_MODES] = attributes[ATTR_SUPPORTED_COLOR_MODES]
             config[ATTR_BRIGHTNESS] = True
@@ -182,6 +184,8 @@ class Light:
                         payload_json[ATTR_COLOR][ATTR_G],
                         payload_json[ATTR_COLOR][ATTR_B],
                     ]
+            if ATTR_EFFECT in payload_json:
+                service_payload[ATTR_EFFECT] = payload_json[ATTR_EFFECT]
             await self._hass.services.async_call(
                 domain, SERVICE_TURN_ON, service_payload
             )
