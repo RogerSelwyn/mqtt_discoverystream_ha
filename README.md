@@ -133,76 +133,108 @@ Discovery and state messages will be published under 4 situations:
 ```mermaid
 sequenceDiagram
 participant H as Home Assistant Master
-participant M as Master Broker
-participant S as Slave Broker
+participant I as Integration
+participant M as Core/<br/>Master Broker
+participant S as Core/<br/>Slave Broker
 participant R as Home Assistant Slave
 opt
-  H->>+M: Entity changed state
-  M->>S: Publish discovery<br/>(discovery_topic)
+  H->>I: Entity changed state
+  I->>M: Publish discovery<br/>(discovery_topic)
+  M->>S: Bridge discovery<br/>(homeassistant)
   S->>R: Create entity
-  M->>S: Publish state<br/>(base_topic)
+  S->>M: Subscribe to state changes (base_topic)
+  I->>M: Subscribe to commands (command_topic)
+note right of I: Wait 1.5 seconds
+  I->>M: Publish state<br/>(base_topic)
+  M->>S: Bridge state<br/>(base_topic)
   S->>R: Set state
-  M->>-H: End
+
 end
-H->>+M: Home Assistant Started
-loop 
-  M->>S: Publish discovery<br/>(discovery_topic)
-  S->>R: Create entity
-  M->>S: Publish state<br/>(base_topic)
-  S->>R: Set state
-end
-M->>-H: End
+H->>M: Home Assistant Started<br/>(homeassistant/status)
+M->>S: Bridge HA Online<br/>(local_topic)
+I->>H: Listen for event `homeassistant_started`
+H->>I: Event `homeassistant_started`
+note right of I: Perform Discovery and State Publication
+I->>H: Listen for event `homeassistant_stop`
 ```
 
 ### Running
 ```mermaid
 sequenceDiagram
 participant H as Home Assistant Master
-participant M as Master Broker
-participant S as Slave Broker
+participant I as Integration
+participant M as Core/<br/>Master Broker
+participant S as Core/<br/>Slave Broker
 participant R as Home Assistant Slave
 opt
-  H->>+M: Entity changed state
-  M->>S: Publish state<br/>(base_topic)
+  H->>+I: Entity changed state
+  I->>M: Publish state<br/>(base_topic)
+  M->>S: Bridge state<br/>(base_topic)
   S->>R: Set state
-  M->>-H: End
 end
 
 opt
-  R->>S: Home Assistant Started
-  S->>+M: Publish birth<br/>(birth_topic)
-  loop 
-    M->>S: Publish discovery<br/>(discovery_topic)
-    S->>R: Create entity
-  end
-note right of M: Wait 5 seconds
-  loop 
-    M->>S: Publish state<br/>(base_topic)
-    S->>R: Set state
-  end
-  M->>-S: End
+  R->>S: Home Assistant Started<br/>(homeassistant/status)
+  S->>M: Bridge HA Online<br/>(remote_topic)
+  M->>I: Remote HA Online
+note right of I: Perform Discovery and State Publication
 end
 opt
   R->>S: Command initiated
-  S->>M: Publish command<br/>(command_topic)
+  S->>S: Publish command<br/>(command_topic)
+  S->>M: Bridge command<br/>(command_topic)
   M->>H: Perform command on entity
-  H->>+M: Entity changed state
-  M->>S: Publish state<br/>(base_topic)
+  H->>I: Entity changed state
+  I->>M: Publish state<br/>(base_topic)
+  M->>S: Bridge state<br/>(base_topic)
   S->>R: Set state
 end
-
 opt
-  H->>+M: Service request
-  loop
-    M->>S: Publish discovery<br/>(discovery_topic)
-    S->>R: Create entity
-    M->>S: Publish state<br/>(base_topic)
-    S->>R: Set state
-  end
-  M->>-H: End
+  H->>+I: Service request
+note right of I: Perform Discovery and State Publication
+  I->>-H: End
 end
 ```
 
+### Shutdown
+```mermaid
+sequenceDiagram
+participant H as Home Assistant Master
+participant I as Integration
+participant M as Core/<br/>Master Broker
+participant S as Core/<br/>Slave Broker
+participant R as Home Assistant Slave
+H->>I: Event `homeassistant_stop`
+loop
+  I->>M: Publish availability offline<br/>(base_topic)
+  M->>S: Bridge availability offline<br/>(base_topic)
+  S->>R: Mark entity unavailable
+end
+H->>M: Home Assistant Stopped<br/>(homeassistant/status)
+M->>S: Bridge HA Offline<br/>(local_topic)
+```
+### Discovery and State Publication
+```mermaid
+sequenceDiagram
+participant H as Home Assistant Master
+participant I as Integration
+participant M as Core/<br/>Master Broker
+participant S as Core/<br/>Slave Broker
+participant R as Home Assistant Slave
+loop 
+  I->>M: Publish discovery<br/>(discovery_topic)
+  M->>S: Bridge discovery<br/>(discovery_topic)
+  S->>R: Create entity
+  S->>M: Subscribe to state changes (base_topic)
+  I->>M: Subscribe to commands (command_topic)
+end
+note right of I: Wait 1.5 seconds
+loop 
+  I->>M: Publish state<br/>(base_topic)
+  M->>S: Bridge state<br/>(base_topic)
+  S->>R: Set state
+end
+```
 
 ## Credits
 
