@@ -1,4 +1,5 @@
 """climate methods for MQTT Discovery Statestream."""
+
 import logging
 
 from homeassistant.components import mqtt
@@ -45,6 +46,7 @@ from ..const import (
     ATTR_PRESET_COMMAND,
     ATTR_TEMP_COMMAND,
     CONF_PUBLISHED,
+    CONF_STAT_T,
     DOMAIN,
 )
 from ..utils import async_publish_attribute, async_publish_base_attributes
@@ -62,6 +64,7 @@ class Climate:
 
     def build_config(self, config, attributes, mybase, mycommand):
         """Build the config for a climate."""
+        del config[CONF_STAT_T]
         config[CONF_ACTION_TOPIC] = f"{mybase}{ATTR_HVAC_ACTION}"
         config[CONF_CURRENT_TEMP_TOPIC] = f"{mybase}{ATTR_CURRENT_TEMPERATURE}"
         config[CONF_TEMP_MAX] = attributes[ATTR_MAX_TEMP]
