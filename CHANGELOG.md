@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.1.3 (2024/04/03)
+### 💥 Breaking Changes
+Home Assistant 2024.4.0 introduces a change that break this integration. You will need to upgrade to this release when upgrading to 2024.4.0.
+
+- [Change in support of HA core breaking change in 2024.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/96210fa40be45653df7b6ed2915a4b0cb87d92e8) - @RogerSelwyn
+
+### ✨ Enhancements
+- [Add service icon](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7a43cc4fce1bd681b1aaa64d3b40ef140847b6ab) - @RogerSelwyn
+- [Add support for light effects](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8a84e0490f7b60b760299d72d53cebf71a199507) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Remove unrequired climate state subscription (uses mode)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8f306e28c523383736ebcd725e344797dd55eed1) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Remove deprecated color_mode attribute from light](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/dae0bdf3d2efd12c397a0bebaffa4aae483c2259) - @RogerSelwyn
+- [Set minimum to 2024.4.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9b77daf03583fd3d3c9981a14cb513cd308b02da) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6165beddd6df2330c16d74bfdf28f10d1a104d8d) - @RogerSelwyn
+- [Updated Mermaid diagrams with more detail](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4d0deda014252962440444ef1a3d4bd0d0044bae) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.1.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4b3a2c482e29b1afd719ee6ecdfa91751c34f59c) - @RogerSelwyn
+
 ## 1.1.2 (2024/03/26)
 ### ✨ Enhancements
 - [Mark entities unavailable at HA shutdown](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e1c7334b9979bc375a848e7c92e79a871fe8fce7) - @RogerSelwyn
