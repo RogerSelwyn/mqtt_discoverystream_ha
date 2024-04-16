@@ -1,4 +1,5 @@
 """Discovery for MQTT Discovery Stream."""
+
 import asyncio
 import logging
 
@@ -25,6 +26,7 @@ from homeassistant.setup import async_when_setup
 
 from .classes.climate import Climate
 from .classes.cover import Cover
+from .classes.input_select import InputSelect
 from .classes.light import Light
 from .classes.switch import Switch
 from .const import (
@@ -70,6 +72,7 @@ class Publisher:
                 self._remote_status_topic = f"{self._remote_status_topic}/status"
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
         self._climate = Climate(hass, self._publish_retain)
+        self._input_select = InputSelect(hass)
         self._light = Light(hass, self._publish_retain)
         self._switch = Switch(hass)
         self._cover = Cover(hass, self._publish_retain)
@@ -127,6 +130,7 @@ class Publisher:
         await self._light.async_subscribe(self._command_topic)
         await self._switch.async_subscribe(self._command_topic)
         await self._cover.async_subscribe(self._command_topic)
+        await self._input_select.async_subscribe(self._command_topic)
         if self._remote_status:
             await self._async_birth_subscribe()
         _LOGGER.info("MQTT subscribe successful")

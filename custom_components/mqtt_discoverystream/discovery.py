@@ -1,7 +1,9 @@
 """Publishing for MQTT Discovery Stream."""
+
 import json
 
 from homeassistant.components import mqtt
+from homeassistant.components.input_select import DOMAIN as IS_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
     CONF_TOPIC,
@@ -29,6 +31,7 @@ from homeassistant.helpers.json import JSONEncoder
 from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.cover import Cover
+from .classes.input_select import InputSelect
 from .classes.light import Light
 from .classes.sensor import Sensor
 from .classes.switch import Switch
@@ -92,6 +95,7 @@ class Discovery:
             self._discovery_topic = f"{self._discovery_topic}/"
         self._binary_sensor = BinarySensor()
         self._climate = Climate(hass, self._publish_retain)
+        self._input_select = InputSelect(hass)
         self._light = Light(hass, self._publish_retain)
         self._sensor = Sensor(hass)
         self._switch = Switch(hass)
@@ -137,9 +141,17 @@ class Discovery:
             self._light.build_config(config, entity_id, attributes, mycommand)
             publish_config = True
 
+        elif ent_domain == IS_DOMAIN:
+            self._input_select.build_config(config, attributes, mycommand)
+            publish_config = True
+
         if publish_config:
             if device := self._build_device(entity_id):
                 config[CONF_DEV] = device
+
+            self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
+
+            entity_id = entity_id.removeprefix("input_")
 
             encoded = json.dumps(config, cls=JSONEncoder)
             entity_disc_topic = (
@@ -148,7 +160,6 @@ class Discovery:
             await mqtt.async_publish(
                 self._hass, entity_disc_topic, encoded, 1, self._publish_retain
             )
-            self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 
     def _build_base(self, entity_id, attributes, mybase):
         # sourcery skip: assign-if-exp, merge-dict-assign
@@ -165,7 +176,7 @@ class Discovery:
             )
 
         config = {
-            CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_id}",
+            CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_id.removeprefix("input_")}",
             CONF_OBJ_ID: ent_id,
             CONF_STAT_T: f"{mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
