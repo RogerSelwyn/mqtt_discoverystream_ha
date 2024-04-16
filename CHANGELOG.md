@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 (2024/04/16)
+### ✨ Enhancements
+- [Add support for input_select](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c188cc48cc4f7351cd3ca9cc0c3131afff5409a3) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.2.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/29f19c3922fbcdf647f1be56db8e584083ff0781) - @RogerSelwyn
+
 ## 1.1.3 (2024/04/03)
 ### 💥 Breaking Changes
 Home Assistant 2024.4.0 introduces a change that break this integration. You will need to upgrade to this release when upgrading to 2024.4.0.
