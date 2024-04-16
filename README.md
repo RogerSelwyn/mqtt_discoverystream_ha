@@ -12,6 +12,7 @@ Provides discovery support for:
 - Binary Sensor
 - Climate
 - Cover
+- Input Select
 - Light
 - Sensor
 - Switch
