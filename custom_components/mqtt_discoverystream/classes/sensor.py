@@ -1,4 +1,5 @@
 """sensor methods for MQTT Discovery Statestream."""
+
 from homeassistant.components.sensor import DOMAIN as sensordomain
 from homeassistant.helpers import entity_registry
 
@@ -13,7 +14,7 @@ class Sensor:
         self._ent_reg = entity_registry.async_get(hass)
         self._hass = hass
 
-    def build_config(self, config, entity_id):
+    def build_config(self, config, mycommand, attributes, mybase, entity_id, *args):  # pylint: disable=unused-argument
         """Build the config for a sensor."""
 
         if entry := self._ent_reg.async_get(entity_id):

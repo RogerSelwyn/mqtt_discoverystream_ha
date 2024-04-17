@@ -60,7 +60,7 @@ class Light:
         self._hass = hass
         self._publish_retain = publish_retain
 
-    def build_config(self, config, entity_id, attributes, mycommand):
+    def build_config(self, config, mycommand, attributes, mybase, entity_id):  # pylint: disable=unused-argument
         """Build the config for a light."""
         del config[CONF_JSON_ATTR_T]
         config[CONF_CMD_T] = f"{ mycommand}{ATTR_SET_LIGHT}"

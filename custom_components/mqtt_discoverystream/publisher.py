@@ -4,7 +4,7 @@ import asyncio
 import logging
 
 from homeassistant.components import mqtt
-from homeassistant.components.input_select import DOMAIN as IS_DOMAIN
+from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
@@ -49,7 +49,7 @@ VALID_COMMANDS = [
     Platform.LIGHT,
     Platform.COVER,
     Platform.SWITCH,
-    IS_DOMAIN,
+    INPUT_SELECT_DOMAIN,
 ]
 
 _LOGGER = logging.getLogger(__name__)
@@ -116,12 +116,9 @@ class Publisher:
             )
             return
 
-        if ent_domain == Platform.LIGHT:
-            await self._light.async_publish_state(new_state, mybase)
-        elif ent_domain == Platform.CLIMATE:
-            await self._climate.async_publish_state(new_state, mybase)
-        elif ent_domain == Platform.COVER:
-            await self._cover.async_publish_state(new_state, mybase)
+        if ent_domain in [Platform.LIGHT, Platform.CLIMATE, Platform.COVER]:
+            entityclass = getattr(self, f"_{ent_domain}")
+            await entityclass.async_publish_state(new_state, mybase)
         else:
             await async_publish_base_attributes(
                 self._hass, new_state, mybase, self._publish_retain

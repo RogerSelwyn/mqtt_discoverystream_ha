@@ -1,4 +1,5 @@
 """switch methods for MQTT Discovery Statestream."""
+
 import logging
 
 from homeassistant.components import mqtt
@@ -30,7 +31,7 @@ class Switch:
         """Initialise the switch class."""
         self._hass = hass
 
-    def build_config(self, config, mycommand):
+    def build_config(self, config, mycommand, *args):  # pylint: disable=unused-argument
         """Build the config for a switch."""
         config[CONF_PL_OFF] = STATE_OFF
         config[CONF_PL_ON] = STATE_ON

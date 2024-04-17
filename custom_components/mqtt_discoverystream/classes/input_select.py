@@ -28,7 +28,7 @@ class InputSelect:
         """Initialise the input_select class."""
         self._hass = hass
 
-    def build_config(self, config, attributes, mycommand):
+    def build_config(self, config, mycommand, attributes, *args):  # pylint: disable=unused-argument
         """Build the config for a input_select."""
         if ATTR_OPTIONS in attributes:
             config[CONF_OPS] = attributes[ATTR_OPTIONS]

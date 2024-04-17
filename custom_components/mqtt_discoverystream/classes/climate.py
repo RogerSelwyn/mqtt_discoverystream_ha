@@ -62,7 +62,7 @@ class Climate:
         self._hass = hass
         self._publish_retain = publish_retain
 
-    def build_config(self, config, attributes, mybase, mycommand):
+    def build_config(self, config, mycommand, attributes, mybase, *args):  # pylint: disable=unused-argument
         """Build the config for a climate."""
         del config[CONF_STAT_T]
         config[CONF_ACTION_TOPIC] = f"{mybase}{ATTR_HVAC_ACTION}"

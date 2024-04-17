@@ -1,4 +1,5 @@
 """cover methods for MQTT Discovery Statestream."""
+
 import logging
 
 from homeassistant.components import mqtt
@@ -44,7 +45,7 @@ class Cover:
         self._hass = hass
         self._publish_retain = publish_retain
 
-    def build_config(self, config, attributes, mybase, mycommand):
+    def build_config(self, config, mycommand, attributes, mybase, *args):  # pylint: disable=unused-argument
         """Build the config for a cover."""
         config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
 

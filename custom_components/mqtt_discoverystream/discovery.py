@@ -3,7 +3,7 @@
 import json
 
 from homeassistant.components import mqtt
-from homeassistant.components.input_select import DOMAIN as IS_DOMAIN
+from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
     CONF_TOPIC,
@@ -110,39 +110,22 @@ class Discovery:
         config = self._build_base(entity_id, attributes, mybase)
 
         publish_config = False
-        if ent_domain == Platform.SENSOR and (
-            self._has_includes or ATTR_DEVICE_CLASS in attributes
-        ):
-            self._sensor.build_config(config, entity_id)
-            publish_config = True
 
-        elif ent_domain == Platform.BINARY_SENSOR and (
-            self._has_includes or ATTR_DEVICE_CLASS in attributes
-        ):
-            self._binary_sensor.build_config(config)
-            publish_config = True
-
-        elif ent_domain == Platform.SWITCH:
-            self._switch.build_config(config, mycommand)
-            publish_config = True
-
-        elif ent_domain == Platform.COVER:
-            self._cover.build_config(config, attributes, mybase, mycommand)
+        if (
+            ent_domain in [Platform.SENSOR, Platform.BINARY_SENSOR]
+            and (self._has_includes or ATTR_DEVICE_CLASS in attributes)
+        ) or ent_domain in [
+            Platform.SWITCH,
+            Platform.COVER,
+            Platform.CLIMATE,
+            Platform.LIGHT,
+            INPUT_SELECT_DOMAIN,
+        ]:
+            entityclass = getattr(self, f"_{ent_domain}")
+            entityclass.build_config(config, mycommand, attributes, mybase, entity_id)
             publish_config = True
 
         elif ent_domain == Platform.DEVICE_TRACKER:
-            publish_config = True
-
-        elif ent_domain == Platform.CLIMATE:
-            self._climate.build_config(config, attributes, mybase, mycommand)
-            publish_config = True
-
-        elif ent_domain == Platform.LIGHT:
-            self._light.build_config(config, entity_id, attributes, mycommand)
-            publish_config = True
-
-        elif ent_domain == IS_DOMAIN:
-            self._input_select.build_config(config, attributes, mycommand)
             publish_config = True
 
         if publish_config:
