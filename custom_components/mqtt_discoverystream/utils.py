@@ -1,4 +1,5 @@
 """Utilities for MQTT Discovery Stream."""
+
 import json
 
 from homeassistant.components import mqtt
@@ -8,11 +9,14 @@ from homeassistant.helpers.json import JSONEncoder
 from .const import ATTR_ATTRIBUTES
 
 
-async def async_publish_base_attributes(hass, new_state, mybase, publish_retain):
+async def async_publish_base_attributes(
+    hass, new_state, mybase, publish_retain, publish_state=True
+):
     """Publish the basic attributes for the entity state."""
-    await mqtt.async_publish(
-        hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, publish_retain
-    )
+    if publish_state:
+        await mqtt.async_publish(
+            hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, publish_retain
+        )
 
     attributes = dict(new_state.attributes.items())
     encoded = json.dumps(attributes, cls=JSONEncoder)

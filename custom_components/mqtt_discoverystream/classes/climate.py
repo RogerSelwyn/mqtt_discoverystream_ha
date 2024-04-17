@@ -107,7 +107,7 @@ class Climate:
         )
 
         await async_publish_base_attributes(
-            self._hass, new_state, mybase, self._publish_retain
+            self._hass, new_state, mybase, self._publish_retain, publish_state=False
         )
 
         payload = new_state.state
