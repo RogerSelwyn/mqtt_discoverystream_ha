@@ -44,6 +44,14 @@ from .const import (
 from .discovery import Discovery
 from .utils import async_publish_base_attributes
 
+VALID_COMMANDS = [
+    Platform.CLIMATE,
+    Platform.LIGHT,
+    Platform.COVER,
+    Platform.SWITCH,
+    IS_DOMAIN,
+]
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -131,21 +139,13 @@ class Publisher:
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
-        if ent_domain in self._subscribed:
+        if ent_domain in self._subscribed or ent_domain not in VALID_COMMANDS:
             return
 
-        if ent_domain == Platform.CLIMATE:
-            await self._climate.async_subscribe(self._command_topic)
-        if ent_domain == Platform.LIGHT:
-            await self._light.async_subscribe(self._command_topic)
-        if ent_domain == Platform.SWITCH:
-            await self._switch.async_subscribe(self._command_topic)
-        if ent_domain == Platform.COVER:
-            await self._cover.async_subscribe(self._command_topic)
-        if ent_domain == IS_DOMAIN:
-            await self._input_select.async_subscribe(self._command_topic)
+        entityclass = getattr(self, f"_{ent_domain}")
+        await entityclass.async_subscribe(self._command_topic)
         self._subscribed.append(ent_domain)
-        _LOGGER.info("MQTT %s subscribe successful", ent_domain)
+        _LOGGER.info("MQTT '%s' subscribe successful", ent_domain)
 
     async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
