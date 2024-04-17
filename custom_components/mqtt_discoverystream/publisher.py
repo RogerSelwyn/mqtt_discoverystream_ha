@@ -4,6 +4,7 @@ import asyncio
 import logging
 
 from homeassistant.components import mqtt
+from homeassistant.components.input_select import DOMAIN as IS_DOMAIN
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
@@ -79,10 +80,12 @@ class Publisher:
         self._discovery = Discovery(hass, conf)
         self._publish_filter = convert_include_exclude_filter(conf)
         self._entity_states = {}
-        async_when_setup(hass, MQTT_DOMAIN, self._async_subscribe)
+        if self._remote_status:
+            async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
         self._register_services()
         self._listen_for_hass_started()
         self._listen_for_hass_stop()
+        self._subscribed = []
 
     async def async_state_publish(self, entity_id, new_state, mybase):
         """Publish state for MQTT Discovery Statestream."""
@@ -124,18 +127,27 @@ class Publisher:
             self._publish_retain,
         )
 
-    async def _async_subscribe(self, hass, component):  # pylint: disable=unused-argument
+    async def _async_subscribe(self, entity_id):
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
-        await self._climate.async_subscribe(self._command_topic)
-        await self._light.async_subscribe(self._command_topic)
-        await self._switch.async_subscribe(self._command_topic)
-        await self._cover.async_subscribe(self._command_topic)
-        await self._input_select.async_subscribe(self._command_topic)
-        if self._remote_status:
-            await self._async_birth_subscribe()
-        _LOGGER.info("MQTT subscribe successful")
+        ent_parts = entity_id.split(".")
+        ent_domain = ent_parts[0]
+        if ent_domain in self._subscribed:
+            return
 
-    async def _async_birth_subscribe(self):
+        if ent_domain == Platform.CLIMATE:
+            await self._climate.async_subscribe(self._command_topic)
+        if ent_domain == Platform.LIGHT:
+            await self._light.async_subscribe(self._command_topic)
+        if ent_domain == Platform.SWITCH:
+            await self._switch.async_subscribe(self._command_topic)
+        if ent_domain == Platform.COVER:
+            await self._cover.async_subscribe(self._command_topic)
+        if ent_domain == IS_DOMAIN:
+            await self._input_select.async_subscribe(self._command_topic)
+        self._subscribed.append(ent_domain)
+        _LOGGER.info("MQTT %s subscribe successful", ent_domain)
+
+    async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
         await mqtt.async_subscribe(
             self._hass,
@@ -174,6 +186,7 @@ class Publisher:
                         entity_id, current_state.attributes, mybase
                     )
                     self._entity_states[entity_id] = current_state
+                    await self._async_subscribe(entity_id)
         _LOGGER.debug("Discovery published")
         await asyncio.sleep(DEFAULT_STATE_SLEEP)
         for entity_id, current_state in self._entity_states.items():
