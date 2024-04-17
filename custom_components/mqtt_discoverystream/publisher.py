@@ -13,7 +13,6 @@ from homeassistant.components.mqtt.const import (
     DEFAULT_PAYLOAD_NOT_AVAILABLE,
 )
 from homeassistant.const import (
-    CONF_INCLUDE,
     EVENT_HOMEASSISTANT_STARTED,
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
@@ -29,11 +28,9 @@ from .classes.climate import Climate
 from .classes.cover import Cover
 from .classes.input_select import InputSelect
 from .classes.light import Light
-from .classes.switch import Switch
 from .const import (
     CONF_BASE_TOPIC,
     CONF_COMMAND_TOPIC,
-    CONF_DISCOVERY_TOPIC,
     CONF_ONLINE_STATUS,
     CONF_PUBLISHED,
     CONF_REMOTE_STATUS,
@@ -48,7 +45,6 @@ VALID_COMMANDS = [
     Platform.CLIMATE,
     Platform.LIGHT,
     Platform.COVER,
-    Platform.SWITCH,
     INPUT_SELECT_DOMAIN,
 ]
 
@@ -63,30 +59,17 @@ class Publisher:
         self._hass = hass
         self._base_topic = base_topic
         self._publish_retain = publish_retain
-        self._has_includes = bool(conf.get(CONF_INCLUDE))
-        self._loop_time = conf.get(CONF_REPUBLISH_TIME)
-        self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
-            CONF_BASE_TOPIC
-        )
-        self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
-        if not self._command_topic.endswith("/"):
-            self._command_topic = f"{self._command_topic}/"
-        self._remote_status = conf.get(CONF_REMOTE_STATUS)
-        if self._remote_status:
-            self._remote_status_topic = self._remote_status.get(CONF_TOPIC) or conf.get(
-                CONF_BASE_TOPIC
-            )
-            self._remote_online_status = self._remote_status.get(CONF_ONLINE_STATUS)
-            if not self._remote_status_topic.endswith("/status"):
-                self._remote_status_topic = f"{self._remote_status_topic}/status"
+        self._conf = conf
+        self._remote_status, self._remote_status_topic = self._set_remote_status()
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
+
         self._climate = Climate(hass, self._publish_retain)
         self._input_select = InputSelect(hass)
         self._light = Light(hass, self._publish_retain)
-        self._switch = Switch(hass)
         self._cover = Cover(hass, self._publish_retain)
+
         self._discovery = Discovery(hass, conf)
-        self._publish_filter = convert_include_exclude_filter(conf)
+
         self._entity_states = {}
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
@@ -140,7 +123,7 @@ class Publisher:
             return
 
         entityclass = getattr(self, f"_{ent_domain}")
-        await entityclass.async_subscribe(self._command_topic)
+        await entityclass.async_subscribe(self._set_command_topic())
         self._subscribed.append(ent_domain)
         _LOGGER.info("MQTT '%s' subscribe successful", ent_domain)
 
@@ -153,7 +136,7 @@ class Publisher:
         )
 
     async def _async_handle_birth_message(self, msg):
-        if msg.payload == self._remote_online_status:
+        if msg.payload == self._remote_status.get(CONF_ONLINE_STATUS):
             await self._async_publish_discovery_state()
 
     def _register_services(self):
@@ -165,7 +148,11 @@ class Publisher:
         self._hass.bus.async_listen_once(
             EVENT_HOMEASSISTANT_STARTED, self._async_publish_discovery_state
         )
-        async_call_later(self._hass, self._loop_time, self._async_schedule_publish)
+        async_call_later(
+            self._hass,
+            self._conf.get(CONF_REPUBLISH_TIME),
+            self._async_schedule_publish,
+        )
 
     def _listen_for_hass_stop(self):
         self._hass.bus.async_listen_once(
@@ -175,8 +162,9 @@ class Publisher:
     async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
         ent_reg = entity_registry.async_get(self._hass)
         self._entity_states = {}
+        publish_filter = convert_include_exclude_filter(self._conf)
         for entity_id in list(ent_reg.entities):
-            if self._publish_filter(entity_id):
+            if publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
                     mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
                     await self._discovery.async_discovery_publish(
@@ -206,4 +194,27 @@ class Publisher:
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
         await self._async_publish_discovery_state()
-        async_call_later(self._hass, self._loop_time, self._async_schedule_publish)
+        async_call_later(
+            self._hass,
+            self._conf.get(CONF_REPUBLISH_TIME),
+            self._async_schedule_publish,
+        )
+
+    def _set_command_topic(self):
+        command_topic = self._conf.get(CONF_COMMAND_TOPIC) or self._conf.get(
+            CONF_BASE_TOPIC
+        )
+        if not command_topic.endswith("/"):
+            command_topic = f"{command_topic}/"
+        return command_topic
+
+    def _set_remote_status(self):
+        remote_status = self._conf.get(CONF_REMOTE_STATUS)
+        remote_status_topic = None
+        if remote_status:
+            remote_status_topic = remote_status.get(CONF_TOPIC) or self._conf.get(
+                CONF_BASE_TOPIC
+            )
+            if not remote_status_topic.endswith("/status"):
+                remote_status_topic = f"{remote_status_topic}/status"
+        return remote_status, remote_status_topic

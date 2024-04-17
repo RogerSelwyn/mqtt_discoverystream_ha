@@ -72,27 +72,21 @@ class Discovery:
     def __init__(self, hass, conf):
         """Initiate discovery."""
         self._hass = hass
+        self._conf = conf
         self._publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
-        self._command_topic = conf.get(CONF_COMMAND_TOPIC) or conf.get(CONF_BASE_TOPIC)
-        if not self._command_topic.endswith("/"):
-            self._command_topic = f"{self._command_topic}/"
-        self._local_status = conf.get(CONF_LOCAL_STATUS)
-        if self._local_status:
-            self._local_status_topic = self._local_status.get(CONF_TOPIC) or conf.get(
-                CONF_BASE_TOPIC
-            )
-            self._local_online_status = self._local_status.get(CONF_ONLINE_STATUS)
-            self._local_offline_status = self._local_status.get(CONF_OFFLINE_STATUS)
-            if not self._local_status_topic.endswith("/status"):
-                self._local_status_topic = f"{self._local_status_topic}/status"
+        self._command_topic = self._set_topic(CONF_COMMAND_TOPIC)
+        (
+            self._local_status,
+            self._local_status_topic,
+            self._local_online_status,
+            self._local_offline_status,
+        ) = self._set_local_status()
+
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
-        self._discovery_topic = conf.get(CONF_DISCOVERY_TOPIC) or conf.get(
-            CONF_BASE_TOPIC
-        )
-        if not self._discovery_topic.endswith("/"):
-            self._discovery_topic = f"{self._discovery_topic}/"
+        self._discovery_topic = self._set_topic(CONF_DISCOVERY_TOPIC)
+
         self._binary_sensor = BinarySensor()
         self._climate = Climate(hass, self._publish_retain)
         self._input_select = InputSelect(hass)
@@ -214,3 +208,30 @@ class Discovery:
                     config_device[CONF_CNS] = device.connections
 
         return config_device
+
+    def _set_topic(self, topic):
+        response_topic = self._conf.get(topic) or self._conf.get(CONF_BASE_TOPIC)
+        if not response_topic.endswith("/"):
+            response_topic = f"{response_topic}/"
+        return response_topic
+
+    def _set_local_status(self):
+        local_status = self._conf.get(CONF_LOCAL_STATUS)
+        local_status_topic = None
+        local_online_status = None
+        local_offline_status = None
+        if local_status:
+            local_status_topic = local_status.get(CONF_TOPIC) or self._conf.get(
+                CONF_BASE_TOPIC
+            )
+            local_online_status = local_status.get(CONF_ONLINE_STATUS)
+            local_offline_status = local_status.get(CONF_OFFLINE_STATUS)
+            if not local_status_topic.endswith("/status"):
+                local_status_topic = f"{local_status_topic}/status"
+
+        return (
+            local_status,
+            local_status_topic,
+            local_online_status,
+            local_offline_status,
+        )
