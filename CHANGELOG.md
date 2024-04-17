@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.1 (2024/04/17)
+### 🧰 Maintenance
+- [Only subscribe to required topics](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1a6081a1db368f8bac2dd2ddd05681f46317ed4f) - @RogerSelwyn
+- [Remove publication of unrequired attribute](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d09958facce302a809b57fd21a0f78ff83105937) - @RogerSelwyn
+- [Simplify subscription code](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9c8168633d36dbcfa99d6a7ffab2b7a50d9a4a32) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0276256925a54be994a673315dda9276e70c5608) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5b51e28e03fa698d03fdb4cc0806a59fa583dff5) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.2.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b18669e2c61419c4fc2e4b9f707c026d6c9ba955) - @RogerSelwyn
+
 ## 1.2.0 (2024/04/16)
 ### ✨ Enhancements
 - [Add support for input_select](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c188cc48cc4f7351cd3ca9cc0c3131afff5409a3) - @RogerSelwyn
