@@ -18,7 +18,6 @@ from homeassistant.components.mqtt.cover import (
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
-    ATTR_STATE,
     SERVICE_CLOSE_COVER,
     SERVICE_OPEN_COVER,
     SERVICE_STOP_COVER,
@@ -55,18 +54,6 @@ class Cover(DiscoveryEntity):
             config[CONF_TILT_STATUS_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_TILT_POSITION + "'] }}"
             )
-
-    async def async_publish_state(self, new_state, mybase):
-        """Build the state for a light."""
-        await super().async_publish_state(new_state, mybase)
-
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{ATTR_STATE}",
-            new_state.state,
-            1,
-            self._publish_retain,
-        )
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a cover."""

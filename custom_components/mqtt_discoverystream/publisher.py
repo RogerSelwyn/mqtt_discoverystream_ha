@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+from dataclasses import dataclass
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
@@ -66,8 +67,7 @@ class Publisher:
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
         self._register_services()
-        self._listen_for_hass_started()
-        self._listen_for_hass_stop()
+        self._listen_for_hass_events()
         self._subscribed = []
 
     async def async_state_publish(self, entity_id, new_state, mybase):
@@ -134,19 +134,18 @@ class Publisher:
             DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
         )
 
-    def _listen_for_hass_started(self):
+    def _listen_for_hass_events(self):
         self._hass.bus.async_listen_once(
             EVENT_HOMEASSISTANT_STARTED, self._async_publish_discovery_state
         )
+        self._hass.bus.async_listen_once(
+            EVENT_HOMEASSISTANT_STOP, self._async_mark_unavailable
+        )
+
         async_call_later(
             self._hass,
             self._conf.get(CONF_REPUBLISH_TIME),
             self._async_schedule_publish,
-        )
-
-    def _listen_for_hass_stop(self):
-        self._hass.bus.async_listen_once(
-            EVENT_HOMEASSISTANT_STOP, self._async_mark_unavailable
         )
 
     async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
@@ -202,6 +201,7 @@ class Publisher:
         return remote_status, remote_status_topic
 
 
+@dataclass
 class DiscoveryClasses:
     """Discovery classes."""
 
