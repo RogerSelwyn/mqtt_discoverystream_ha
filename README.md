@@ -8,15 +8,26 @@ This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assi
 Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
 
 ## Supported entities
-Provides discovery support for:
-- Binary Sensor
-- Climate
-- Cover
-- Device Tracker
-- Input Select --> Remote Select
-- Light
-- Sensor
-- Switch
+Provides discovery & command support for:
+
+| **Entity Type** | **Entity Created** | **Commands Supported**    |
+|:----------------|:-------------------|:--------------------------|
+| Binary Sensor   | binary_sensor      |                           |
+| Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
+| Cover           | cover              | Open, Close, Stop         |
+| Device Tracker  | device_tracker     |                           |
+| Input Select    | select             | Select Option             |
+| Light           | light              | Turn On, Turn Off         |
+| Sensor          | sensor             |                           |
+| Switch          | switch             | Turn On, Turn Off         |
+
+## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
+I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the major work to create it put in by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
+
+<a href="https://www.buymeacoffee.com/rogtp" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a> 
+<a href="https://www.paypal.com/donate/?hosted_button_id=F7TGHNGH7A526">
+  <img src="https://github.com/RogerSelwyn/actions/blob/e82dab9e5643bbb82e182215a748a3024e3e7eac/images/paypal-donate-button.png" alt="Donate with PayPal" height="40"/>
+</a>
 
 ## Pre-requisites
 
