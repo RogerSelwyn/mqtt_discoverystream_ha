@@ -8,15 +8,18 @@ This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assi
 Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
 
 ## Supported entities
-Provides discovery support for:
-- Binary Sensor
-- Climate
-- Cover
-- Device Tracker
-- Input Select --> Remote Select
-- Light
-- Sensor
-- Switch
+Provides discovery & command support for:
+
+| **Entity Type** | **Entity Created** | **Commands Supported**    |
+|:----------------|:-------------------|:--------------------------|
+| Binary Sensor   | binary_sensor      |                           |
+| Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
+| Cover           | cover              | Open, Close, Stop         |
+| Device Tracker  | device_tracker     |                           |
+| Input Select    | select             | Select Option             |
+| Light           | light              | Turn On, Turn Off         |
+| Sensor          | sensor             |                           |
+| Switch          | switch             | Turn On, Turn Off         |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
 I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the major work to create it put in by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
