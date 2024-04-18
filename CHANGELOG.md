@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.2 (2024/04/18)
+### 🧰 Maintenance
+- [Further code de-duplication](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/61b7260c6da7f90eb3a1be27b3368415eda73771) - @RogerSelwyn
+- [Code cleanup](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ab8b7eb9774bb97a422881cd8a6e19c6b34ba39c) - @RogerSelwyn
+- [Major de-duplication of code to aid readability](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/da01dfa5ea43a82dbb66a0cb8c86afaa2af82e0c) - @RogerSelwyn
+- [Further code removal](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/88d7ee73b73551bb6cc308711b0bbd8ae917598f) - @RogerSelwyn
+
+### 🔖 Release
+- [v1.2.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/05b37df7f813ef28e682f05b4d739187651044ac) - @RogerSelwyn
+
 ## 1.2.1 (2024/04/17)
 ### 🧰 Maintenance
 - [Only subscribe to required topics](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1a6081a1db368f8bac2dd2ddd05681f46317ed4f) - @RogerSelwyn
