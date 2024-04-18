@@ -12,6 +12,7 @@ Provides discovery support for:
 - Binary Sensor
 - Climate
 - Cover
+- Device Tracker
 - Input Select --> Remote Select
 - Light
 - Sensor
