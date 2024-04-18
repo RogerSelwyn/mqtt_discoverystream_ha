@@ -11,9 +11,9 @@ from .entity import DiscoveryEntity
 class Sensor(DiscoveryEntity):
     """Sensor class."""
 
-    def __init__(self, hass, publish_retain):
+    def __init__(self, hass, publish_retain, platform):
         """Initialise the sensor class."""
-        super().__init__(hass, publish_retain)
+        super().__init__(hass, publish_retain, platform)
         self._ent_reg = entity_registry.async_get(hass)
 
     def build_config(self, config, entity_info: EntityInfo):

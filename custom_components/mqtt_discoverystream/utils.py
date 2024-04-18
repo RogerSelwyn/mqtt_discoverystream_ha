@@ -1,13 +1,16 @@
 """Utilities for MQTT Discovery Stream."""
 
 import json
+import logging
 from dataclasses import dataclass, field
 
 from homeassistant.components import mqtt
 from homeassistant.const import ATTR_STATE
 from homeassistant.helpers.json import JSONEncoder
 
-from .const import ATTR_ATTRIBUTES, CONF_BASE_TOPIC
+from .const import ATTR_ATTRIBUTES, CONF_BASE_TOPIC, CONF_PUBLISHED, DOMAIN
+
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_publish_base_attributes(
@@ -49,6 +52,21 @@ def set_topic(conf, topic):
     if not response_topic.endswith("/"):
         response_topic = f"{response_topic}/"
     return response_topic
+
+
+def explode_message(hass, msg):
+    """Handle a message for a switch."""
+    explode_topic = msg.topic.split("/")
+    domain = explode_topic[1]
+    entity = explode_topic[2]
+    element = explode_topic[3]
+
+    # Only handle service calls for discoveries we published
+    if f"{domain}.{entity}" not in hass.data[DOMAIN][CONF_PUBLISHED]:
+        return False, False, False
+
+    _LOGGER.debug("Message received: topic %s; payload: %s", {msg.topic}, {msg.payload})
+    return domain, entity, element
 
 
 @dataclass

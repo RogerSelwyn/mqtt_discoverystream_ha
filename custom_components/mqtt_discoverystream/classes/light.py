@@ -25,7 +25,6 @@ from homeassistant.const import (
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
     STATE_ON,
-    Platform,
 )
 from homeassistant.helpers.entity import get_supported_features
 from homeassistant.helpers.json import JSONEncoder
@@ -43,12 +42,10 @@ from ..const import (
     ATTR_Y,
     CONF_CMD_T,
     CONF_JSON_ATTR_T,
-    CONF_PUBLISHED,
-    DOMAIN,
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
-from ..utils import EntityInfo
+from ..utils import EntityInfo, explode_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -134,28 +131,11 @@ class Light(DiscoveryEntity):
 
         return color
 
-    async def async_subscribe(self, command_topic):
-        """Subscribe to messages for a light."""
-        await mqtt.async_subscribe(
-            self._hass,
-            f"{command_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
-            self._async_handle_message,
-        )
-        return True
-
     async def _async_handle_message(self, msg):
         """Handle a message for a light."""
-        explode_topic = msg.topic.split("/")
-        domain = explode_topic[1]
-        entity = explode_topic[2]
-
-        # Only handle service calls for discoveries we published
-        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
+        if not domain:
             return
-
-        _LOGGER.debug(
-            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
-        )
 
         payload_json = json.loads(msg.payload)
         service_payload = {

@@ -2,14 +2,12 @@
 
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
     STATE_OFF,
     STATE_ON,
-    Platform,
 )
 
 from ..const import (
@@ -17,10 +15,8 @@ from ..const import (
     CONF_CMD_T,
     CONF_PL_OFF,
     CONF_PL_ON,
-    CONF_PUBLISHED,
-    DOMAIN,
 )
-from ..utils import EntityInfo
+from ..utils import EntityInfo, explode_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -35,28 +31,11 @@ class Switch(DiscoveryEntity):
         config[CONF_PL_ON] = STATE_ON
         config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
 
-    async def async_subscribe(self, command_topic):
-        """Subscribe to messages for a switch."""
-        await mqtt.async_subscribe(
-            self._hass,
-            f"{command_topic}{Platform.SWITCH}/+/{ATTR_SET}",
-            self._async_handle_message,
-        )
-        return True
-
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
-        explode_topic = msg.topic.split("/")
-        domain = explode_topic[1]
-        entity = explode_topic[2]
-
-        # Only handle service calls for discoveries we published
-        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
+        if not domain:
             return
-
-        _LOGGER.debug(
-            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
-        )
 
         if msg.payload == STATE_ON:
             await self._hass.services.async_call(

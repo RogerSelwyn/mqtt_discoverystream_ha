@@ -5,6 +5,7 @@ import logging
 from dataclasses import dataclass
 
 from homeassistant.components import mqtt
+from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
@@ -17,6 +18,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
+    Platform,
 )
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
@@ -110,12 +112,8 @@ class Publisher:
             return
 
         entityclass = getattr(self._discovery_classes, ent_domain)
-        subscribed = await entityclass.async_subscribe(
-            set_topic(self._conf, CONF_COMMAND_TOPIC)
-        )
-        if subscribed:
-            self._subscribed.append(ent_domain)
-            _LOGGER.info("MQTT '%s' subscribe successful", ent_domain)
+        await entityclass.async_subscribe(set_topic(self._conf, CONF_COMMAND_TOPIC))
+        self._subscribed.append(ent_domain)
 
     async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
@@ -206,11 +204,13 @@ class DiscoveryClasses:
     """Discovery classes."""
 
     def __init__(self, hass, publish_retain):
-        self.binary_sensor = BinarySensor(hass, publish_retain)
-        self.climate = Climate(hass, publish_retain)
-        self.input_select = InputSelect(hass, publish_retain)
-        self.light = Light(hass, publish_retain)
-        self.sensor = Sensor(hass, publish_retain)
-        self.switch = Switch(hass, publish_retain)
-        self.cover = Cover(hass, publish_retain)
-        self.device_tracker = DeviceTracker(hass, publish_retain)
+        self.binary_sensor = BinarySensor(hass, publish_retain, Platform.BINARY_SENSOR)
+        self.climate = Climate(hass, publish_retain, Platform.CLIMATE)
+        self.input_select = InputSelect(hass, publish_retain, INPUT_SELECT_DOMAIN)
+        self.light = Light(hass, publish_retain, Platform.LIGHT)
+        self.sensor = Sensor(hass, publish_retain, Platform.SENSOR)
+        self.switch = Switch(hass, publish_retain, Platform.SWITCH)
+        self.cover = Cover(hass, publish_retain, Platform.COVER)
+        self.device_tracker = DeviceTracker(
+            hass, publish_retain, Platform.DEVICE_TRACKER
+        )

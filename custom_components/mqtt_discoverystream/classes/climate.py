@@ -38,18 +38,15 @@ from homeassistant.const import (
     ATTR_TEMPERATURE,
     STATE_OFF,
     STATE_UNAVAILABLE,
-    Platform,
 )
 
 from ..const import (
     ATTR_MODE_COMMAND,
     ATTR_PRESET_COMMAND,
     ATTR_TEMP_COMMAND,
-    CONF_PUBLISHED,
     CONF_STAT_T,
-    DOMAIN,
 )
-from ..utils import EntityInfo, async_publish_attribute
+from ..utils import EntityInfo, async_publish_attribute, explode_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -58,9 +55,19 @@ _LOGGER = logging.getLogger(__name__)
 class Climate(DiscoveryEntity):
     """Climate class."""
 
-    def __init__(self, hass, publish_retain):
+    def __init__(
+        self,
+        hass,
+        publish_retain,
+        platform,
+    ):
         """Initialise the climate class."""
-        super().__init__(hass, publish_retain, publish_state=False)
+        super().__init__(
+            hass,
+            publish_retain,
+            platform,
+            publish_state=False,
+        )
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a climate."""
@@ -119,39 +126,11 @@ class Climate(DiscoveryEntity):
             self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, self._publish_retain
         )
 
-    async def async_subscribe(self, command_topic):
-        """Subscribe to messages for climate."""
-        await mqtt.async_subscribe(
-            self._hass,
-            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_MODE_COMMAND}",
-            self._async_handle_message,
-        )
-        await mqtt.async_subscribe(
-            self._hass,
-            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_PRESET_COMMAND}",
-            self._async_handle_message,
-        )
-        await mqtt.async_subscribe(
-            self._hass,
-            f"{command_topic}{Platform.CLIMATE}/+/{ATTR_TEMP_COMMAND}",
-            self._async_handle_message,
-        )
-        return True
-
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
-        explode_topic = msg.topic.split("/")
-        domain = explode_topic[1]
-        entity = explode_topic[2]
-        element = explode_topic[3]
-
-        # Only handle service calls for discoveries we published
-        if f"{domain}.{entity}" not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
+        domain, entity, element = explode_message(self._hass, msg)
+        if not domain:
             return
-
-        _LOGGER.debug(
-            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
-        )
 
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
