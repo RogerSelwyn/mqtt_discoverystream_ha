@@ -3,7 +3,6 @@
 import json
 
 from homeassistant.components import mqtt
-from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
     CONF_TOPIC,
@@ -28,13 +27,6 @@ from homeassistant.const import (
 from homeassistant.helpers import device_registry, entity_registry
 from homeassistant.helpers.json import JSONEncoder
 
-from .classes.binary_sensor import BinarySensor
-from .classes.climate import Climate
-from .classes.cover import Cover
-from .classes.input_select import InputSelect
-from .classes.light import Light
-from .classes.sensor import Sensor
-from .classes.switch import Switch
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
@@ -63,18 +55,21 @@ from .const import (
     CONF_UNIQ_ID,
     CONF_UNIT_OF_MEAS,
     DOMAIN,
+    SUPPORTED_ENTITIES,
 )
+from .utils import EntityInfo, set_topic
 
 
 class Discovery:
     """Manage discovery publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf):
+    def __init__(self, hass, conf, discovery_classes):
         """Initiate discovery."""
         self._hass = hass
         self._conf = conf
+        self._discovery_classes = discovery_classes
         self._publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
-        self._command_topic = self._set_topic(CONF_COMMAND_TOPIC)
+        self._command_topic = set_topic(conf, CONF_COMMAND_TOPIC)
         (
             self._local_status,
             self._local_status_topic,
@@ -85,15 +80,7 @@ class Discovery:
         self._has_includes = bool(conf.get(CONF_INCLUDE))
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
-        self._discovery_topic = self._set_topic(CONF_DISCOVERY_TOPIC)
-
-        self._binary_sensor = BinarySensor()
-        self._climate = Climate(hass, self._publish_retain)
-        self._input_select = InputSelect(hass)
-        self._light = Light(hass, self._publish_retain)
-        self._sensor = Sensor(hass)
-        self._switch = Switch(hass)
-        self._cover = Cover(hass, self._publish_retain)
+        self._discovery_topic = set_topic(conf, CONF_DISCOVERY_TOPIC)
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -101,48 +88,42 @@ class Discovery:
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        config = self._build_base(entity_id, attributes, mybase)
-
-        publish_config = False
+        if ent_domain not in SUPPORTED_ENTITIES:
+            return
 
         if (
-            ent_domain in [Platform.SENSOR, Platform.BINARY_SENSOR]
-            and (self._has_includes or ATTR_DEVICE_CLASS in attributes)
-        ) or ent_domain in [
-            Platform.SWITCH,
-            Platform.COVER,
-            Platform.CLIMATE,
-            Platform.LIGHT,
-            INPUT_SELECT_DOMAIN,
-        ]:
-            entityclass = getattr(self, f"_{ent_domain}")
-            entityclass.build_config(config, mycommand, attributes, mybase, entity_id)
-            publish_config = True
+            ent_domain in [Platform.BINARY_SENSOR, Platform.SENSOR]
+            and not self._has_includes
+            and ATTR_DEVICE_CLASS not in attributes
+        ):
+            return
 
-        elif ent_domain == Platform.DEVICE_TRACKER:
-            publish_config = True
+        entity_info = EntityInfo(mycommand, attributes, mybase, entity_id)
+        config = self._build_base(entity_info)
 
-        if publish_config:
-            if device := self._build_device(entity_id):
-                config[CONF_DEV] = device
+        entityclass = getattr(self._discovery_classes, ent_domain)
+        entityclass.build_config(config, entity_info)
 
-            self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
+        if device := self._build_device(entity_id):
+            config[CONF_DEV] = device
 
-            entity_id = entity_id.removeprefix("input_")
+        self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 
-            encoded = json.dumps(config, cls=JSONEncoder)
-            entity_disc_topic = (
-                f"{self._discovery_topic}{entity_id.replace('.', '/')}/{ATTR_CONFIG}"
-            )
-            await mqtt.async_publish(
-                self._hass, entity_disc_topic, encoded, 1, self._publish_retain
-            )
+        entity_id = entity_id.removeprefix("input_")
 
-    def _build_base(self, entity_id, attributes, mybase):
+        encoded = json.dumps(config, cls=JSONEncoder)
+        entity_disc_topic = (
+            f"{self._discovery_topic}{entity_id.replace('.', '/')}/{ATTR_CONFIG}"
+        )
+        await mqtt.async_publish(
+            self._hass, entity_disc_topic, encoded, 1, self._publish_retain
+        )
+
+    def _build_base(self, entity_info: EntityInfo):
         # sourcery skip: assign-if-exp, merge-dict-assign
-        ent_parts = entity_id.split(".")
+        ent_parts = entity_info.entity_id.split(".")
         ent_id = ent_parts[1]
-        availability = [{CONF_TOPIC: f"{mybase}{CONF_AVAILABILITY}"}]
+        availability = [{CONF_TOPIC: f"{entity_info.mybase}{CONF_AVAILABILITY}"}]
         if self._local_status:
             availability.append(
                 {
@@ -153,19 +134,19 @@ class Discovery:
             )
 
         config = {
-            CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_id.removeprefix("input_")}",
+            CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_info.entity_id.removeprefix("input_")}",
             CONF_OBJ_ID: ent_id,
-            CONF_STAT_T: f"{mybase}{ATTR_STATE}",
-            CONF_JSON_ATTR_T: f"{mybase}{ATTR_ATTRIBUTES}",
+            CONF_STAT_T: f"{entity_info.mybase}{ATTR_STATE}",
+            CONF_JSON_ATTR_T: f"{entity_info.mybase}{ATTR_ATTRIBUTES}",
             CONF_AVTY: availability,
             CONF_AVTY_MODE: AVAILABILITY_LATEST,
         }
         name = None
-        if ATTR_FRIENDLY_NAME in attributes:
-            name = attributes[ATTR_FRIENDLY_NAME]
+        if ATTR_FRIENDLY_NAME in entity_info.attributes:
+            name = entity_info.attributes[ATTR_FRIENDLY_NAME]
         else:
             name = ent_id.replace("_", " ").title()
-        if entry := self._ent_reg.async_get(entity_id):
+        if entry := self._ent_reg.async_get(entity_info.entity_id):
             if entry.device_id and name:
                 device = self._dev_reg.async_get(entry.device_id)
                 if device and name.startswith(device.name):
@@ -180,12 +161,12 @@ class Discovery:
                 config[CONF_DEV_CLA] = entry.device_class
         config[CONF_NAME] = name
 
-        if ATTR_UNIT_OF_MEASUREMENT in attributes:
-            config[CONF_UNIT_OF_MEAS] = attributes[ATTR_UNIT_OF_MEASUREMENT]
-        if ATTR_STATE_CLASS in attributes:
-            config[CONF_STAT_CLA] = attributes[ATTR_STATE_CLASS]
-        if ATTR_ICON in attributes:
-            config[ATTR_ICON] = attributes[ATTR_ICON]
+        if ATTR_UNIT_OF_MEASUREMENT in entity_info.attributes:
+            config[CONF_UNIT_OF_MEAS] = entity_info.attributes[ATTR_UNIT_OF_MEASUREMENT]
+        if ATTR_STATE_CLASS in entity_info.attributes:
+            config[CONF_STAT_CLA] = entity_info.attributes[ATTR_STATE_CLASS]
+        if ATTR_ICON in entity_info.attributes:
+            config[ATTR_ICON] = entity_info.attributes[ATTR_ICON]
 
         return config
 
@@ -208,12 +189,6 @@ class Discovery:
                     config_device[CONF_CNS] = device.connections
 
         return config_device
-
-    def _set_topic(self, topic):
-        response_topic = self._conf.get(topic) or self._conf.get(CONF_BASE_TOPIC)
-        if not response_topic.endswith("/"):
-            response_topic = f"{response_topic}/"
-        return response_topic
 
     def _set_local_status(self):
         local_status = self._conf.get(CONF_LOCAL_STATUS)

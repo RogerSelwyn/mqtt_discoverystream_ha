@@ -49,42 +49,46 @@ from ..const import (
     CONF_STAT_T,
     DOMAIN,
 )
-from ..utils import async_publish_attribute, async_publish_base_attributes
+from ..utils import EntityInfo, async_publish_attribute
+from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Climate:
+class Climate(DiscoveryEntity):
     """Climate class."""
 
     def __init__(self, hass, publish_retain):
         """Initialise the climate class."""
-        self._hass = hass
-        self._publish_retain = publish_retain
+        super().__init__(hass, publish_retain, publish_state=False)
 
-    def build_config(self, config, mycommand, attributes, mybase, *args):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a climate."""
         del config[CONF_STAT_T]
-        config[CONF_ACTION_TOPIC] = f"{mybase}{ATTR_HVAC_ACTION}"
-        config[CONF_CURRENT_TEMP_TOPIC] = f"{mybase}{ATTR_CURRENT_TEMPERATURE}"
-        config[CONF_TEMP_MAX] = attributes[ATTR_MAX_TEMP]
-        config[CONF_TEMP_MIN] = attributes[ATTR_MIN_TEMP]
-        config[CONF_MODE_COMMAND_TOPIC] = f"{mycommand}{ATTR_MODE_COMMAND}"
-        config[CONF_MODE_LIST] = attributes[ATTR_HVAC_MODES]
-        config[CONF_MODE_STATE_TOPIC] = f"{mybase}{ATTR_HVAC_MODE}"
-        preset_modes = attributes[ATTR_PRESET_MODES]
+        config[CONF_ACTION_TOPIC] = f"{entity_info.mybase}{ATTR_HVAC_ACTION}"
+        config[CONF_CURRENT_TEMP_TOPIC] = (
+            f"{entity_info.mybase}{ATTR_CURRENT_TEMPERATURE}"
+        )
+        config[CONF_TEMP_MAX] = entity_info.attributes[ATTR_MAX_TEMP]
+        config[CONF_TEMP_MIN] = entity_info.attributes[ATTR_MIN_TEMP]
+        config[CONF_MODE_COMMAND_TOPIC] = f"{entity_info.mycommand}{ATTR_MODE_COMMAND}"
+        config[CONF_MODE_LIST] = entity_info.attributes[ATTR_HVAC_MODES]
+        config[CONF_MODE_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_HVAC_MODE}"
+        preset_modes = entity_info.attributes[ATTR_PRESET_MODES]
         if PRESET_NONE in preset_modes:
             preset_modes.remove(PRESET_NONE)
         config[CONF_PRESET_MODES_LIST] = preset_modes
-        config[CONF_PRESET_MODE_COMMAND_TOPIC] = f"{mycommand}{ATTR_PRESET_COMMAND}"
-        config[CONF_PRESET_MODE_STATE_TOPIC] = f"{mybase}{ATTR_PRESET_MODE}"
-        config[CONF_TEMP_COMMAND_TOPIC] = f"{mycommand}{ATTR_TEMP_COMMAND}"
-        config[CONF_TEMP_STATE_TOPIC] = f"{mybase}{ATTR_TEMPERATURE}"
-        if ATTR_TARGET_TEMP_STEP in attributes:
-            step = attributes[ATTR_TARGET_TEMP_STEP]
-        else:
-            step = 0.5
-        config[CONF_TEMP_STEP] = step
+        config[CONF_PRESET_MODE_COMMAND_TOPIC] = (
+            f"{entity_info.mycommand}{ATTR_PRESET_COMMAND}"
+        )
+        config[CONF_PRESET_MODE_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_PRESET_MODE}"
+        config[CONF_TEMP_COMMAND_TOPIC] = f"{entity_info.mycommand}{ATTR_TEMP_COMMAND}"
+        config[CONF_TEMP_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_TEMPERATURE}"
+        config[CONF_TEMP_STEP] = (
+            entity_info.attributes[ATTR_TARGET_TEMP_STEP]
+            if ATTR_TARGET_TEMP_STEP in entity_info.attributes
+            else 0.5
+        )
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a climate."""
@@ -106,9 +110,7 @@ class Climate:
             self._hass, new_state, mybase, ATTR_TEMPERATURE, self._publish_retain
         )
 
-        await async_publish_base_attributes(
-            self._hass, new_state, mybase, self._publish_retain, publish_state=False
-        )
+        await super().async_publish_state(new_state, mybase)
 
         payload = new_state.state
         if payload == STATE_UNAVAILABLE:
@@ -134,6 +136,7 @@ class Climate:
             f"{command_topic}{Platform.CLIMATE}/+/{ATTR_TEMP_COMMAND}",
             self._async_handle_message,
         )
+        return True
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""

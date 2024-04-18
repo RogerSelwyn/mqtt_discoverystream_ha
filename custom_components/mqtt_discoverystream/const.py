@@ -2,6 +2,9 @@
 
 from datetime import timedelta
 
+from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
+from homeassistant.const import Platform
+
 ATTR_COLOR = "color"
 ATTR_H = "h"
 ATTR_S = "s"
@@ -70,3 +73,14 @@ CONF_IDS = "ids"
 CONF_CNS = "cns"
 CONF_PL_ON = "pl_on"
 CONF_PL_OFF = "pl_off"
+
+SUPPORTED_ENTITIES = [
+    Platform.BINARY_SENSOR,
+    Platform.CLIMATE,
+    Platform.COVER,
+    Platform.DEVICE_TRACKER,
+    Platform.LIGHT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+    INPUT_SELECT_DOMAIN,
+]

@@ -1,12 +1,13 @@
 """Utilities for MQTT Discovery Stream."""
 
 import json
+from dataclasses import dataclass, field
 
 from homeassistant.components import mqtt
 from homeassistant.const import ATTR_STATE
 from homeassistant.helpers.json import JSONEncoder
 
-from .const import ATTR_ATTRIBUTES
+from .const import ATTR_ATTRIBUTES, CONF_BASE_TOPIC
 
 
 async def async_publish_base_attributes(
@@ -40,3 +41,21 @@ async def async_publish_attribute(
             1,
             publish_retain,
         )
+
+
+def set_topic(conf, topic):
+    """Create the topic string."""
+    response_topic = conf.get(topic) or conf.get(CONF_BASE_TOPIC)
+    if not response_topic.endswith("/"):
+        response_topic = f"{response_topic}/"
+    return response_topic
+
+
+@dataclass
+class EntityInfo:
+    """Information for an entity."""
+
+    mycommand: str = field(init=True, repr=True)
+    attributes: str = field(init=True, repr=True)
+    mybase: str = field(init=True, repr=True)
+    entity_id: str = field(init=True, repr=True)

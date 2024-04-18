@@ -32,39 +32,33 @@ from ..const import (
     CONF_PUBLISHED,
     DOMAIN,
 )
-from ..utils import async_publish_base_attributes
+from ..utils import EntityInfo
+from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Cover:
+class Cover(DiscoveryEntity):
     """Cover class."""
 
-    def __init__(self, hass, publish_retain):
-        """Initialise the cover class."""
-        self._hass = hass
-        self._publish_retain = publish_retain
-
-    def build_config(self, config, mycommand, attributes, mybase, *args):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a cover."""
-        config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
+        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
 
-        if ATTR_CURRENT_POSITION in attributes:
-            config[CONF_GET_POSITION_TOPIC] = f"{mybase}{ATTR_ATTRIBUTES}"
+        if ATTR_CURRENT_POSITION in entity_info.attributes:
+            config[CONF_GET_POSITION_TOPIC] = f"{entity_info.mybase}{ATTR_ATTRIBUTES}"
             config[CONF_GET_POSITION_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_POSITION + "'] }}"
             )
-        if ATTR_CURRENT_TILT_POSITION in attributes:
-            config[CONF_TILT_STATUS_TOPIC] = f"{mybase}{ATTR_ATTRIBUTES}"
+        if ATTR_CURRENT_TILT_POSITION in entity_info.attributes:
+            config[CONF_TILT_STATUS_TOPIC] = f"{entity_info.mybase}{ATTR_ATTRIBUTES}"
             config[CONF_TILT_STATUS_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_TILT_POSITION + "'] }}"
             )
 
     async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""
-        await async_publish_base_attributes(
-            self._hass, new_state, mybase, self._publish_retain
-        )
+        await super().async_publish_state(new_state, mybase)
 
         await mqtt.async_publish(
             self._hass,
@@ -81,6 +75,7 @@ class Cover:
             f"{command_topic}{Platform.COVER}/+/{ATTR_SET}",
             self._async_handle_message,
         )
+        return True
 
     async def _async_handle_message(self, msg):
         """Handle a message for a cover."""

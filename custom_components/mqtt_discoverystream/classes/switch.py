@@ -20,22 +20,20 @@ from ..const import (
     CONF_PUBLISHED,
     DOMAIN,
 )
+from ..utils import EntityInfo
+from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Switch:
+class Switch(DiscoveryEntity):
     """Switch class."""
 
-    def __init__(self, hass):
-        """Initialise the switch class."""
-        self._hass = hass
-
-    def build_config(self, config, mycommand, *args):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a switch."""
         config[CONF_PL_OFF] = STATE_OFF
         config[CONF_PL_ON] = STATE_ON
-        config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
+        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a switch."""
@@ -44,6 +42,7 @@ class Switch:
             f"{command_topic}{Platform.SWITCH}/+/{ATTR_SET}",
             self._async_handle_message,
         )
+        return True
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""

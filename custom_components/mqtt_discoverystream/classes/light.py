@@ -48,38 +48,39 @@ from ..const import (
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
+from ..utils import EntityInfo
+from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class Light:
+class Light(DiscoveryEntity):
     """Light class."""
 
-    def __init__(self, hass, publish_retain):
-        """Initialise the light class."""
-        self._hass = hass
-        self._publish_retain = publish_retain
-
-    def build_config(self, config, mycommand, attributes, mybase, entity_id):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):  # noqa: F821
         """Build the config for a light."""
         del config[CONF_JSON_ATTR_T]
-        config[CONF_CMD_T] = f"{ mycommand}{ATTR_SET_LIGHT}"
+        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET_LIGHT}"
         config[CONF_SCHEMA] = ATTR_JSON
 
-        supported_features = get_supported_features(self._hass, entity_id)
-        if (supported_features & SUPPORT_BRIGHTNESS) or (ATTR_BRIGHTNESS in attributes):
+        supported_features = get_supported_features(self._hass, entity_info.entity_id)
+        if (supported_features & SUPPORT_BRIGHTNESS) or (
+            ATTR_BRIGHTNESS in entity_info.attributes
+        ):
             config[ATTR_BRIGHTNESS] = True
         if supported_features & SUPPORT_EFFECT:
             config[ATTR_EFFECT] = True
-            config[ATTR_EFFECT_LIST] = attributes[ATTR_EFFECT_LIST]
-        if ATTR_SUPPORTED_COLOR_MODES in attributes:
-            config[ATTR_SUPPORTED_COLOR_MODES] = attributes[ATTR_SUPPORTED_COLOR_MODES]
+            config[ATTR_EFFECT_LIST] = entity_info.attributes[ATTR_EFFECT_LIST]
+        if ATTR_SUPPORTED_COLOR_MODES in entity_info.attributes:
+            config[ATTR_SUPPORTED_COLOR_MODES] = entity_info.attributes[
+                ATTR_SUPPORTED_COLOR_MODES
+            ]
             config[ATTR_BRIGHTNESS] = True
         else:
             config[ATTR_COLOR_MODE] = False
             _LOGGER.warning(
                 "Light '%s' has no '%s' attribute which is mandatory. Please report to owner.",
-                entity_id,
+                entity_info.entity_id,
                 ATTR_SUPPORTED_COLOR_MODES,
             )
 
@@ -140,6 +141,7 @@ class Light:
             f"{command_topic}{Platform.LIGHT}/+/{ATTR_SET_LIGHT}",
             self._async_handle_message,
         )
+        return True
 
     async def _async_handle_message(self, msg):
         """Handle a message for a light."""

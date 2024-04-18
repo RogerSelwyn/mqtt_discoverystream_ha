@@ -4,20 +4,22 @@ from homeassistant.components.sensor import DOMAIN as sensordomain
 from homeassistant.helpers import entity_registry
 
 from ..const import ATTR_SUGGESTED_DISPLAY_PRECISION, CONF_SUG_DSP_PRC
+from ..utils import EntityInfo
+from .entity import DiscoveryEntity
 
 
-class Sensor:
+class Sensor(DiscoveryEntity):
     """Sensor class."""
 
-    def __init__(self, hass):
+    def __init__(self, hass, publish_retain):
         """Initialise the sensor class."""
+        super().__init__(hass, publish_retain)
         self._ent_reg = entity_registry.async_get(hass)
-        self._hass = hass
 
-    def build_config(self, config, mycommand, attributes, mybase, entity_id, *args):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a sensor."""
 
-        if entry := self._ent_reg.async_get(entity_id):
+        if entry := self._ent_reg.async_get(entity_info.entity_id):
             if options := entry.options:
                 if sensordomain in options:
                     sensor_options = options[sensordomain]

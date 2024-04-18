@@ -4,7 +4,6 @@ import asyncio
 import logging
 
 from homeassistant.components import mqtt
-from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
@@ -17,17 +16,20 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
-    Platform,
 )
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_call_later
 from homeassistant.setup import async_when_setup
 
+from .classes.binary_sensor import BinarySensor
 from .classes.climate import Climate
 from .classes.cover import Cover
+from .classes.device_tracker import DeviceTracker
 from .classes.input_select import InputSelect
 from .classes.light import Light
+from .classes.sensor import Sensor
+from .classes.switch import Switch
 from .const import (
     CONF_BASE_TOPIC,
     CONF_COMMAND_TOPIC,
@@ -39,14 +41,7 @@ from .const import (
     DOMAIN,
 )
 from .discovery import Discovery
-from .utils import async_publish_base_attributes
-
-VALID_COMMANDS = [
-    Platform.CLIMATE,
-    Platform.LIGHT,
-    Platform.COVER,
-    INPUT_SELECT_DOMAIN,
-]
+from .utils import set_topic
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -63,12 +58,9 @@ class Publisher:
         self._remote_status, self._remote_status_topic = self._set_remote_status()
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
 
-        self._climate = Climate(hass, self._publish_retain)
-        self._input_select = InputSelect(hass)
-        self._light = Light(hass, self._publish_retain)
-        self._cover = Cover(hass, self._publish_retain)
+        self._discovery_classes = DiscoveryClasses(hass, self._publish_retain)
 
-        self._discovery = Discovery(hass, conf)
+        self._discovery = Discovery(hass, conf, self._discovery_classes)
 
         self._entity_states = {}
         if self._remote_status:
@@ -99,13 +91,8 @@ class Publisher:
             )
             return
 
-        if ent_domain in [Platform.LIGHT, Platform.CLIMATE, Platform.COVER]:
-            entityclass = getattr(self, f"_{ent_domain}")
-            await entityclass.async_publish_state(new_state, mybase)
-        else:
-            await async_publish_base_attributes(
-                self._hass, new_state, mybase, self._publish_retain
-            )
+        entityclass = getattr(self._discovery_classes, ent_domain)
+        await entityclass.async_publish_state(new_state, mybase)
 
         await mqtt.async_publish(
             self._hass,
@@ -119,13 +106,16 @@ class Publisher:
         """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
-        if ent_domain in self._subscribed or ent_domain not in VALID_COMMANDS:
+        if ent_domain in self._subscribed:
             return
 
-        entityclass = getattr(self, f"_{ent_domain}")
-        await entityclass.async_subscribe(self._set_command_topic())
-        self._subscribed.append(ent_domain)
-        _LOGGER.info("MQTT '%s' subscribe successful", ent_domain)
+        entityclass = getattr(self._discovery_classes, ent_domain)
+        subscribed = await entityclass.async_subscribe(
+            set_topic(self._conf, CONF_COMMAND_TOPIC)
+        )
+        if subscribed:
+            self._subscribed.append(ent_domain)
+            _LOGGER.info("MQTT '%s' subscribe successful", ent_domain)
 
     async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
@@ -200,14 +190,6 @@ class Publisher:
             self._async_schedule_publish,
         )
 
-    def _set_command_topic(self):
-        command_topic = self._conf.get(CONF_COMMAND_TOPIC) or self._conf.get(
-            CONF_BASE_TOPIC
-        )
-        if not command_topic.endswith("/"):
-            command_topic = f"{command_topic}/"
-        return command_topic
-
     def _set_remote_status(self):
         remote_status = self._conf.get(CONF_REMOTE_STATUS)
         remote_status_topic = None
@@ -218,3 +200,17 @@ class Publisher:
             if not remote_status_topic.endswith("/status"):
                 remote_status_topic = f"{remote_status_topic}/status"
         return remote_status, remote_status_topic
+
+
+class DiscoveryClasses:
+    """Discovery classes."""
+
+    def __init__(self, hass, publish_retain):
+        self.binary_sensor = BinarySensor(hass, publish_retain)
+        self.climate = Climate(hass, publish_retain)
+        self.input_select = InputSelect(hass, publish_retain)
+        self.light = Light(hass, publish_retain)
+        self.sensor = Sensor(hass, publish_retain)
+        self.switch = Switch(hass, publish_retain)
+        self.cover = Cover(hass, publish_retain)
+        self.device_tracker = DeviceTracker(hass, publish_retain)

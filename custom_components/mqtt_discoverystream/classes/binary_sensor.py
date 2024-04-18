@@ -2,8 +2,10 @@
 
 from homeassistant.const import STATE_OFF, STATE_ON
 
+from .entity import DiscoveryEntity
 
-class BinarySensor:
+
+class BinarySensor(DiscoveryEntity):
     """Binary_sensor class."""
 
     def build_config(self, config, *args):  # pylint: disable=unused-argument

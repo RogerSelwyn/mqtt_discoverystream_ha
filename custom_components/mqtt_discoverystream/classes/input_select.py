@@ -17,22 +17,20 @@ from ..const import (
     CONF_PUBLISHED,
     DOMAIN,
 )
+from ..utils import EntityInfo
+from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
 
-class InputSelect:
+class InputSelect(DiscoveryEntity):
     """Input_Select class."""
 
-    def __init__(self, hass):
-        """Initialise the input_select class."""
-        self._hass = hass
-
-    def build_config(self, config, mycommand, attributes, *args):  # pylint: disable=unused-argument
+    def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a input_select."""
-        if ATTR_OPTIONS in attributes:
-            config[CONF_OPS] = attributes[ATTR_OPTIONS]
-        config[CONF_CMD_T] = f"{mycommand}{ATTR_SET}"
+        if ATTR_OPTIONS in entity_info.attributes:
+            config[CONF_OPS] = entity_info.attributes[ATTR_OPTIONS]
+        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
 
     async def async_subscribe(self, command_topic):
         """Subscribe to messages for a input_select."""
@@ -41,6 +39,7 @@ class InputSelect:
             f"{command_topic}{IS_DOMAIN}/+/{ATTR_SET}",
             self._async_handle_message,
         )
+        return True
 
     async def _async_handle_message(self, msg):
         """Handle a message for a input_select."""
