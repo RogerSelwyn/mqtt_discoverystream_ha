@@ -95,3 +95,14 @@ SUPPORTED_COMMANDS = {
     Platform.SWITCH: [ATTR_SET],
     INPUT_SELECT_DOMAIN: [ATTR_SET],
 }
+
+OUTPUT_ENTITIES = {
+    Platform.BINARY_SENSOR: Platform.BINARY_SENSOR,
+    Platform.CLIMATE: Platform.CLIMATE,
+    Platform.COVER: Platform.COVER,
+    Platform.DEVICE_TRACKER: Platform.DEVICE_TRACKER,
+    Platform.LIGHT: Platform.LIGHT,
+    Platform.SENSOR: Platform.SENSOR,
+    Platform.SWITCH: Platform.SWITCH,
+    INPUT_SELECT_DOMAIN: Platform.SELECT,
+}

@@ -8,7 +8,13 @@ from homeassistant.components import mqtt
 from homeassistant.const import ATTR_STATE
 from homeassistant.helpers.json import JSONEncoder
 
-from .const import ATTR_ATTRIBUTES, CONF_BASE_TOPIC, CONF_PUBLISHED, DOMAIN
+from .const import (
+    ATTR_ATTRIBUTES,
+    CONF_BASE_TOPIC,
+    CONF_PUBLISHED,
+    DOMAIN,
+    OUTPUT_ENTITIES,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -67,6 +73,12 @@ def explode_message(hass, msg):
 
     _LOGGER.debug("Message received: topic %s; payload: %s", {msg.topic}, {msg.payload})
     return domain, entity, element
+
+
+def translate_entity_type(entity_id):
+    """Translate the entity type to the output type."""
+    ent_parts = entity_id.split(".")
+    return f"{OUTPUT_ENTITIES[ent_parts[0]]}.{ent_parts[1]}"
 
 
 @dataclass

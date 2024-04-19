@@ -57,7 +57,7 @@ from .const import (
     DOMAIN,
     SUPPORTED_ENTITIES,
 )
-from .utils import EntityInfo, set_topic
+from .utils import EntityInfo, set_topic, translate_entity_type
 
 
 class Discovery:
@@ -109,7 +109,7 @@ class Discovery:
 
         self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
 
-        entity_id = entity_id.removeprefix("input_")
+        entity_id = translate_entity_type(entity_id)
 
         encoded = json.dumps(config, cls=JSONEncoder)
         entity_disc_topic = (
@@ -134,7 +134,7 @@ class Discovery:
             )
 
         config = {
-            CONF_UNIQ_ID: f"{DATA_MQTT}_{entity_info.entity_id.removeprefix("input_")}",
+            CONF_UNIQ_ID: f"{DATA_MQTT}_{translate_entity_type(entity_info.entity_id)}",
             CONF_OBJ_ID: ent_id,
             CONF_STAT_T: f"{entity_info.mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{entity_info.mybase}{ATTR_ATTRIBUTES}",
