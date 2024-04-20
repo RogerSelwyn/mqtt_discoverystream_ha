@@ -1,6 +1,7 @@
 """sensor methods for MQTT Discovery Statestream."""
 
 from homeassistant.components.sensor import DOMAIN as sensordomain
+from homeassistant.const import Platform
 from homeassistant.helpers import entity_registry
 
 from ..const import ATTR_SUGGESTED_DISPLAY_PRECISION, CONF_SUG_DSP_PRC
@@ -8,8 +9,10 @@ from ..utils import EntityInfo
 from .entity import DiscoveryEntity
 
 
-class Sensor(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Sensor class."""
+
+    PLATFORM = Platform.SENSOR
 
     def __init__(self, hass, publish_retain, platform):
         """Initialise the sensor class."""

@@ -8,6 +8,7 @@ from homeassistant.const import (
     SERVICE_TURN_ON,
     STATE_OFF,
     STATE_ON,
+    Platform,
 )
 
 from ..const import (
@@ -22,8 +23,10 @@ from .entity import DiscoveryEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-class Switch(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Switch class."""
+
+    PLATFORM = Platform.SWITCH
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a switch."""

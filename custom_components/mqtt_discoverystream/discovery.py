@@ -1,5 +1,6 @@
 """Publishing for MQTT Discovery Stream."""
 
+import importlib
 import json
 
 from homeassistant.components import mqtt
@@ -55,19 +56,20 @@ from .const import (
     CONF_UNIQ_ID,
     CONF_UNIT_OF_MEAS,
     DOMAIN,
-    SUPPORTED_ENTITIES,
+    SUPPORTED_ENTITY_TYPES,
 )
-from .utils import EntityInfo, set_topic, translate_entity_type
+from .utils import EntityInfo, set_topic, simple_attribute_add, translate_entity_type
 
 
 class Discovery:
     """Manage discovery publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf, discovery_classes):
+    def __init__(self, hass, conf):
         """Initiate discovery."""
         self._hass = hass
         self._conf = conf
-        self._discovery_classes = discovery_classes
+        self.discovery_classes = {}
+        self._subscribed = []
         self._publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
         self._command_topic = set_topic(conf, CONF_COMMAND_TOPIC)
         (
@@ -88,7 +90,7 @@ class Discovery:
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        if ent_domain not in SUPPORTED_ENTITIES:
+        if ent_domain not in SUPPORTED_ENTITY_TYPES:
             return
 
         if (
@@ -101,7 +103,15 @@ class Discovery:
         entity_info = EntityInfo(mycommand, attributes, mybase, entity_id)
         config = self._build_base(entity_info)
 
-        entityclass = getattr(self._discovery_classes, ent_domain)
+        if ent_domain not in self.discovery_classes:
+            await self._hass.async_add_executor_job(
+                self._build_discovery_class, ent_domain
+            )
+        entityclass = self.discovery_classes[ent_domain]
+        if ent_domain not in self._subscribed:
+            await entityclass.async_subscribe(set_topic(self._conf, CONF_COMMAND_TOPIC))
+            self._subscribed.append(ent_domain)
+
         entityclass.build_config(config, entity_info)
 
         if device := self._build_device(entity_id):
@@ -120,7 +130,6 @@ class Discovery:
         )
 
     def _build_base(self, entity_info: EntityInfo):
-        # sourcery skip: assign-if-exp, merge-dict-assign
         ent_parts = entity_info.entity_id.split(".")
         ent_id = ent_parts[1]
         availability = [{CONF_TOPIC: f"{entity_info.mybase}{CONF_AVAILABILITY}"}]
@@ -161,12 +170,13 @@ class Discovery:
                 config[CONF_DEV_CLA] = entry.device_class
         config[CONF_NAME] = name
 
-        if ATTR_UNIT_OF_MEASUREMENT in entity_info.attributes:
-            config[CONF_UNIT_OF_MEAS] = entity_info.attributes[ATTR_UNIT_OF_MEASUREMENT]
-        if ATTR_STATE_CLASS in entity_info.attributes:
-            config[CONF_STAT_CLA] = entity_info.attributes[ATTR_STATE_CLASS]
-        if ATTR_ICON in entity_info.attributes:
-            config[ATTR_ICON] = entity_info.attributes[ATTR_ICON]
+        simple_attribute_add(
+            config, entity_info.attributes, ATTR_UNIT_OF_MEASUREMENT, CONF_UNIT_OF_MEAS
+        )
+        simple_attribute_add(
+            config, entity_info.attributes, ATTR_STATE_CLASS, CONF_STAT_CLA
+        )
+        simple_attribute_add(config, entity_info.attributes, ATTR_ICON, ATTR_ICON)
 
         return config
 
@@ -210,3 +220,12 @@ class Discovery:
             local_online_status,
             local_offline_status,
         )
+
+    def _build_discovery_class(self, entity_type):
+        """Build the discovery class."""
+        modulename = __name__.removesuffix(".discovery")
+        module = importlib.import_module(f".classes.{entity_type}", package=modulename)
+        module_class = module.DiscoveryItem(
+            self._hass, self._publish_retain, module.DiscoveryItem.PLATFORM
+        )
+        self.discovery_classes[entity_type] = module_class

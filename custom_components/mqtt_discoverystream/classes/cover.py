@@ -20,6 +20,7 @@ from homeassistant.const import (
     SERVICE_CLOSE_COVER,
     SERVICE_OPEN_COVER,
     SERVICE_STOP_COVER,
+    Platform,
 )
 
 from ..const import (
@@ -33,8 +34,10 @@ from .entity import DiscoveryEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-class Cover(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Cover class."""
+
+    PLATFORM = Platform.COVER
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a cover."""

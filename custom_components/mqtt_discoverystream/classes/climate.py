@@ -38,6 +38,7 @@ from homeassistant.const import (
     ATTR_TEMPERATURE,
     STATE_OFF,
     STATE_UNAVAILABLE,
+    Platform,
 )
 
 from ..const import (
@@ -52,8 +53,10 @@ from .entity import DiscoveryEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-class Climate(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Climate class."""
+
+    PLATFORM = Platform.CLIMATE
 
     def __init__(
         self,

@@ -1,5 +1,6 @@
 """input_select methods for MQTT Discovery Statestream."""
 
+from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.select import ATTR_OPTION, ATTR_OPTIONS
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -15,8 +16,10 @@ from ..utils import EntityInfo, explode_message
 from .entity import DiscoveryEntity
 
 
-class InputSelect(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Input_Select class."""
+
+    PLATFORM = INPUT_SELECT_DOMAIN
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a input_select."""

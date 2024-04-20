@@ -74,7 +74,7 @@ CONF_CNS = "cns"
 CONF_PL_ON = "pl_on"
 CONF_PL_OFF = "pl_off"
 
-SUPPORTED_ENTITIES = [
+SUPPORTED_ENTITY_TYPES = [
     Platform.BINARY_SENSOR,
     Platform.CLIMATE,
     Platform.COVER,

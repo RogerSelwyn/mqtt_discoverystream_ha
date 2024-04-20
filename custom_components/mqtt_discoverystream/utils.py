@@ -81,6 +81,12 @@ def translate_entity_type(entity_id):
     return f"{OUTPUT_ENTITIES[ent_parts[0]]}.{ent_parts[1]}"
 
 
+def simple_attribute_add(config, attributes, attribute_name, conf_name):
+    """Simple check for attribute existence and inclusion."""
+    if attribute_name in attributes:
+        config[conf_name] = attributes[attribute_name]
+
+
 @dataclass
 class EntityInfo:
     """Information for an entity."""

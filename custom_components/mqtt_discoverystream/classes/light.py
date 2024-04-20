@@ -25,6 +25,7 @@ from homeassistant.const import (
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
     STATE_ON,
+    Platform,
 )
 from homeassistant.helpers.entity import get_supported_features
 from homeassistant.helpers.json import JSONEncoder
@@ -51,8 +52,10 @@ from .entity import DiscoveryEntity
 _LOGGER = logging.getLogger(__name__)
 
 
-class Light(DiscoveryEntity):
+class DiscoveryItem(DiscoveryEntity):
     """Light class."""
+
+    PLATFORM = Platform.LIGHT
 
     def build_config(self, config, entity_info: EntityInfo):  # noqa: F821
         """Build the config for a light."""

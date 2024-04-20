@@ -2,10 +2,8 @@
 
 import asyncio
 import logging
-from dataclasses import dataclass
 
 from homeassistant.components import mqtt
-from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
@@ -18,24 +16,14 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
     STATE_UNKNOWN,
-    Platform,
 )
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_call_later
 from homeassistant.setup import async_when_setup
 
-from .classes.binary_sensor import BinarySensor
-from .classes.climate import Climate
-from .classes.cover import Cover
-from .classes.device_tracker import DeviceTracker
-from .classes.input_select import InputSelect
-from .classes.light import Light
-from .classes.sensor import Sensor
-from .classes.switch import Switch
 from .const import (
     CONF_BASE_TOPIC,
-    CONF_COMMAND_TOPIC,
     CONF_ONLINE_STATUS,
     CONF_PUBLISHED,
     CONF_REMOTE_STATUS,
@@ -44,7 +32,6 @@ from .const import (
     DOMAIN,
 )
 from .discovery import Discovery
-from .utils import set_topic
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -60,11 +47,7 @@ class Publisher:
         self._conf = conf
         self._remote_status, self._remote_status_topic = self._set_remote_status()
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
-
-        self._discovery_classes = DiscoveryClasses(hass, self._publish_retain)
-
-        self._discovery = Discovery(hass, conf, self._discovery_classes)
-
+        self.discovery = Discovery(self._hass, self._conf)
         self._entity_states = {}
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
@@ -78,7 +61,7 @@ class Publisher:
         ent_domain = ent_parts[0]
 
         if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
-            await self._discovery.async_discovery_publish(
+            await self.discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
             await asyncio.sleep(DEFAULT_STATE_SLEEP)
@@ -93,7 +76,7 @@ class Publisher:
             )
             return
 
-        entityclass = getattr(self._discovery_classes, ent_domain)
+        entityclass = self.discovery.discovery_classes[ent_domain]
         await entityclass.async_publish_state(new_state, mybase)
 
         await mqtt.async_publish(
@@ -103,17 +86,6 @@ class Publisher:
             1,
             self._publish_retain,
         )
-
-    async def _async_subscribe(self, entity_id):
-        """Subscribe to neccesary topics as part MQTT Discovery Statestream."""
-        ent_parts = entity_id.split(".")
-        ent_domain = ent_parts[0]
-        if ent_domain in self._subscribed:
-            return
-
-        entityclass = getattr(self._discovery_classes, ent_domain)
-        await entityclass.async_subscribe(set_topic(self._conf, CONF_COMMAND_TOPIC))
-        self._subscribed.append(ent_domain)
 
     async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
@@ -154,11 +126,11 @@ class Publisher:
             if publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
                     mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                    await self._discovery.async_discovery_publish(
+                    await self.discovery.async_discovery_publish(
                         entity_id, current_state.attributes, mybase
                     )
                     self._entity_states[entity_id] = current_state
-                    await self._async_subscribe(entity_id)
+
         _LOGGER.debug("Discovery published")
         await asyncio.sleep(DEFAULT_STATE_SLEEP)
         for entity_id, current_state in self._entity_states.items():
@@ -197,20 +169,3 @@ class Publisher:
             if not remote_status_topic.endswith("/status"):
                 remote_status_topic = f"{remote_status_topic}/status"
         return remote_status, remote_status_topic
-
-
-@dataclass
-class DiscoveryClasses:
-    """Discovery classes."""
-
-    def __init__(self, hass, publish_retain):
-        self.binary_sensor = BinarySensor(hass, publish_retain, Platform.BINARY_SENSOR)
-        self.climate = Climate(hass, publish_retain, Platform.CLIMATE)
-        self.input_select = InputSelect(hass, publish_retain, INPUT_SELECT_DOMAIN)
-        self.light = Light(hass, publish_retain, Platform.LIGHT)
-        self.sensor = Sensor(hass, publish_retain, Platform.SENSOR)
-        self.switch = Switch(hass, publish_retain, Platform.SWITCH)
-        self.cover = Cover(hass, publish_retain, Platform.COVER)
-        self.device_tracker = DeviceTracker(
-            hass, publish_retain, Platform.DEVICE_TRACKER
-        )
