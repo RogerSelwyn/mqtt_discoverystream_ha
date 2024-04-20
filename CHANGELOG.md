@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.3 (2024/04/20)
+### 🐛 Fixes
+- [Fix incorrect subscription before MQTT available](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/364d989e97dbf3f61203f400bd4c801a346a21e1) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Even more code de-duplication](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b8f64654f089ea17e4d42bba7132efba86d96da1) - @RogerSelwyn
+- [Make entity type translation more generic](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b05198ec7927b3529f2b0c329e27749b8348613d) - @RogerSelwyn
+- [Optimise code to reduce unnecessary imports](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3f0c572523fdb1d39a45ee4bb2665f4758ed5cfb) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.2.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0a02f1bb97eebde673941c2da4a577f5e8d945fb) - @RogerSelwyn
+
+
 ## 1.2.2 (2024/04/18)
 ### 🧰 Maintenance
 - [Further code de-duplication](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/61b7260c6da7f90eb3a1be27b3368415eda73771) - @RogerSelwyn
