@@ -83,6 +83,7 @@ class Discovery:
         self._dev_reg = device_registry.async_get(hass)
         self._ent_reg = entity_registry.async_get(hass)
         self._discovery_topic = set_topic(conf, CONF_DISCOVERY_TOPIC)
+        self.subscribe_possible = False
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -108,7 +109,7 @@ class Discovery:
                 self._build_discovery_class, ent_domain
             )
         entityclass = self.discovery_classes[ent_domain]
-        if ent_domain not in self._subscribed:
+        if ent_domain not in self._subscribed and self.subscribe_possible:
             await entityclass.async_subscribe(set_topic(self._conf, CONF_COMMAND_TOPIC))
             self._subscribed.append(ent_domain)
 

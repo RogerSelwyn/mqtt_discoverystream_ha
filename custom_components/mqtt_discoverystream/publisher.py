@@ -47,7 +47,7 @@ class Publisher:
         self._conf = conf
         self._remote_status, self._remote_status_topic = self._set_remote_status()
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
-        self.discovery = Discovery(self._hass, self._conf)
+        self._discovery = Discovery(self._hass, self._conf)
         self._entity_states = {}
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
@@ -61,7 +61,7 @@ class Publisher:
         ent_domain = ent_parts[0]
 
         if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
-            await self.discovery.async_discovery_publish(
+            await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
             await asyncio.sleep(DEFAULT_STATE_SLEEP)
@@ -76,7 +76,7 @@ class Publisher:
             )
             return
 
-        entityclass = self.discovery.discovery_classes[ent_domain]
+        entityclass = self._discovery.discovery_classes[ent_domain]
         await entityclass.async_publish_state(new_state, mybase)
 
         await mqtt.async_publish(
@@ -119,6 +119,7 @@ class Publisher:
         )
 
     async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
+        self._discovery.subscribe_possible = True
         ent_reg = entity_registry.async_get(self._hass)
         self._entity_states = {}
         publish_filter = convert_include_exclude_filter(self._conf)
@@ -126,7 +127,7 @@ class Publisher:
             if publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
                     mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                    await self.discovery.async_discovery_publish(
+                    await self._discovery.async_discovery_publish(
                         entity_id, current_state.attributes, mybase
                     )
                     self._entity_states[entity_id] = current_state
