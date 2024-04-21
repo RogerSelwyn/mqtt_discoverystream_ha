@@ -5,6 +5,7 @@ import logging
 from homeassistant.components.cover import (
     ATTR_CURRENT_POSITION,
     ATTR_CURRENT_TILT_POSITION,
+    ATTR_POSITION
 )
 from homeassistant.components.mqtt.cover import (
     CONF_GET_POSITION_TEMPLATE,
@@ -20,6 +21,7 @@ from homeassistant.const import (
     SERVICE_CLOSE_COVER,
     SERVICE_OPEN_COVER,
     SERVICE_STOP_COVER,
+    SERVICE_SET_COVER_POSITION,
     Platform,
 )
 
@@ -71,6 +73,10 @@ class DiscoveryItem(DiscoveryEntity):
         elif msg.payload == DEFAULT_PAYLOAD_STOP:
             await self._hass.services.async_call(
                 domain, SERVICE_STOP_COVER, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
+            )
+        elif msg.payload.isdigit() and int(msg.payload) >= 0:
+            await self._hass.services.async_call(
+                domain, SERVICE_SET_COVER_POSITION, {ATTR_ENTITY_ID: f"{domain}.{entity}", ATTR_POSITION: msg.payload}
             )
         else:
             _LOGGER.error(
