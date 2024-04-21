@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.4 (2024/04/21)
+### ✨ Enhancements
+- [Add support for setting cover (tilt) position](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6f730d6a85e54c4058133a540be5b91f147d52fa) - @RogerSelwyn
+
+### 🔖 Release
+- [v1.2.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/efba312c6897dd9c04d367a355a7487136410ff3) - @RogerSelwyn
+
 ## 1.2.3 (2024/04/20)
 ### 🐛 Fixes
 - [Fix incorrect subscription before MQTT available](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/364d989e97dbf3f61203f400bd4c801a346a21e1) - @RogerSelwyn
