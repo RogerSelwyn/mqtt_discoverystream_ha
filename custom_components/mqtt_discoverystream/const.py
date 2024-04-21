@@ -19,6 +19,8 @@ ATTR_MODE_COMMAND = "command_mode"
 ATTR_TEMP_COMMAND = "command_temperature"
 ATTR_SET_LIGHT = "set_light"
 ATTR_SET = "set"
+ATTR_SET_POSITION = "set_position"
+ATTR_SET_TILT = "set_tilt"
 ATTR_JSON = "JSON"
 ATTR_COLOR = "color"
 ATTR_ATTRIBUTES = "attributes"
@@ -60,9 +62,11 @@ CONF_ENT_CAT = "ent_cat"
 CONF_JSON_ATTR_T = "json_attr_t"
 CONF_OBJ_ID = "obj_id"
 CONF_OPS = "ops"
+CONF_SET_POS_T = "set_pos_t"
 CONF_STAT_T = "stat_t"
 CONF_STAT_CLA = "stat_cla"
 CONF_SUG_DSP_PRC = "sug_dsp_prc"
+CONF_TILT_CMD_T = "tilt_cmd_t"
 CONF_UNIQ_ID = "uniq_id"
 CONF_UNIT_OF_MEAS = "unit_of_meas"
 
@@ -88,7 +92,7 @@ SUPPORTED_ENTITY_TYPES = [
 SUPPORTED_COMMANDS = {
     Platform.BINARY_SENSOR: [],
     Platform.CLIMATE: [ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND],
-    Platform.COVER: [ATTR_SET],
+    Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
     Platform.DEVICE_TRACKER: [],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.SENSOR: [],

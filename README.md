@@ -14,7 +14,7 @@ Provides discovery & command support for:
 |:----------------|:-------------------|:--------------------------|
 | Binary Sensor   | binary_sensor      |                           |
 | Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
-| Cover           | cover              | Open, Close, Stop         |
+| Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
 | Input Select    | select             | Select Option             |
 | Light           | light              | Turn On, Turn Off         |
