@@ -74,7 +74,7 @@ class DiscoveryItem(DiscoveryEntity):
             await self._hass.services.async_call(
                 domain, SERVICE_STOP_COVER, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
             )
-        elif msg.payload.isdigit() and int(msg.payload) >= 0:
+        elif msg.payload.isdigit() and int(msg.payload) >= 0 and int(msg.payload) <= 100:
             await self._hass.services.async_call(
                 domain, SERVICE_SET_COVER_POSITION, {ATTR_ENTITY_ID: f"{domain}.{entity}", ATTR_POSITION: msg.payload}
             )
