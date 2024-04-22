@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.2.5 (2024/04/22)
+### ✨ Enhancements
+- [Add support for Input Button](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d14ee5e52826a127642f0b6656e2ab29ca5fab8b) - @RogerSelwyn
+- [Add support for Input Number](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cb8d2aad2b1aaa5e06b9f9af607656b3743fe8c8) - @RogerSelwyn
+- [Add support for Input Text](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/683467fe3cad818cb71fb9d02f01a9ecd36fb3aa) - @RogerSelwyn
+- [Add support for Button](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/04ffce512c6125a5e8b0aa8f84dc4b27ac82463f) - @RogerSelwyn
+- [Add support for Number](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5370a6832eddc7e442ea88c153a2a78a3b650560) - @RogerSelwyn
+- [Add support for Select](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/76e075396407b19c2fc0dbd912d21868046a40b7) - @RogerSelwyn
+- [Add support for Text](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c92e5f86b27d890c6bf4c04c631302b408d969e2) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Simplify error processing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/47a26c4b964f515c5688e2fa5eedf573af8f7f5d) - @RogerSelwyn
+- [Further removal of complexity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d2aef1f9c409ed0d74fc45aaaa9b9ba1a9106086) - @RogerSelwyn
+- [Remove unrequired debug](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c886389b45007e0eef6c9349bf71b4fd68387235) - @RogerSelwyn
+- [Code refactor](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a22067aa324b2b80a73e161e745d82f208020b2f) - @RogerSelwyn
+- [Rework input entities to abstract duplicate code](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e556ddf3d74a525b11ff7eed1c3d171d656e4fa6) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update docs](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6bd139de1af417ec4d13c63000c1f4a1409e3ba5) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.2.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/99202dff4973f3ec263316a438515fbeaa1e91e2) - @RogerSelwyn
+  
 ## 1.2.4 (2024/04/21)
 ### ✨ Enhancements
 - [Add support for setting cover (tilt) position](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6f730d6a85e54c4058133a540be5b91f147d52fa) - @RogerSelwyn
