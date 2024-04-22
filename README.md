@@ -20,6 +20,7 @@ Provides discovery & command support for:
 | Input Button    | button             | Press                     |
 | Input Number    | number             | Set Value                 |
 | Input Select    | select             | Select Option             |
+| Input Text      | text               | Set Value                 |
 | Light           | light              | Turn On, Turn Off         |
 | Sensor          | sensor             |                           |
 | Switch          | switch             | Turn On, Turn Off         |
