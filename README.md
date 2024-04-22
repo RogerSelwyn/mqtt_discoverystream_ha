@@ -28,6 +28,7 @@ Provides discovery & command support for:
 | Sensor          | sensor             |                           |
 | Select          | select             | Select Option             |
 | Switch          | switch             | Turn On, Turn Off         |
+| Text            | text               | Set Value                 |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
 I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the major work to create it put in by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
