@@ -38,7 +38,7 @@ from ..const import (
     CONF_SET_POS_T,
     CONF_TILT_CMD_T,
 )
-from ..utils import EntityInfo, explode_message
+from ..utils import EntityInfo, command_error, validate_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -79,14 +79,16 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a cover."""
-        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
-        if not domain:
+        valid, domain, entity, command = validate_message(
+            self._hass, msg, DiscoveryItem.PLATFORM
+        )
+        if not valid:
             return
 
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }
-        if element == ATTR_SET:
+        if command == ATTR_SET:
             if msg.payload == DEFAULT_PAYLOAD_OPEN:
                 await self._hass.services.async_call(
                     domain, SERVICE_OPEN_COVER, service_payload
@@ -99,20 +101,15 @@ class DiscoveryItem(DiscoveryEntity):
                 await self._hass.services.async_call(
                     domain, SERVICE_STOP_COVER, service_payload
                 )
-        elif element == ATTR_SET_POSITION:
+            else:
+                command_error(command, msg.payload, entity)
+        elif command == ATTR_SET_POSITION:
             service_payload[ATTR_POSITION] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_SET_COVER_POSITION, service_payload
             )
-        elif element == ATTR_SET_TILT:
+        elif command == ATTR_SET_TILT:
             service_payload[ATTR_TILT_POSITION] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_SET_COVER_TILT_POSITION, service_payload
-            )
-        else:
-            _LOGGER.error(
-                'Invalid service for "%s" - payload: %s for %s',
-                ATTR_SET,
-                {msg.payload},
-                {entity},
             )

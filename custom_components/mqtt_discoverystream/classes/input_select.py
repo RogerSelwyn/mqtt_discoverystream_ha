@@ -12,7 +12,7 @@ from ..const import (
     CONF_CMD_T,
     CONF_OPS,
 )
-from ..utils import EntityInfo, explode_message
+from ..utils import EntityInfo, validate_message
 from .entity import DiscoveryEntity
 
 
@@ -29,8 +29,10 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a input_select."""
-        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
-        if not domain:
+        valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
+            self._hass, msg, DiscoveryItem.PLATFORM
+        )
+        if not valid:
             return
 
         service_payload = {

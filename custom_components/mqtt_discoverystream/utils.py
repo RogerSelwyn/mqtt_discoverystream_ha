@@ -14,6 +14,7 @@ from .const import (
     CONF_PUBLISHED,
     DOMAIN,
     OUTPUT_ENTITIES,
+    SUPPORTED_COMMANDS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,19 +61,23 @@ def set_topic(conf, topic):
     return response_topic
 
 
-def explode_message(hass, msg):
+def validate_message(hass, msg, platform):
     """Handle a message for a switch."""
     explode_topic = msg.topic.split("/")
     domain = explode_topic[1]
     entity = explode_topic[2]
-    element = explode_topic[3]
+    command = explode_topic[3]
 
     # Only handle service calls for discoveries we published
     if f"{domain}.{entity}" not in hass.data[DOMAIN][CONF_PUBLISHED]:
-        return False, False, False
+        return False, None, None, None
+
+    if command not in SUPPORTED_COMMANDS[platform]:
+        command_error(command, msg.payload, entity)
+        return False, None, None, None
 
     _LOGGER.debug("Message received: topic %s; payload: %s", {msg.topic}, {msg.payload})
-    return domain, entity, element
+    return True, domain, entity, command
 
 
 def translate_entity_type(entity_id):
@@ -85,6 +90,16 @@ def simple_attribute_add(config, attributes, attribute_name, conf_name):
     """Simple check for attribute existence and inclusion."""
     if attribute_name in attributes:
         config[conf_name] = attributes[attribute_name]
+
+
+def command_error(command, payload, entity):
+    """Log error for invalid command."""
+    _LOGGER.error(
+        'Invalid service for "%s" - payload: %s for %s',
+        command,
+        {payload},
+        {entity},
+    )
 
 
 @dataclass

@@ -17,7 +17,7 @@ from ..const import (
     CONF_PL_OFF,
     CONF_PL_ON,
 )
-from ..utils import EntityInfo, explode_message
+from ..utils import EntityInfo, command_error, validate_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -36,8 +36,10 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
-        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
-        if not domain:
+        valid, domain, entity, command = validate_message(
+            self._hass, msg, DiscoveryItem.PLATFORM
+        )
+        if not valid:
             return
 
         if msg.payload == STATE_ON:
@@ -49,9 +51,4 @@ class DiscoveryItem(DiscoveryEntity):
                 domain, SERVICE_TURN_OFF, {ATTR_ENTITY_ID: f"{domain}.{entity}"}
             )
         else:
-            _LOGGER.error(
-                'Invalid service for "%s" - payload: %s for %s',
-                ATTR_SET,
-                {msg.payload},
-                {entity},
-            )
+            command_error(command, msg.payload, entity)

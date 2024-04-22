@@ -46,7 +46,7 @@ from ..const import (
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
-from ..utils import EntityInfo, explode_message
+from ..utils import EntityInfo, validate_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -136,11 +136,16 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a light."""
-        domain, entity, element = explode_message(self._hass, msg)  # pylint: disable=unused-variable
-        if not domain:
+        valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
+            self._hass,
+            msg,
+            DiscoveryItem.PLATFORM,
+        )
+        if not valid:
             return
 
         payload_json = json.loads(msg.payload)
+
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }

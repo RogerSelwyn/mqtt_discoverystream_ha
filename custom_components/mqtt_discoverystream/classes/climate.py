@@ -47,7 +47,7 @@ from ..const import (
     ATTR_TEMP_COMMAND,
     CONF_STAT_T,
 )
-from ..utils import EntityInfo, async_publish_attribute, explode_message
+from ..utils import EntityInfo, async_publish_attribute, validate_message
 from .entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -131,21 +131,23 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
-        domain, entity, element = explode_message(self._hass, msg)
-        if not domain:
+        valid, domain, entity, command = validate_message(
+            self._hass, msg, DiscoveryItem.PLATFORM
+        )
+        if not valid:
             return
 
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }
 
-        if element == ATTR_MODE_COMMAND:
+        if command == ATTR_MODE_COMMAND:
             service_payload[ATTR_HVAC_MODE] = msg.payload
             service_name = SERVICE_SET_HVAC_MODE
-        elif element == ATTR_PRESET_COMMAND:
+        elif command == ATTR_PRESET_COMMAND:
             service_payload[ATTR_PRESET_MODE] = msg.payload
             service_name = SERVICE_SET_PRESET_MODE
-        elif element == ATTR_TEMP_COMMAND:
+        elif command == ATTR_TEMP_COMMAND:
             service_payload[ATTR_TEMPERATURE] = msg.payload
             service_name = SERVICE_SET_TEMPERATURE
 
