@@ -53,7 +53,6 @@ class Publisher:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
         self._register_services()
         self._listen_for_hass_events()
-        self._subscribed = []
 
     async def async_state_publish(self, entity_id, new_state, mybase):
         """Publish state for MQTT Discovery Statestream."""

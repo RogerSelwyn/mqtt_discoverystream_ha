@@ -92,6 +92,12 @@ def simple_attribute_add(config, attributes, attribute_name, conf_name):
         config[conf_name] = attributes[attribute_name]
 
 
+def simple_entry_attribute(config_device, attribute, conf_name):
+    """Simple check for attribute existence and inclusion."""
+    if attribute:
+        config_device[conf_name] = attribute
+
+
 def command_error(command, payload, entity):
     """Log error for invalid command."""
     _LOGGER.error(

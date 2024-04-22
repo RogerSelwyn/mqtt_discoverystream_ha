@@ -58,7 +58,13 @@ from .const import (
     DOMAIN,
     SUPPORTED_ENTITY_TYPES,
 )
-from .utils import EntityInfo, set_topic, simple_attribute_add, translate_entity_type
+from .utils import (
+    EntityInfo,
+    set_topic,
+    simple_attribute_add,
+    simple_entry_attribute,
+    translate_entity_type,
+)
 
 
 class Discovery:
@@ -163,12 +169,9 @@ class Discovery:
                     name = name[len(device.name) + 1 :].strip()
                     if name == "":
                         name = None
-            if entry.entity_category:
-                config[CONF_ENT_CAT] = entry.entity_category
-            if entry.original_device_class:
-                config[CONF_DEV_CLA] = entry.original_device_class
-            elif entry.device_class:
-                config[CONF_DEV_CLA] = entry.device_class
+            simple_entry_attribute(config, entry.entity_category, CONF_ENT_CAT)
+            simple_entry_attribute(config, entry.original_device_class, CONF_DEV_CLA)
+            simple_entry_attribute(config, entry.device_class, CONF_DEV_CLA)
         config[CONF_NAME] = name
 
         simple_attribute_add(
@@ -186,18 +189,13 @@ class Discovery:
         entry = self._ent_reg.async_get(entity_id)
         if entry and entry.device_id:
             if device := self._dev_reg.async_get(entry.device_id):
-                if device.manufacturer:
-                    config_device[CONF_MF] = device.manufacturer
-                if device.model:
-                    config_device[CONF_MDL] = device.model
-                if device.name:
-                    config_device[CONF_NAME] = device.name
-                if device.sw_version:
-                    config_device[CONF_SW] = device.sw_version
+                simple_entry_attribute(config_device, device.manufacturer, CONF_MF)
+                simple_entry_attribute(config_device, device.model, CONF_MDL)
+                simple_entry_attribute(config_device, device.name, CONF_NAME)
+                simple_entry_attribute(config_device, device.sw_version, CONF_SW)
+                simple_entry_attribute(config_device, device.connections, CONF_CNS)
                 if device.identifiers:
                     config_device[CONF_IDS] = [id[1] for id in device.identifiers]
-                if device.connections:
-                    config_device[CONF_CNS] = device.connections
 
         return config_device
 
