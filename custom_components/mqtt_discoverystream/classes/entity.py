@@ -7,7 +7,7 @@ from homeassistant.components import mqtt
 from homeassistant.const import ATTR_STATE
 from homeassistant.helpers.json import JSONEncoder
 
-from ..const import ATTR_ATTRIBUTES, SUPPORTED_COMMANDS
+from ..const import ATTR_ATTRIBUTES, SUPPORTED_ENTITY_TYPE_COMMANDS
 from ..utils import EntityInfo
 
 _LOGGER = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class DiscoveryEntity:
         self._publish_retain = publish_retain
         self._publish_state = publish_state
         self._platform = platform
-        self._commands = SUPPORTED_COMMANDS[self._platform]
+        self._commands = SUPPORTED_ENTITY_TYPE_COMMANDS[self._platform]
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a discovery entity."""

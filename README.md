@@ -24,6 +24,7 @@ Provides discovery & command support for:
 | Input Select    | select             | Select Option             |
 | Input Text      | text               | Set Value                 |
 | Light           | light              | Turn On, Turn Off         |
+| Number          | number             | Set Value                 |
 | Sensor          | sensor             |                           |
 | Switch          | switch             | Turn On, Turn Off         |
 

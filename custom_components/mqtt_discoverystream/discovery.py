@@ -56,7 +56,7 @@ from .const import (
     CONF_UNIQ_ID,
     CONF_UNIT_OF_MEAS,
     DOMAIN,
-    SUPPORTED_ENTITY_TYPES,
+    SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 from .utils import (
     EntityInfo,
@@ -97,7 +97,7 @@ class Discovery:
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
-        if ent_domain not in SUPPORTED_ENTITY_TYPES:
+        if ent_domain not in SUPPORTED_ENTITY_TYPE_COMMANDS:
             return
 
         if (

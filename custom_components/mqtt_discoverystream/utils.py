@@ -10,7 +10,7 @@ from .const import (
     CONF_PUBLISHED,
     DOMAIN,
     OUTPUT_ENTITIES,
-    SUPPORTED_COMMANDS,
+    SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ def validate_message(hass, msg, platform):
     if f"{domain}.{entity}" not in hass.data[DOMAIN][CONF_PUBLISHED]:
         return False, None, None, None
 
-    if command not in SUPPORTED_COMMANDS[platform]:
+    if command not in SUPPORTED_ENTITY_TYPE_COMMANDS[platform]:
         command_error(command, msg.payload, entity)
         return False, None, None, None
 
@@ -63,7 +63,11 @@ def validate_message(hass, msg, platform):
 def translate_entity_type(entity_id):
     """Translate the entity type to the output type."""
     ent_parts = entity_id.split(".")
-    return f"{OUTPUT_ENTITIES[ent_parts[0]]}.{ent_parts[1]}"
+    if ent_parts[0] in OUTPUT_ENTITIES:
+        output_entity = OUTPUT_ENTITIES[ent_parts[0]]
+    else:
+        output_entity = ent_parts[0]
+    return f"{output_entity}.{ent_parts[1]}"
 
 
 def simple_attribute_add(config, attributes, attribute_name, conf_name):
