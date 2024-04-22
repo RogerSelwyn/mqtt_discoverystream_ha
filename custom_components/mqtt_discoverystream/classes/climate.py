@@ -102,7 +102,6 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a climate."""
-        _LOGGER.debug("New State %s;", new_state)
         await async_publish_attribute(
             self._hass, new_state, mybase, ATTR_HVAC_ACTION, self._publish_retain
         )
