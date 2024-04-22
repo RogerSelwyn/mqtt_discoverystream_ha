@@ -21,20 +21,7 @@ class DiscoveryItem(DiscoveryEntity):
     """Event class."""
 
     PLATFORM = Platform.EVENT
-
-    def __init__(
-        self,
-        hass,
-        publish_retain,
-        platform,
-    ):
-        """Initialise the text class."""
-        super().__init__(
-            hass,
-            publish_retain,
-            platform,
-            publish_state=False,
-        )
+    PUBLISH_STATE = False
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a event."""

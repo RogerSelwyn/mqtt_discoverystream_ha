@@ -224,7 +224,14 @@ class Discovery:
         """Build the discovery class."""
         modulename = __name__.removesuffix(".discovery")
         module = importlib.import_module(f".classes.{entity_type}", package=modulename)
+        if hasattr(module.DiscoveryItem, "PUBLISH_STATE"):
+            publish_state = module.DiscoveryItem.PUBLISH_STATE
+        else:
+            publish_state = True
         module_class = module.DiscoveryItem(
-            self._hass, self._publish_retain, module.DiscoveryItem.PLATFORM
+            self._hass,
+            self._publish_retain,
+            module.DiscoveryItem.PLATFORM,
+            publish_state,
         )
         self.discovery_classes[entity_type] = module_class

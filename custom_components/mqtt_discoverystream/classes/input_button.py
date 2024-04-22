@@ -9,3 +9,4 @@ class DiscoveryItem(ButtonDiscoveryEntity):
     """Input_Button class."""
 
     PLATFORM = INPUT_BUTTON_DOMAIN
+    PUBLISH_STATE = False

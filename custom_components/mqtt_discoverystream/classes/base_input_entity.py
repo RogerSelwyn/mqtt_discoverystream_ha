@@ -48,20 +48,6 @@ _LOGGER = logging.getLogger(__name__)
 class ButtonDiscoveryEntity(DiscoveryEntity):
     """Button class."""
 
-    def __init__(
-        self,
-        hass,
-        publish_retain,
-        platform,
-    ):
-        """Initialise the button class."""
-        super().__init__(
-            hass,
-            publish_retain,
-            platform,
-            publish_state=False,
-        )
-
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a button."""
         del config[CONF_STAT_T]
@@ -164,20 +150,6 @@ class SwitchDiscoveryEntity(DiscoveryEntity):
 
 class TextDiscoveryEntity(DiscoveryEntity):
     """Text class."""
-
-    def __init__(
-        self,
-        hass,
-        publish_retain,
-        platform,
-    ):
-        """Initialise the text class."""
-        super().__init__(
-            hass,
-            publish_retain,
-            platform,
-            publish_state=False,
-        )
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a text."""

@@ -14,9 +14,9 @@ class DiscoveryItem(DiscoveryEntity):
 
     PLATFORM = Platform.SENSOR
 
-    def __init__(self, hass, publish_retain, platform):
+    def __init__(self, hass, publish_retain, platform, publish_state):
         """Initialise the sensor class."""
-        super().__init__(hass, publish_retain, platform)
+        super().__init__(hass, publish_retain, platform, publish_state)
         self._ent_reg = entity_registry.async_get(hass)
 
     def build_config(self, config, entity_info: EntityInfo):

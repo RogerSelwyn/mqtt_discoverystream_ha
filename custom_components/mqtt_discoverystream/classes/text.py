@@ -9,3 +9,4 @@ class DiscoveryItem(TextDiscoveryEntity):
     """Text class."""
 
     PLATFORM = Platform.TEXT
+    PUBLISH_STATE = False
