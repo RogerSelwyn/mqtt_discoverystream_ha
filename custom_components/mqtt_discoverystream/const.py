@@ -3,6 +3,7 @@
 from datetime import timedelta
 
 from homeassistant.components.input_button import DOMAIN as INPUT_BUTTON_DOMAIN
+from homeassistant.components.input_number import DOMAIN as INPUT_NUMBER_DOMAIN
 from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.const import Platform
 
@@ -19,6 +20,7 @@ ATTR_ATTRIBUTES = "attributes"
 ATTR_COLOR = "color"
 ATTR_CONFIG = "config"
 ATTR_JSON = "JSON"
+ATTR_MODE = "mode"
 ATTR_MODE_COMMAND = "command_mode"
 ATTR_PRESET_COMMAND = "command_preset"
 ATTR_PRESS = "press"
@@ -62,11 +64,15 @@ CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"
 CONF_ENT_CAT = "ent_cat"
 CONF_JSON_ATTR_T = "json_attr_t"
+CONF_MAX = "max"
+CONF_MIN = "min"
+CONF_MODE = "mode"
 CONF_OBJ_ID = "obj_id"
 CONF_OPS = "ops"
 CONF_SET_POS_T = "set_pos_t"
 CONF_STAT_T = "stat_t"
 CONF_STAT_CLA = "stat_cla"
+CONF_STEP = "step"
 CONF_SUG_DSP_PRC = "sug_dsp_prc"
 CONF_TILT_CMD_T = "tilt_cmd_t"
 CONF_UNIQ_ID = "uniq_id"
@@ -89,6 +95,7 @@ SUPPORTED_ENTITY_TYPES = [
     Platform.SENSOR,
     Platform.SWITCH,
     INPUT_BUTTON_DOMAIN,
+    INPUT_NUMBER_DOMAIN,
     INPUT_SELECT_DOMAIN,
 ]
 
@@ -101,6 +108,7 @@ SUPPORTED_COMMANDS = {
     Platform.SENSOR: [],
     Platform.SWITCH: [ATTR_SET],
     INPUT_BUTTON_DOMAIN: [ATTR_PRESS],
+    INPUT_NUMBER_DOMAIN: [ATTR_SET],
     INPUT_SELECT_DOMAIN: [ATTR_SET],
 }
 
@@ -113,5 +121,6 @@ OUTPUT_ENTITIES = {
     Platform.SENSOR: Platform.SENSOR,
     Platform.SWITCH: Platform.SWITCH,
     INPUT_BUTTON_DOMAIN: Platform.BUTTON,
+    INPUT_NUMBER_DOMAIN: Platform.NUMBER,
     INPUT_SELECT_DOMAIN: Platform.SELECT,
 }

@@ -16,6 +16,9 @@ Provides discovery & command support for:
 | Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
+| ~~Input Boolean~~ |                  |                           |
+| Input Button    | button             | Press                     |
+| Input Number    | number             | Set Value                 |
 | Input Select    | select             | Select Option             |
 | Light           | light              | Turn On, Turn Off         |
 | Sensor          | sensor             |                           |
