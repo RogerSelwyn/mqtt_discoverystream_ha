@@ -2,6 +2,7 @@
 
 from datetime import timedelta
 
+from homeassistant.components.input_boolean import DOMAIN as INPUT_BOOLEAN_DOMAIN
 from homeassistant.components.input_button import DOMAIN as INPUT_BUTTON_DOMAIN
 from homeassistant.components.input_number import DOMAIN as INPUT_NUMBER_DOMAIN
 from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
@@ -101,6 +102,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.SENSOR: [],
     Platform.SWITCH: [ATTR_SET],
     Platform.TEXT: [ATTR_SET],
+    INPUT_BOOLEAN_DOMAIN: [ATTR_SET],
     INPUT_BUTTON_DOMAIN: [ATTR_PRESS],
     INPUT_NUMBER_DOMAIN: [ATTR_SET],
     INPUT_SELECT_DOMAIN: [ATTR_SET],
@@ -108,6 +110,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
 }
 
 OUTPUT_ENTITIES = {
+    INPUT_BOOLEAN_DOMAIN: Platform.SWITCH,
     INPUT_BUTTON_DOMAIN: Platform.BUTTON,
     INPUT_NUMBER_DOMAIN: Platform.NUMBER,
     INPUT_SELECT_DOMAIN: Platform.SELECT,
