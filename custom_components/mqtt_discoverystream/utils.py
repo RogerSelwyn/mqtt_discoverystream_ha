@@ -1,15 +1,11 @@
 """Utilities for MQTT Discovery Stream."""
 
-import json
 import logging
 from dataclasses import dataclass, field
 
 from homeassistant.components import mqtt
-from homeassistant.const import ATTR_STATE
-from homeassistant.helpers.json import JSONEncoder
 
 from .const import (
-    ATTR_ATTRIBUTES,
     CONF_BASE_TOPIC,
     CONF_PUBLISHED,
     DOMAIN,
@@ -20,26 +16,10 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 
-async def async_publish_base_attributes(
-    hass, new_state, mybase, publish_retain, publish_state=True
-):
-    """Publish the basic attributes for the entity state."""
-    if publish_state:
-        await mqtt.async_publish(
-            hass, f"{mybase}{ATTR_STATE}", new_state.state, 1, publish_retain
-        )
-
-    attributes = dict(new_state.attributes.items())
-    encoded = json.dumps(attributes, cls=JSONEncoder)
-    await mqtt.async_publish(
-        hass, f"{mybase}{ATTR_ATTRIBUTES}", encoded, 1, publish_retain
-    )
-
-
 async def async_publish_attribute(
     hass, new_state, mybase, attribute_name, publish_retain, strip=False
 ):
-    """Publish a s[ecific attribute"""
+    """Publish a specific attribute"""
     if attribute_name in new_state.attributes:
         value = new_state.attributes[attribute_name]
         if value and strip:

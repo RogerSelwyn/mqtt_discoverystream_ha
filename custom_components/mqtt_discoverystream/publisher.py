@@ -15,7 +15,6 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STARTED,
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
-    STATE_UNKNOWN,
 )
 from homeassistant.helpers import entity_registry
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
@@ -65,7 +64,7 @@ class Publisher:
             )
             await asyncio.sleep(DEFAULT_STATE_SLEEP)
 
-        if new_state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN, None):
+        if new_state.state in (STATE_UNAVAILABLE, None):
             await mqtt.async_publish(
                 self._hass,
                 f"{mybase}{CONF_AVAILABILITY}",

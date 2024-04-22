@@ -1,11 +1,14 @@
 """Base for all discovery entities."""
 
+import json
 import logging
 
 from homeassistant.components import mqtt
+from homeassistant.const import ATTR_STATE
+from homeassistant.helpers.json import JSONEncoder
 
-from ..const import SUPPORTED_COMMANDS
-from ..utils import EntityInfo, async_publish_base_attributes
+from ..const import ATTR_ATTRIBUTES, SUPPORTED_COMMANDS
+from ..utils import EntityInfo
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,12 +30,9 @@ class DiscoveryEntity:
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a discovery entity."""
 
-        await async_publish_base_attributes(
-            self._hass,
+        await self._async_publish_base_attributes(
             new_state,
             mybase,
-            self._publish_retain,
-            publish_state=self._publish_state,
         )
 
     async def async_subscribe(self, command_topic):
@@ -51,3 +51,20 @@ class DiscoveryEntity:
 
     async def _async_handle_message(self, msg):
         """Handle a message for a discovery entity."""
+
+    async def _async_publish_base_attributes(self, new_state, mybase):
+        """Publish the basic attributes for the entity state."""
+        if self._publish_state:
+            await mqtt.async_publish(
+                self._hass,
+                f"{mybase}{ATTR_STATE}",
+                new_state.state,
+                1,
+                self._publish_retain,
+            )
+
+        attributes = dict(new_state.attributes.items())
+        encoded = json.dumps(attributes, cls=JSONEncoder)
+        await mqtt.async_publish(
+            self._hass, f"{mybase}{ATTR_ATTRIBUTES}", encoded, 1, self._publish_retain
+        )
