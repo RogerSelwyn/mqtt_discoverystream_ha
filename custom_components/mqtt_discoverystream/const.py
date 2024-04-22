@@ -65,6 +65,7 @@ CONF_CMD_T = "cmd_t"
 CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"
 CONF_ENT_CAT = "ent_cat"
+CONF_EVT_TYP = "evt_typ"
 CONF_JSON_ATTR_T = "json_attr_t"
 CONF_MAX = "max"
 CONF_MIN = "min"
@@ -96,6 +97,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.CLIMATE: [ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND],
     Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
     Platform.DEVICE_TRACKER: [],
+    Platform.EVENT: [],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.NUMBER: [ATTR_SET],
     Platform.SELECT: [ATTR_SET],
