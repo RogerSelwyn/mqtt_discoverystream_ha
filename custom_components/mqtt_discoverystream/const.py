@@ -97,6 +97,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.DEVICE_TRACKER: [],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.NUMBER: [ATTR_SET],
+    Platform.SELECT: [ATTR_SET],
     Platform.SENSOR: [],
     Platform.SWITCH: [ATTR_SET],
     INPUT_BUTTON_DOMAIN: [ATTR_PRESS],

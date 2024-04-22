@@ -6,7 +6,7 @@ from homeassistant.helpers import entity_registry
 
 from ..const import ATTR_SUGGESTED_DISPLAY_PRECISION, CONF_SUG_DSP_PRC
 from ..utils import EntityInfo
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 
 class DiscoveryItem(DiscoveryEntity):

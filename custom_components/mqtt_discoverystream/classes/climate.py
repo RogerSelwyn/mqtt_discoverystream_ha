@@ -48,7 +48,7 @@ from ..const import (
     CONF_STAT_T,
 )
 from ..utils import EntityInfo, async_publish_attribute, validate_message
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

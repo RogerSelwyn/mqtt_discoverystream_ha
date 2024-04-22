@@ -39,7 +39,7 @@ from ..const import (
     CONF_TILT_CMD_T,
 )
 from ..utils import EntityInfo, command_error, validate_message
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

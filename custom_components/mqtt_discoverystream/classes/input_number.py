@@ -22,7 +22,7 @@ from ..const import (
     CONF_STEP,
 )
 from ..utils import EntityInfo, validate_message
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 
 class DiscoveryItem(DiscoveryEntity):

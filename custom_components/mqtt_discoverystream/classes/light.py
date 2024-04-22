@@ -47,7 +47,7 @@ from ..const import (
     STATE_CAPITAL_ON,
 )
 from ..utils import EntityInfo, validate_message
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

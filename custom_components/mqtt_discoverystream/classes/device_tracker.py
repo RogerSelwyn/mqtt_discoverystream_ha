@@ -2,7 +2,7 @@
 
 from homeassistant.const import Platform
 
-from .entity import DiscoveryEntity
+from .base_entity import DiscoveryEntity
 
 
 class DiscoveryItem(DiscoveryEntity):

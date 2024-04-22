@@ -26,6 +26,7 @@ Provides discovery & command support for:
 | Light           | light              | Turn On, Turn Off         |
 | Number          | number             | Set Value                 |
 | Sensor          | sensor             |                           |
+| Select          | select             | Select Option             |
 | Switch          | switch             | Turn On, Turn Off         |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
