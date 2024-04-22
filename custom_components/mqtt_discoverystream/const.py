@@ -90,6 +90,7 @@ CONF_PL_OFF = "pl_off"
 
 SUPPORTED_ENTITY_TYPES = [
     Platform.BINARY_SENSOR,
+    Platform.BUTTON,
     Platform.CLIMATE,
     Platform.COVER,
     Platform.DEVICE_TRACKER,
@@ -104,6 +105,7 @@ SUPPORTED_ENTITY_TYPES = [
 
 SUPPORTED_COMMANDS = {
     Platform.BINARY_SENSOR: [],
+    Platform.BUTTON: [ATTR_PRESS],
     Platform.CLIMATE: [ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND],
     Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
     Platform.DEVICE_TRACKER: [],
@@ -118,6 +120,7 @@ SUPPORTED_COMMANDS = {
 
 OUTPUT_ENTITIES = {
     Platform.BINARY_SENSOR: Platform.BINARY_SENSOR,
+    Platform.BUTTON: Platform.BUTTON,
     Platform.CLIMATE: Platform.CLIMATE,
     Platform.COVER: Platform.COVER,
     Platform.DEVICE_TRACKER: Platform.DEVICE_TRACKER,

@@ -13,11 +13,13 @@ Provides discovery & command support for:
 | **Entity Type** | **Entity Created** | **Commands Supported**    |
 |:----------------|:-------------------|:--------------------------|
 | Binary Sensor   | binary_sensor      |                           |
+| Button          | button             | Press                     |
 | Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
 | ~~Input Boolean~~ |                  |                           |
 | Input Button    | button             | Press                     |
+| ~~Input Datetime~~ |                 |                           |
 | Input Number    | number             | Set Value                 |
 | Input Select    | select             | Select Option             |
 | Input Text      | text               | Set Value                 |
