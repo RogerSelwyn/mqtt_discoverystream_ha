@@ -18,6 +18,7 @@ Provides discovery & command support for:
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
 | Event           | event              |                           |
+| ~~Image~~       |                    |                           |
 | Input Boolean   | switch             | Turn On, Turn Off         |
 | Input Button    | button             | Press                     |
 | ~~Input Datetime~~ |                 |                           |
@@ -26,6 +27,7 @@ Provides discovery & command support for:
 | Input Text      | text               | Set Value                 |
 | Light           | light              | Turn On, Turn Off         |
 | Number          | number             | Set Value                 |
+| Scene           | scene              | Apply                     |
 | Sensor          | sensor             |                           |
 | Select          | select             | Select Option             |
 | Switch          | switch             | Turn On, Turn Off         |

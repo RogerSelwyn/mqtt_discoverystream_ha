@@ -58,11 +58,15 @@ class Publisher:
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
+        valid = True
         if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
-            await self._discovery.async_discovery_publish(
+            valid = await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
             await asyncio.sleep(DEFAULT_STATE_SLEEP)
+
+        if not valid:
+            return
 
         if new_state.state in (STATE_UNAVAILABLE, None):
             await mqtt.async_publish(
@@ -125,10 +129,11 @@ class Publisher:
             if publish_filter(entity_id):
                 if current_state := self._hass.states.get(entity_id):
                     mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                    await self._discovery.async_discovery_publish(
+                    valid = await self._discovery.async_discovery_publish(
                         entity_id, current_state.attributes, mybase
                     )
-                    self._entity_states[entity_id] = current_state
+                    if valid:
+                        self._entity_states[entity_id] = current_state
 
         _LOGGER.debug("Discovery published")
         await asyncio.sleep(DEFAULT_STATE_SLEEP)

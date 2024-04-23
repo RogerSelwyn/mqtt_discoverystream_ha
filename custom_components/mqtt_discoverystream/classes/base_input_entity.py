@@ -26,7 +26,6 @@ from homeassistant.const import (
 
 from ..const import (
     ATTR_MODE,
-    ATTR_PRESS,
     ATTR_SET,
     CONF_CMD_T,
     CONF_MAX,
@@ -51,7 +50,7 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a button."""
         del config[CONF_STAT_T]
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_PRESS}"
+        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""

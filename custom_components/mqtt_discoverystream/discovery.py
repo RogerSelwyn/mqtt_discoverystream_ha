@@ -2,6 +2,7 @@
 
 import importlib
 import json
+import logging
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
@@ -17,6 +18,7 @@ from homeassistant.components.mqtt.mixins import (
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
+    ATTR_ENTITY_PICTURE,
     ATTR_FRIENDLY_NAME,
     ATTR_ICON,
     ATTR_STATE,
@@ -40,6 +42,7 @@ from .const import (
     CONF_DEV_CLA,
     CONF_DISCOVERY_TOPIC,
     CONF_ENT_CAT,
+    CONF_ENT_PIC,
     CONF_IDS,
     CONF_JSON_ATTR_T,
     CONF_LOCAL_STATUS,
@@ -66,6 +69,8 @@ from .utils import (
     translate_entity_type,
 )
 
+_LOGGER = logging.getLogger(__name__)
+
 
 class Discovery:
     """Manage discovery publication for MQTT Discovery Statestream."""
@@ -90,6 +95,7 @@ class Discovery:
         self._ent_reg = entity_registry.async_get(hass)
         self._discovery_topic = set_topic(conf, CONF_DISCOVERY_TOPIC)
         self.subscribe_possible = False
+        self._error_domain = []
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -98,14 +104,17 @@ class Discovery:
         ent_domain = ent_parts[0]
 
         if ent_domain not in SUPPORTED_ENTITY_TYPE_COMMANDS:
-            return
+            if ent_domain not in self._error_domain:
+                _LOGGER.error("Entity type not supported - %s", entity_id)
+                self._error_domain.append(ent_domain)
+            return False
 
         if (
             ent_domain in [Platform.BINARY_SENSOR, Platform.SENSOR]
             and not self._has_includes
             and ATTR_DEVICE_CLASS not in attributes
         ):
-            return
+            return False
 
         entity_info = EntityInfo(mycommand, attributes, mybase, entity_id)
         config = self._build_base(entity_info)
@@ -135,6 +144,8 @@ class Discovery:
         await mqtt.async_publish(
             self._hass, entity_disc_topic, encoded, 1, self._publish_retain
         )
+
+        return True
 
     def _build_base(self, entity_info: EntityInfo):
         ent_parts = entity_info.entity_id.split(".")
@@ -181,6 +192,9 @@ class Discovery:
             config, entity_info.attributes, ATTR_STATE_CLASS, CONF_STAT_CLA
         )
         simple_attribute_add(config, entity_info.attributes, ATTR_ICON, ATTR_ICON)
+        simple_attribute_add(
+            config, entity_info.attributes, ATTR_ENTITY_PICTURE, CONF_ENT_PIC
+        )
 
         return config
 

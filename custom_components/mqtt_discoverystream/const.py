@@ -25,7 +25,6 @@ ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
 ATTR_MODE_COMMAND = "command_mode"
 ATTR_PRESET_COMMAND = "command_preset"
-ATTR_PRESS = "press"
 ATTR_SET = "set"
 ATTR_SET_LIGHT = "set_light"
 ATTR_SET_POSITION = "set_position"
@@ -65,6 +64,7 @@ CONF_CMD_T = "cmd_t"
 CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"
 CONF_ENT_CAT = "ent_cat"
+CONF_ENT_PIC = "ent_pic"
 CONF_EVT_TYP = "evt_typ"
 CONF_JSON_ATTR_T = "json_attr_t"
 CONF_MAX = "max"
@@ -93,19 +93,20 @@ CONF_PL_OFF = "pl_off"
 
 SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.BINARY_SENSOR: [],
-    Platform.BUTTON: [ATTR_PRESS],
+    Platform.BUTTON: [ATTR_SET],
     Platform.CLIMATE: [ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND],
     Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
     Platform.DEVICE_TRACKER: [],
     Platform.EVENT: [],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.NUMBER: [ATTR_SET],
+    Platform.SCENE: [ATTR_SET],
     Platform.SELECT: [ATTR_SET],
     Platform.SENSOR: [],
     Platform.SWITCH: [ATTR_SET],
     Platform.TEXT: [ATTR_SET],
     INPUT_BOOLEAN_DOMAIN: [ATTR_SET],
-    INPUT_BUTTON_DOMAIN: [ATTR_PRESS],
+    INPUT_BUTTON_DOMAIN: [ATTR_SET],
     INPUT_NUMBER_DOMAIN: [ATTR_SET],
     INPUT_SELECT_DOMAIN: [ATTR_SET],
     INPUT_TEXT_DOMAIN: [ATTR_SET],
