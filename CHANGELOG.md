@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.6 (2024/04/23)
+### ✨ Enhancements
+- [Add support for Input Boolean](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d541bf463ef3aaeaa2589f730f55cd7841681ee2) - @RogerSelwyn
+- [Add support for Event](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b9bc5c3074ddfa177d4e144dcae4ff0ab6546e03) - @RogerSelwyn
+- [Add support for Scene](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/154fba1cb35dcd02b50e68301107b77e5e3609ed) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Extract more code to an attribute](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b69000877ec35d4c91b573f0c1018bedd89271b2) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v1.2.6](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d8df9f0de4cf956697dc2278f4cc8bd68065ed3d) - @RogerSelwyn
+
 ## 1.2.5 (2024/04/22)
 ### ✨ Enhancements
 - [Add support for Input Button](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d14ee5e52826a127642f0b6656e2ab29ca5fab8b) - @RogerSelwyn
