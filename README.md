@@ -18,10 +18,8 @@ Provides discovery & command support for:
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
 | Event           | event              |                           |
-| ~~Image~~       |                    |                           |
 | Input Boolean   | switch             | Turn On, Turn Off         |
 | Input Button    | button             | Press                     |
-| ~~Input Datetime~~ |                 |                           |
 | Input Number    | number             | Set Value                 |
 | Input Select    | select             | Select Option             |
 | Input Text      | text               | Set Value                 |
