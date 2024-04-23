@@ -51,7 +51,7 @@ DEFAULT_RETAIN = False
 DEFAULT_STATE_SLEEP = 1.5
 
 
-DOMAIN = "mqtt_discoverystream"
+DOMAIN = "mqtt_discoverystream_alt"
 
 
 STATE_CAPITAL_ON = "ON"

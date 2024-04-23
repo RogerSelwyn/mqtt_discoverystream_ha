@@ -1,8 +1,8 @@
 {
-  "name": "MQTT DiscoveryStream",
+  "name": "MQTT DiscoveryStream Alt",
   "zip_release": true,
   "homeassistant": "2024.4.0",
   "content_in_root": false,
-  "filename": "mqtt_discoverystream.zip",
+  "filename": "mqtt_discoverystream_alt.zip",
   "render_readme": true
 }
