@@ -6,7 +6,7 @@
 
 This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration and builds on the version by [koying](https://github.com/koying/mqtt_discoverystream_ha).
 
-The integration publishes [MQTT Discovery]((https://www.home-assistant.io/docs/mqtt/discovery) information for the supported entities, publishes any state changes and handles returned commands from the slave home assistant instance.
+The integration publishes [MQTT Discovery](https://www.home-assistant.io/docs/mqtt/discovery) information for the supported entities, publishes any state changes and handles returned commands from the slave home assistant instance.
 
 ## Supported entities
 Provides discovery & command support for:
