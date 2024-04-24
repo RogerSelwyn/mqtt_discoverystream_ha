@@ -263,4 +263,5 @@ end
 
 ## Credits
 
-- This custom component is based upon the `mqtt_statestream` one from HA Core.  
+- This custom component is based upon the `mqtt_statestream` one from HA Core.
+- Extends the capabilties of the `mqtt_discoverystream` custom integration by `koying`.
