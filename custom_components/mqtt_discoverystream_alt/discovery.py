@@ -55,6 +55,7 @@ from .const import (
     CONF_STAT_CLA,
     CONF_STAT_T,
     CONF_SW,
+    CONF_TILDA,
     CONF_UNIQ_ID,
     CONF_UNIQUE_PREFIX,
     CONF_UNIT_OF_MEAS,
@@ -63,6 +64,7 @@ from .const import (
 )
 from .utils import (
     EntityInfo,
+    build_topic,
     set_topic,
     simple_attribute_add,
     simple_entry_attribute,
@@ -100,7 +102,7 @@ class Discovery:
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
-        mycommand = f"{self._command_topic}{entity_id.replace('.', '/')}/"
+        mycommand = f"{self._command_topic}{entity_id.replace('.', '/')}"
         ent_parts = entity_id.split(".")
         ent_domain = ent_parts[0]
 
@@ -151,7 +153,7 @@ class Discovery:
     def _build_base(self, entity_info: EntityInfo):
         ent_parts = entity_info.entity_id.split(".")
         ent_id = ent_parts[1]
-        availability = [{CONF_TOPIC: f"{entity_info.mybase}{CONF_AVAILABILITY}"}]
+        availability = [{CONF_TOPIC: f"~/{CONF_AVAILABILITY}"}]
         if self._local_status:
             availability.append(
                 {
@@ -162,10 +164,11 @@ class Discovery:
             )
 
         config = {
+            CONF_TILDA: entity_info.mybase.removesuffix("/"),
             CONF_UNIQ_ID: f"{self._unique_prefix}_{translate_entity_type(entity_info.entity_id)}",
             CONF_OBJ_ID: ent_id,
-            CONF_STAT_T: f"{entity_info.mybase}{ATTR_STATE}",
-            CONF_JSON_ATTR_T: f"{entity_info.mybase}{ATTR_ATTRIBUTES}",
+            CONF_STAT_T: build_topic(ATTR_STATE),
+            CONF_JSON_ATTR_T: build_topic(ATTR_ATTRIBUTES),
             CONF_AVTY: availability,
             CONF_AVTY_MODE: AVAILABILITY_LATEST,
         }

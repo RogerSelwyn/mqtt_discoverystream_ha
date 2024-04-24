@@ -46,7 +46,7 @@ from ..const import (
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
-from ..utils import EntityInfo, validate_message
+from ..utils import EntityInfo, add_config_command, validate_message
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -60,7 +60,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):  # noqa: F821
         """Build the config for a light."""
         del config[CONF_JSON_ATTR_T]
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET_LIGHT}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET_LIGHT)
         config[CONF_SCHEMA] = ATTR_JSON
 
         supported_features = get_supported_features(self._hass, entity_info.entity_id)

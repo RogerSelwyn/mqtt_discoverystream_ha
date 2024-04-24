@@ -100,3 +100,13 @@ class EntityInfo:
     attributes: str = field(init=True, repr=True)
     mybase: str = field(init=True, repr=True)
     entity_id: str = field(init=True, repr=True)
+
+
+def add_config_command(config, entity_info: EntityInfo, confname, confvalue):
+    """Add relevant commands to discovery config."""
+    config[confname] = f"{entity_info.mycommand}/{confvalue}"
+
+
+def build_topic(attrname):
+    """Build a standard topic."""
+    return f"~/{attrname}"

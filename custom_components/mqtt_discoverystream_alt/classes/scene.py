@@ -5,7 +5,7 @@ import logging
 from homeassistant.const import ATTR_ENTITY_ID, SERVICE_TURN_ON, STATE_ON, Platform
 
 from ..const import ATTR_SET, CONF_CMD_T, CONF_PL_ON
-from ..utils import EntityInfo, validate_message
+from ..utils import EntityInfo, add_config_command, validate_message
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a scene."""
         config[CONF_PL_ON] = STATE_ON
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a scene."""

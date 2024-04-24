@@ -47,7 +47,13 @@ from ..const import (
     ATTR_TEMP_COMMAND,
     CONF_STAT_T,
 )
-from ..utils import EntityInfo, async_publish_attribute, validate_message
+from ..utils import (
+    EntityInfo,
+    add_config_command,
+    async_publish_attribute,
+    build_topic,
+    validate_message,
+)
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -62,25 +68,30 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a climate."""
         del config[CONF_STAT_T]
-        config[CONF_ACTION_TOPIC] = f"{entity_info.mybase}{ATTR_HVAC_ACTION}"
-        config[CONF_CURRENT_TEMP_TOPIC] = (
-            f"{entity_info.mybase}{ATTR_CURRENT_TEMPERATURE}"
-        )
+        config[CONF_ACTION_TOPIC] = build_topic(ATTR_HVAC_ACTION)
+        config[CONF_CURRENT_TEMP_TOPIC] = build_topic(ATTR_CURRENT_TEMPERATURE)
         config[CONF_TEMP_MAX] = entity_info.attributes[ATTR_MAX_TEMP]
         config[CONF_TEMP_MIN] = entity_info.attributes[ATTR_MIN_TEMP]
-        config[CONF_MODE_COMMAND_TOPIC] = f"{entity_info.mycommand}{ATTR_MODE_COMMAND}"
+        add_config_command(
+            config, entity_info, CONF_MODE_COMMAND_TOPIC, ATTR_MODE_COMMAND
+        )
         config[CONF_MODE_LIST] = entity_info.attributes[ATTR_HVAC_MODES]
-        config[CONF_MODE_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_HVAC_MODE}"
+        config[CONF_MODE_STATE_TOPIC] = build_topic(ATTR_HVAC_MODE)
         preset_modes = entity_info.attributes[ATTR_PRESET_MODES]
         if PRESET_NONE in preset_modes:
             preset_modes.remove(PRESET_NONE)
         config[CONF_PRESET_MODES_LIST] = preset_modes
-        config[CONF_PRESET_MODE_COMMAND_TOPIC] = (
-            f"{entity_info.mycommand}{ATTR_PRESET_COMMAND}"
+        add_config_command(
+            config,
+            entity_info,
+            CONF_PRESET_MODE_COMMAND_TOPIC,
+            ATTR_PRESET_COMMAND,
         )
-        config[CONF_PRESET_MODE_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_PRESET_MODE}"
-        config[CONF_TEMP_COMMAND_TOPIC] = f"{entity_info.mycommand}{ATTR_TEMP_COMMAND}"
-        config[CONF_TEMP_STATE_TOPIC] = f"{entity_info.mybase}{ATTR_TEMPERATURE}"
+        config[CONF_PRESET_MODE_STATE_TOPIC] = build_topic(ATTR_PRESET_MODE)
+        add_config_command(
+            config, entity_info, CONF_TEMP_COMMAND_TOPIC, ATTR_TEMP_COMMAND
+        )
+        config[CONF_TEMP_STATE_TOPIC] = build_topic(ATTR_TEMPERATURE)
         config[CONF_TEMP_STEP] = (
             entity_info.attributes[ATTR_TARGET_TEMP_STEP]
             if ATTR_TARGET_TEMP_STEP in entity_info.attributes

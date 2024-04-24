@@ -38,7 +38,7 @@ from ..const import (
     CONF_STAT_T,
     CONF_STEP,
 )
-from ..utils import EntityInfo, command_error, validate_message
+from ..utils import EntityInfo, add_config_command, command_error, validate_message
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -52,7 +52,7 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a button."""
         del config[CONF_STAT_T]
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
@@ -73,7 +73,7 @@ class NumberDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a number."""
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
         config[CONF_MAX] = entity_info.attributes[ATTR_MAX]
         config[CONF_MIN] = entity_info.attributes[ATTR_MIN]
         config[CONF_MODE] = entity_info.attributes[ATTR_MODE]
@@ -101,7 +101,7 @@ class SelectDiscoveryEntity(DiscoveryEntity):
         """Build the config for a select."""
         if ATTR_OPTIONS in entity_info.attributes:
             config[CONF_OPS] = entity_info.attributes[ATTR_OPTIONS]
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a select."""
@@ -127,7 +127,7 @@ class SwitchDiscoveryEntity(DiscoveryEntity):
         """Build the config for a switch."""
         config[CONF_PL_OFF] = STATE_OFF
         config[CONF_PL_ON] = STATE_ON
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
@@ -156,7 +156,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a text."""
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
         config[CONF_MAX] = entity_info.attributes[ATTR_MAX]
         config[CONF_MIN] = entity_info.attributes[ATTR_MIN]
         config[CONF_MODE] = entity_info.attributes[ATTR_MODE]

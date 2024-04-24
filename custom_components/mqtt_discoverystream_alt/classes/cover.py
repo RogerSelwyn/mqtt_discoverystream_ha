@@ -38,7 +38,13 @@ from ..const import (
     CONF_SET_POS_T,
     CONF_TILT_CMD_T,
 )
-from ..utils import EntityInfo, command_error, validate_message
+from ..utils import (
+    EntityInfo,
+    add_config_command,
+    build_topic,
+    command_error,
+    validate_message,
+)
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -51,10 +57,10 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a cover."""
-        config[CONF_CMD_T] = f"{entity_info.mycommand}{ATTR_SET}"
+        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
         if ATTR_CURRENT_POSITION in entity_info.attributes:
-            config[CONF_GET_POSITION_TOPIC] = f"{entity_info.mybase}{ATTR_ATTRIBUTES}"
+            config[CONF_GET_POSITION_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_GET_POSITION_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_POSITION + "'] }}"
             )
@@ -63,16 +69,16 @@ class DiscoveryItem(DiscoveryEntity):
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & CoverEntityFeature.SET_POSITION
         ):
-            config[CONF_SET_POS_T] = f"{entity_info.mycommand}{ATTR_SET_POSITION}"
+            add_config_command(config, entity_info, CONF_SET_POS_T, ATTR_SET_POSITION)
 
         if (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & CoverEntityFeature.SET_TILT_POSITION
         ):
-            config[CONF_TILT_CMD_T] = f"{entity_info.mycommand}{ATTR_SET_TILT}"
+            add_config_command(config, entity_info, CONF_TILT_CMD_T, ATTR_SET_TILT)
 
         if ATTR_CURRENT_TILT_POSITION in entity_info.attributes:
-            config[CONF_TILT_STATUS_TOPIC] = f"{entity_info.mybase}{ATTR_ATTRIBUTES}"
+            config[CONF_TILT_STATUS_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_TILT_STATUS_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_TILT_POSITION + "'] }}"
             )
