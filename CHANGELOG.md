@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.1 (2024/04/24)
+### 🐛 Fixes
+- [Fix suppression of entity states](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d9325da21fe59dbd6d290c04f6d05b5529c638bc) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b5b293c5d32cce00e77e1044043b4b7a1859c6ad) - @RogerSelwyn
+
+
+## 2.0.0 (2024/04/24)
+### 💥 Breaking Changes
+- [Rename integration to `mqtt_discoverystream_alt`](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0154dac10b956f10351dbfc41855a00211bcaa6a) - @RogerSelwyn
+- [Rename folder to `mqtt_discoverystream_alt`](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a330efe61eaf82b0101e50ca14a3ff8469b16e0b) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Move entity attribute to super](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bae957acbd4af2d0748e6fe58c17e61598a5c502) - @RogerSelwyn
+- [Remove duplicate code](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fb4f67b2426c0d11070e65f21b12da78c9fe899e) - @RogerSelwyn
+- [Rename release script to `..._alt`](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/44fa7c5814dd7b0faeb071707a27047645df7c53) - @RogerSelwyn
+
 ## 1.2.6 (2024/04/23)
 ### ✨ Enhancements
 - [Add support for Input Boolean](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d541bf463ef3aaeaa2589f730f55cd7841681ee2) - @RogerSelwyn
