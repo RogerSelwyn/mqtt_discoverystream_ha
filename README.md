@@ -33,7 +33,7 @@ Provides discovery & command support for:
 | Text            | text               | Set Value                 |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
-I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the major work to create it put in by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
+I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the initial creation by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
 
 <a href="https://www.buymeacoffee.com/rogtp" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a> 
 <a href="https://www.paypal.com/donate/?hosted_button_id=F7TGHNGH7A526">
