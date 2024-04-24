@@ -4,8 +4,9 @@
 
 # MQTT DiscoveryStream integration for Home Assistant
 
-This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration.  
-Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
+This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration and builds on the version by [koying](https://github.com/koying/mqtt_discoverystream_ha).
+
+The integration publishes [MQTT Discovery](https://www.home-assistant.io/docs/mqtt/discovery) information for the supported entities, publishes any state changes and handles returned commands from the slave home assistant instance.
 
 ## Supported entities
 Provides discovery & command support for:
@@ -32,7 +33,7 @@ Provides discovery & command support for:
 | Text            | text               | Set Value                 |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
-I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the major work to create it put in by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
+I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the initial creation by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
 
 <a href="https://www.buymeacoffee.com/rogtp" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a> 
 <a href="https://www.paypal.com/donate/?hosted_button_id=F7TGHNGH7A526">
@@ -50,7 +51,7 @@ I work on this integration because I like things to work well for myself and oth
 1. Launch HACS
 1. Navigate to the Integrations section
 1. Add this repository as an Custom Repository (Integration) via the menu at top right (Only required if you wish to use this forked version).
-1. Search for "MQTT DiscoveryStream"
+1. Search for "MQTT DiscoveryStream Alt"
 1. Select "Install this repository"
 1. Restart Home Assistant
 
@@ -262,4 +263,5 @@ end
 
 ## Credits
 
-- This custom component is based upon the `mqtt_statestream` one from HA Core.  
+- This custom component is based upon the `mqtt_statestream` one from HA Core.
+- Extends the capabilties of the `mqtt_discoverystream` custom integration by `koying`.
