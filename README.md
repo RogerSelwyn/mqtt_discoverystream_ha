@@ -4,7 +4,7 @@
 
 # MQTT DiscoveryStream integration for Home Assistant
 
-This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration.  
+This is an "extension" of the builtin [`mqtt_statestream`](https://www.home-assistant.io/integrations/mqtt_statestream/) integration and builds on the version by [koying](https://github.com/koying/mqtt_discoverystream_ha).
 Besides the functionalities of the hereabove, it also allows to publish and handles an [MQTT "discovery"](https://www.home-assistant.io/docs/mqtt/discovery) setup.
 
 ## Supported entities
