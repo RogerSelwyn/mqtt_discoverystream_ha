@@ -9,4 +9,3 @@ class DiscoveryItem(ButtonDiscoveryEntity):
     """Button class."""
 
     PLATFORM = Platform.BUTTON
-    PUBLISH_STATE = False

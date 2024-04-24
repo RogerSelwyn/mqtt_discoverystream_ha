@@ -9,4 +9,3 @@ class DiscoveryItem(TextDiscoveryEntity):
     """Input_Text class."""
 
     PLATFORM = INPUT_TEXT_DOMAIN
-    PUBLISH_STATE = False
