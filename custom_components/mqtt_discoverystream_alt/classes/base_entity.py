@@ -21,7 +21,7 @@ _LOGGER = logging.getLogger(__name__)
 class DiscoveryEntity:
     """Base discovery entity class."""
 
-    PUBLISH_STATE = False
+    PUBLISH_STATE = True
 
     def __init__(self, hass, publish_retain, platform, publish_state):
         """Initialise the climate class."""
