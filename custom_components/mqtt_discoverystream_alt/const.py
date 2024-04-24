@@ -45,6 +45,7 @@ CONF_PUBLISHED = "conf_published"
 CONF_PUBLISH_RETAIN = "publish_retain"
 CONF_REMOTE_STATUS = "remote_status"
 CONF_REPUBLISH_TIME = "republish_time"
+CONF_UNIQUE_PREFIX = "unique_prefix"
 
 DEFAULT_LOOP_TIME = timedelta(minutes=5)
 DEFAULT_RETAIN = False

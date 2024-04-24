@@ -8,7 +8,6 @@ from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
     CONF_AVAILABILITY,
     CONF_TOPIC,
-    DATA_MQTT,
 )
 from homeassistant.components.mqtt.mixins import (
     AVAILABILITY_LATEST,
@@ -57,6 +56,7 @@ from .const import (
     CONF_STAT_T,
     CONF_SW,
     CONF_UNIQ_ID,
+    CONF_UNIQUE_PREFIX,
     CONF_UNIT_OF_MEAS,
     DOMAIN,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
@@ -96,6 +96,7 @@ class Discovery:
         self._discovery_topic = set_topic(conf, CONF_DISCOVERY_TOPIC)
         self.subscribe_possible = False
         self._error_domain = []
+        self._unique_prefix = self._conf.get(CONF_UNIQUE_PREFIX)
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -161,7 +162,7 @@ class Discovery:
             )
 
         config = {
-            CONF_UNIQ_ID: f"{DATA_MQTT}_{translate_entity_type(entity_info.entity_id)}",
+            CONF_UNIQ_ID: f"{self._unique_prefix}_{translate_entity_type(entity_info.entity_id)}",
             CONF_OBJ_ID: ent_id,
             CONF_STAT_T: f"{entity_info.mybase}{ATTR_STATE}",
             CONF_JSON_ATTR_T: f"{entity_info.mybase}{ATTR_ATTRIBUTES}",

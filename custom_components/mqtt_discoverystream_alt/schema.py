@@ -1,4 +1,5 @@
 """Schema for MQTT Discovery Stream."""
+
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.components.mqtt import valid_publish_topic
@@ -22,6 +23,7 @@ from .const import (
     CONF_PUBLISH_TIMESTAMPS,
     CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
+    CONF_UNIQUE_PREFIX,
     DEFAULT_LOOP_TIME,
     DEFAULT_RETAIN,
     DOMAIN,
@@ -57,6 +59,7 @@ CONFIG_SCHEMA = vol.Schema(
                 vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
                 vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
+                vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
                 vol.Optional(
                     CONF_REPUBLISH_TIME, default=DEFAULT_LOOP_TIME
                 ): cv.time_period,

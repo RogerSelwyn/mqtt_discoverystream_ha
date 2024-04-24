@@ -92,6 +92,7 @@ The base options are the same as the mqtt_statestream one.
 | publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.               |
 | publish_discovery  | false   | no       | Publish the discovery topic ("config").                                            |
 | publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                     |
+| unique_prefix      | mqtt    | no       | Prefix applied to the unique id of the created entity                              |
 | republish_time     | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
 | include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.        |
 | local_status       | none    | no       | See below                                                                          |
