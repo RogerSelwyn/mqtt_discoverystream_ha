@@ -61,7 +61,7 @@ The integration is configured via YAML only.
 Example:
 
 ```yaml
-mqtt_discoverystream:
+mqtt_discoverystream_alt:
   base_topic: test_HA
   publish_attributes: false
   publish_timestamps: true
