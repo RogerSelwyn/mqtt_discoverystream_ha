@@ -59,7 +59,10 @@ class DiscoveryItem(DiscoveryEntity):
         """Build the config for a cover."""
         add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
 
-        if ATTR_CURRENT_POSITION in entity_info.attributes:
+        if ATTR_CURRENT_POSITION in entity_info.attributes or (
+            entity_info.attributes[ATTR_SUPPORTED_FEATURES]
+            & CoverEntityFeature.SET_POSITION
+        ):
             config[CONF_GET_POSITION_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_GET_POSITION_TEMPLATE] = (
                 "{{ value_json['" + ATTR_CURRENT_POSITION + "'] }}"
