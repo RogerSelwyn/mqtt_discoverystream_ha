@@ -48,6 +48,7 @@ class Publisher:
         self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
         self._discovery = Discovery(self._hass, self._conf)
         self._entity_states = {}
+        self._publish_filter = convert_include_exclude_filter(self._conf)
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
         self._register_services()
@@ -63,7 +64,6 @@ class Publisher:
             valid = await self._discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
-            await asyncio.sleep(DEFAULT_STATE_SLEEP)
 
         if not valid:
             return
@@ -124,36 +124,41 @@ class Publisher:
         self._discovery.subscribe_possible = True
         ent_reg = entity_registry.async_get(self._hass)
         self._entity_states = {}
-        publish_filter = convert_include_exclude_filter(self._conf)
-        for entity_id in list(ent_reg.entities):
-            if publish_filter(entity_id):
-                if current_state := self._hass.states.get(entity_id):
-                    mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                    valid = await self._discovery.async_discovery_publish(
-                        entity_id, current_state.attributes, mybase
-                    )
-                    if valid:
-                        self._entity_states[entity_id] = current_state
+        _LOGGER.debug("Discovery/State publishing start")
+        async with asyncio.TaskGroup() as group:
+            for entity_id in list(ent_reg.entities):
+                group.create_task(self._publish_entity_discovery_state(entity_id))
+        _LOGGER.debug("Discovery/State published")
 
-        _LOGGER.debug("Discovery published")
-        await asyncio.sleep(DEFAULT_STATE_SLEEP)
-        for entity_id, current_state in self._entity_states.items():
-            mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-            await self.async_state_publish(entity_id, current_state, mybase)
-        _LOGGER.debug("States published")
+    async def _publish_entity_discovery_state(self, entity_id):
+        if self._publish_filter(entity_id):
+            if current_state := self._hass.states.get(entity_id):
+                mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+                valid = await self._discovery.async_discovery_publish(
+                    entity_id, current_state.attributes, mybase
+                )
+                if valid:
+                    self._entity_states[entity_id] = current_state
+                    await asyncio.sleep(DEFAULT_STATE_SLEEP)
+                    mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+                    await self.async_state_publish(entity_id, current_state, mybase)
 
     async def _async_mark_unavailable(self, call):  # pylint: disable=unused-argument
         _LOGGER.info("Shutdown - marking entities unavailable")
-        for entity_id in self._entity_states:
-            mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-            _LOGGER.info(entity_id)
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{CONF_AVAILABILITY}",
-                DEFAULT_PAYLOAD_NOT_AVAILABLE,
-                0,
-                self._publish_retain,
-            )
+        async with asyncio.TaskGroup() as group:
+            for entity_id in self._entity_states:
+                group.create_task(self._async_mark_entity_unavailable(entity_id))
+
+    async def _async_mark_entity_unavailable(self, entity_id):
+        mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+        _LOGGER.info(entity_id)
+        await mqtt.async_publish(
+            self._hass,
+            f"{mybase}{CONF_AVAILABILITY}",
+            DEFAULT_PAYLOAD_NOT_AVAILABLE,
+            0,
+            self._publish_retain,
+        )
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
         await self._async_publish_discovery_state()
