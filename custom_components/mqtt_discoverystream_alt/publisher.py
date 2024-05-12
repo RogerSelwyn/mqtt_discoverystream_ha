@@ -124,24 +124,32 @@ class Publisher:
         self._discovery.subscribe_possible = True
         ent_reg = entity_registry.async_get(self._hass)
         self._entity_states = {}
-        _LOGGER.debug("Discovery/State publishing start")
+        _LOGGER.debug("Discovery/State publishing - start")
         async with asyncio.TaskGroup() as group:
             for entity_id in list(ent_reg.entities):
-                group.create_task(self._publish_entity_discovery_state(entity_id))
-        _LOGGER.debug("Discovery/State published")
+                group.create_task(self._publish_entity_discovery(entity_id))
+        await asyncio.sleep(DEFAULT_STATE_SLEEP)
+        async with asyncio.TaskGroup() as group:
+            for entity_id in self._entity_states:
+                group.create_task(self._publish_entity_state(entity_id))
+        _LOGGER.debug("Discovery/State publishing - finish")
 
-    async def _publish_entity_discovery_state(self, entity_id):
+    async def _publish_entity_discovery(self, entity_id):
         if self._publish_filter(entity_id):
             if current_state := self._hass.states.get(entity_id):
+                _LOGGER.debug("Discovery/State publishing - %s - discovery", entity_id)
                 mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
                 valid = await self._discovery.async_discovery_publish(
                     entity_id, current_state.attributes, mybase
                 )
                 if valid:
                     self._entity_states[entity_id] = current_state
-                    await asyncio.sleep(DEFAULT_STATE_SLEEP)
-                    mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                    await self.async_state_publish(entity_id, current_state, mybase)
+
+    async def _publish_entity_state(self, entity_id):
+        _LOGGER.debug("Discovery/State publishing - %s - state", entity_id)
+        current_state = self._entity_states[entity_id]
+        mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
+        await self.async_state_publish(entity_id, current_state, mybase)
 
     async def _async_mark_unavailable(self, call):  # pylint: disable=unused-argument
         _LOGGER.info("Shutdown - marking entities unavailable")
