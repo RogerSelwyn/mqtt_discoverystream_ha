@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.2 (2024/05/12)
+### ✨ Enhancements
+- [Add support for custom unique ID prefix](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/44eaef522d5b31bcd3fb63fa99608cda9fbf39f4) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Ensure position_topic attribute is published](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5afac09c79b619f02dc08dc719790c9f027baaf5) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Make use of topic shortening](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/53b22afa408dd83de5cc6fb1ec02587d4188b224) - @RogerSelwyn
+- [Optimise all entity publishing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cfe6fceca883dffaeb63a446808d0a3547bd36ca) - @RogerSelwyn
+- [Re-work publishing of all entity discovery/state](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6539a60f76cb977507cf8b25596f6d6246bd1432) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7821aaa6d02d51206cc4578de5c308d73d8336e6) - @RogerSelwyn
+
+
 ## 2.0.1 (2024/04/24)
 ### 🐛 Fixes
 - [Fix suppression of entity states](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d9325da21fe59dbd6d290c04f6d05b5529c638bc) - @RogerSelwyn
