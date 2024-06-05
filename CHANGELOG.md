@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.3 (2024/06/05)
+### 🐛 Fixes
+- [MQTT - AVAILABILITY_LATEST](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e11fa7574d96dd8a9b827b43b77028d796ba86aa) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Update requirements_release.txt](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fb376b61bdc5849991b514695a756a939d6ba2ac) - @RogerSelwyn
+- [Create lint.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f001500f81b661517232c6b980fd1022e4e757a5) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c6f69c18a57404791c9ef078e2d0970a35bb80f1) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bb98032976aa1e6466ce2372d721f79397831fa5) - @RogerSelwyn
+
+
 ## 2.0.2 (2024/05/12)
 ### ✨ Enhancements
 - [Add support for custom unique ID prefix](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/44eaef522d5b31bcd3fb63fa99608cda9fbf39f4) - @RogerSelwyn
