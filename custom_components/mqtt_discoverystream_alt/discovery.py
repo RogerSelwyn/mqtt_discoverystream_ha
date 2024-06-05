@@ -6,11 +6,11 @@ import logging
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
+    AVAILABILITY_LATEST,
     CONF_AVAILABILITY,
     CONF_TOPIC,
 )
 from homeassistant.components.mqtt.mixins import (
-    AVAILABILITY_LATEST,
     CONF_PAYLOAD_AVAILABLE,
     CONF_PAYLOAD_NOT_AVAILABLE,
 )
