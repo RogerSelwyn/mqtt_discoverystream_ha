@@ -2,12 +2,10 @@
 
 import json
 import logging
-from collections.abc import Mapping
-from typing import Any
 
 from homeassistant.components import mqtt
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP, EVENT_STATE_CHANGED
-from homeassistant.core import Event, HomeAssistant, State, callback
+from homeassistant.core import Event, EventStateChangedData, HomeAssistant, callback
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.json import JSONEncoder
 from homeassistant.helpers.start import async_at_start
@@ -48,9 +46,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     if publish_discovery:
         publisher = Publisher(hass, conf, base_topic, publish_retain)
 
-    async def _state_publisher(evt: Event) -> None:
-        entity_id: str = evt.data["entity_id"]
-        new_state: State = evt.data["new_state"]
+    async def _state_publisher(evt: Event[EventStateChangedData]) -> None:
+        entity_id = evt.data["entity_id"]
+        new_state = evt.data["new_state"]
+        assert new_state
 
         mybase = f"{base_topic}{entity_id.replace('.', '/')}/"
         if publish_discovery:
@@ -87,9 +86,9 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     @callback
     def _ha_started(hass: HomeAssistant) -> None:
         @callback
-        def _event_filter(event_data: Mapping[str, Any]) -> bool:
-            entity_id: str = event_data["entity_id"]
-            new_state: State | None = event_data["new_state"]
+        def _event_filter(event_data: EventStateChangedData) -> bool:
+            entity_id = event_data["entity_id"]
+            new_state = event_data["new_state"]
             if new_state is None:
                 return False
             if not publish_filter(entity_id):
