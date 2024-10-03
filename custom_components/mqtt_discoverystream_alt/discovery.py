@@ -8,11 +8,9 @@ from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
     AVAILABILITY_LATEST,
     CONF_AVAILABILITY,
-    CONF_TOPIC,
-)
-from homeassistant.components.mqtt.mixins import (
     CONF_PAYLOAD_AVAILABLE,
     CONF_PAYLOAD_NOT_AVAILABLE,
+    CONF_TOPIC,
 )
 from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
