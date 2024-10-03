@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.4 (2024/10/03)
+### 🐛 Fixes
+- [Fix error caused by constants move in core MQTT](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/57100a626a494d8af474ac1f05b0f9152665d011) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Maintain in line with core statestream](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/84e90702f4d80208d62e575bd37d8150604b030d) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2051698afd296c8c2045cd73bd5705ab73193570) - @RogerSelwyn
+
 ## 2.0.3 (2024/06/05)
 ### 🐛 Fixes
 - [MQTT - AVAILABILITY_LATEST](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e11fa7574d96dd8a9b827b43b77028d796ba86aa) - @RogerSelwyn
