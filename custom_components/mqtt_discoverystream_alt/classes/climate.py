@@ -139,7 +139,7 @@ class DiscoveryItem(DiscoveryEntity):
         service_payload = {
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }
-
+        service_name = None
         if command == ATTR_MODE_COMMAND:
             service_payload[ATTR_HVAC_MODE] = msg.payload
             service_name = SERVICE_SET_HVAC_MODE
