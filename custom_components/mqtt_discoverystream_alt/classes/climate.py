@@ -77,17 +77,19 @@ class DiscoveryItem(DiscoveryEntity):
         )
         config[CONF_MODE_LIST] = entity_info.attributes[ATTR_HVAC_MODES]
         config[CONF_MODE_STATE_TOPIC] = build_topic(ATTR_HVAC_MODE)
-        preset_modes = entity_info.attributes[ATTR_PRESET_MODES]
-        if PRESET_NONE in preset_modes:
-            preset_modes.remove(PRESET_NONE)
-        config[CONF_PRESET_MODES_LIST] = preset_modes
-        add_config_command(
-            config,
-            entity_info,
-            CONF_PRESET_MODE_COMMAND_TOPIC,
-            ATTR_PRESET_COMMAND,
-        )
-        config[CONF_PRESET_MODE_STATE_TOPIC] = build_topic(ATTR_PRESET_MODE)
+        if ATTR_PRESET_MODES in entity_info.attributes:
+            preset_modes = entity_info.attributes[ATTR_PRESET_MODES]
+            if PRESET_NONE in preset_modes:
+                preset_modes.remove(PRESET_NONE)
+            config[CONF_PRESET_MODES_LIST] = preset_modes
+            add_config_command(
+                config,
+                entity_info,
+                CONF_PRESET_MODE_COMMAND_TOPIC,
+                ATTR_PRESET_COMMAND,
+            )
+        if ATTR_PRESET_MODE in entity_info.attributes:
+            config[CONF_PRESET_MODE_STATE_TOPIC] = build_topic(ATTR_PRESET_MODE)
         add_config_command(
             config, entity_info, CONF_TEMP_COMMAND_TOPIC, ATTR_TEMP_COMMAND
         )
