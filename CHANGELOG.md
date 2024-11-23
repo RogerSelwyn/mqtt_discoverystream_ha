@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.5 (2024/11/23)
+### 🐛 Fixes
+- [Use device.name_by_user when available](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b1b2f55b51a5923b4146333fdad3cf125f9cd768) - @RogerSelwyn
+- [Handle no preset_modes on climate](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cc147b66b183599c8259675a2f88d57a6ffcb496) - @RogerSelwyn
+- 
+### 🧰 Maintenance
+- [Remove linting error](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ad7153c6658b7f3750a4930e2774777be463315f) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3a4466076acd0885961e24674793222ec994f2f0) - @RogerSelwyn
+
+
 ## 2.0.4 (2024/10/03)
 ### 🐛 Fixes
 - [Fix error caused by constants move in core MQTT](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/57100a626a494d8af474ac1f05b0f9152665d011) - @RogerSelwyn
