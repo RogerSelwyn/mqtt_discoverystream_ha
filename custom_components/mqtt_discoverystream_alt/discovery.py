@@ -207,7 +207,12 @@ class Discovery:
             if device := self._dev_reg.async_get(entry.device_id):
                 simple_entry_attribute(config_device, device.manufacturer, CONF_MF)
                 simple_entry_attribute(config_device, device.model, CONF_MDL)
-                simple_entry_attribute(config_device, device.name, CONF_NAME)
+                if device.name_by_user:
+                    simple_entry_attribute(
+                        config_device, device.name_by_user, CONF_NAME
+                    )
+                else:
+                    simple_entry_attribute(config_device, device.name, CONF_NAME)
                 simple_entry_attribute(config_device, device.sw_version, CONF_SW)
                 simple_entry_attribute(config_device, device.connections, CONF_CNS)
                 if device.identifiers:
