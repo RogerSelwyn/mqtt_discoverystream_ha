@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.6 (2025/01/09)
+### 🧰 Maintenance
+- [Remove deprecation warnings](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2ce7d0bcc553aaef609f68ff0571fc4d31e87fc5) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [Bump HA to 2025.1.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e0a78ebb56cb2fb66e2d47743827afb96fc4ebb1) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0253f454497f5f61e96c13b28cc267e8f42f6ef3) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/187f3932e2babcbe683f9ea4f70094a435c4897d) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.0.6](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a42fb3928764c8aab399582f0231048db04ebb98) - @RogerSelwyn
+
+
 ## 2.0.5 (2024/11/23)
 ### 🐛 Fixes
 - [Use device.name_by_user when available](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b1b2f55b51a5923b4146333fdad3cf125f9cd768) - @RogerSelwyn
