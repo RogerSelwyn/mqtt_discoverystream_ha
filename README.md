@@ -20,6 +20,7 @@ Provides discovery & command support for:
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
 | Device Tracker  | device_tracker     |                           |
 | Event           | event              |                           |
+| Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |
 | Input Boolean   | switch             | Turn On, Turn Off         |
 | Input Button    | button             | Press                     |
 | Input Number    | number             | Set Value                 |
