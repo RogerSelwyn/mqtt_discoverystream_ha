@@ -21,9 +21,12 @@ ATTR_B = "b"
 ATTR_ATTRIBUTES = "attributes"
 ATTR_COLOR = "color"
 ATTR_CONFIG = "config"
+ATTR_DIRECTION_COMMAND = "command_direction"
 ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
 ATTR_MODE_COMMAND = "command_mode"
+ATTR_OSCILLATION_COMMAND = "command_oscillation"
+ATTR_PERCENTAGE_COMMAND = "command_percentage"
 ATTR_PRESET_COMMAND = "command_preset"
 ATTR_SET = "set"
 ATTR_SET_LIGHT = "set_light"
@@ -100,6 +103,13 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
     Platform.DEVICE_TRACKER: [],
     Platform.EVENT: [],
+    Platform.FAN: [
+        ATTR_SET,
+        ATTR_DIRECTION_COMMAND,
+        ATTR_OSCILLATION_COMMAND,
+        ATTR_PERCENTAGE_COMMAND,
+        ATTR_PRESET_COMMAND,
+    ],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.NUMBER: [ATTR_SET],
     Platform.SCENE: [ATTR_SET],

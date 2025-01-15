@@ -24,7 +24,7 @@ class DiscoveryEntity:
     PUBLISH_STATE = True
 
     def __init__(self, hass, publish_retain, platform, publish_state):
-        """Initialise the climate class."""
+        """Initialise the base class."""
         self._hass = hass
         self._publish_retain = publish_retain
         self._publish_state = publish_state
