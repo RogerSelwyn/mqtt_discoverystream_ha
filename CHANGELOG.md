@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.0 (2025/01/15)
+### ✨ Enhancements
+- [Add support for Fan entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5e873b9dd7fd6623e61320c28890a3765f2d88fa) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Rename workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b3283fec57daf99390446ad7cd6ec7342b78f788) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d899d8130ac61d649e72381068ecac874f92dfc6) - @RogerSelwyn
+
+### ✅ Test
+- [Create sorcery.yaml](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0f7a1c44d2f0caea4252a3d27c70e94ca3cde64f) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.1.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fa6be28f7561749760b82bd8ee77ae5e8e223e6e) - @RogerSelwyn
+
 ## 2.0.6 (2025/01/09)
 ### 🧰 Maintenance
 - [Remove deprecation warnings](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2ce7d0bcc553aaef609f68ff0571fc4d31e87fc5) - @RogerSelwyn
