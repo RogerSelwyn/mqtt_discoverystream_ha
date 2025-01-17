@@ -12,27 +12,28 @@ The integration publishes [MQTT Discovery](https://www.home-assistant.io/docs/mq
 ## Supported entities
 Provides discovery & command support for:
 
-| **Entity Type** | **Entity Created** | **Commands Supported**    |
-|:----------------|:-------------------|:--------------------------|
-| Binary Sensor   | binary_sensor      |                           |
-| Button          | button             | Press                     |
-| Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |
-| Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |
-| Device Tracker  | device_tracker     |                           |
-| Event           | event              |                           |
-| Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |
-| Input Boolean   | switch             | Turn On, Turn Off         |
-| Input Button    | button             | Press                     |
-| Input Number    | number             | Set Value                 |
-| Input Select    | select             | Select Option             |
-| Input Text      | text               | Set Value                 |
-| Light           | light              | Turn On, Turn Off         |
-| Number          | number             | Set Value                 |
-| Scene           | scene              | Apply                     |
-| Sensor          | sensor             |                           |
-| Select          | select             | Select Option             |
-| Switch          | switch             | Turn On, Turn Off         |
-| Text            | text               | Set Value                 |
+| **Entity Type** | **Entity Created** | **Commands Supported**    | **Notes** |
+|:----------------|:-------------------|:--------------------------|:----------|
+| Binary Sensor   | binary_sensor      |                           |           |
+| Button          | button             | Press                     |           |
+| Climate         | climate            | Set HVAC Mode, Set Preset Mode, Set Temperature |           |
+| Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |           |
+| Device Tracker  | device_tracker     |                           |           |
+| Event           | event              |                           |           |
+| Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |           |
+| Image           | image              |                           | References send HA image |
+| Input Boolean   | switch             | Turn On, Turn Off         |           |
+| Input Button    | button             | Press                     |           |
+| Input Number    | number             | Set Value                 |           |
+| Input Select    | select             | Select Option             |           |
+| Input Text      | text               | Set Value                 |           |
+| Light           | light              | Turn On, Turn Off         |           |
+| Number          | number             | Set Value                 |           |
+| Scene           | scene              | Apply                     |           |
+| Sensor          | sensor             |                           |           |
+| Select          | select             | Select Option             |           |
+| Switch          | switch             | Turn On, Turn Off         |           |
+| Text            | text               | Set Value                 |           |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
 I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the initial creation by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.

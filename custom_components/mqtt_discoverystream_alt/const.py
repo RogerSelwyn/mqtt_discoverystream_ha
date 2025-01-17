@@ -110,6 +110,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
         ATTR_PERCENTAGE_COMMAND,
         ATTR_PRESET_COMMAND,
     ],
+    Platform.IMAGE: [],
     Platform.LIGHT: [ATTR_SET_LIGHT],
     Platform.NUMBER: [ATTR_SET],
     Platform.SCENE: [ATTR_SET],
