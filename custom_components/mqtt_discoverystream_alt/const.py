@@ -21,21 +21,24 @@ ATTR_B = "b"
 ATTR_ATTRIBUTES = "attributes"
 ATTR_COLOR = "color"
 ATTR_CONFIG = "config"
-ATTR_DIRECTION_COMMAND = "command_direction"
 ATTR_INSTALL = "install"
-ATTR_INSTALL_COMMAND = "install"
 ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
-ATTR_MODE_COMMAND = "command_mode"
-ATTR_OSCILLATION_COMMAND = "command_oscillation"
-ATTR_PERCENTAGE_COMMAND = "command_percentage"
-ATTR_PRESET_COMMAND = "command_preset"
-ATTR_SET = "set"
-ATTR_SET_LIGHT = "set_light"
-ATTR_SET_POSITION = "set_position"
-ATTR_SET_TILT = "set_tilt"
 ATTR_SUGGESTED_DISPLAY_PRECISION = "suggested_display_precision"
-ATTR_TEMP_COMMAND = "command_temperature"
+
+COMMAND_DIRECTION = "command_direction"
+COMMAND_INSTALL = "install"
+COMMAND_MODE = "command_mode"
+COMMAND_OSCILLATION = "command_oscillation"
+COMMAND_PERCENTAGE = "command_percentage"
+COMMAND_PRESET = "command_preset"
+COMMAND_SEND = "command_send"
+COMMAND_SET = "set"
+COMMAND_SET_FAN_SPEED = "set_fan_speed"
+COMMAND_SET_LIGHT = "set_light"
+COMMAND_SET_POSITION = "set_position"
+COMMAND_SET_TILT = "set_tilt"
+COMMAND_TEMPERATURE = "command_temperature"
 
 CONF_BASE_TOPIC = "base_topic"
 CONF_COMMAND_TOPIC = "command_topic"
@@ -100,32 +103,33 @@ CONF_PL_OFF = "pl_off"
 
 SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.BINARY_SENSOR: [],
-    Platform.BUTTON: [ATTR_SET],
-    Platform.CLIMATE: [ATTR_MODE_COMMAND, ATTR_PRESET_COMMAND, ATTR_TEMP_COMMAND],
-    Platform.COVER: [ATTR_SET, ATTR_SET_POSITION, ATTR_SET_TILT],
+    Platform.BUTTON: [COMMAND_SET],
+    Platform.CLIMATE: [COMMAND_MODE, COMMAND_PRESET, COMMAND_TEMPERATURE],
+    Platform.COVER: [COMMAND_SET, COMMAND_SET_POSITION, COMMAND_SET_TILT],
     Platform.DEVICE_TRACKER: [],
     Platform.EVENT: [],
     Platform.FAN: [
-        ATTR_SET,
-        ATTR_DIRECTION_COMMAND,
-        ATTR_OSCILLATION_COMMAND,
-        ATTR_PERCENTAGE_COMMAND,
-        ATTR_PRESET_COMMAND,
+        COMMAND_SET,
+        COMMAND_DIRECTION,
+        COMMAND_OSCILLATION,
+        COMMAND_PERCENTAGE,
+        COMMAND_PRESET,
     ],
     Platform.IMAGE: [],
-    Platform.LIGHT: [ATTR_SET_LIGHT],
-    Platform.NUMBER: [ATTR_SET],
-    Platform.SCENE: [ATTR_SET],
-    Platform.SELECT: [ATTR_SET],
+    Platform.LIGHT: [COMMAND_SET_LIGHT],
+    Platform.NUMBER: [COMMAND_SET],
+    Platform.SCENE: [COMMAND_SET],
+    Platform.SELECT: [COMMAND_SET],
     Platform.SENSOR: [],
-    Platform.SWITCH: [ATTR_SET],
-    Platform.TEXT: [ATTR_SET],
-    Platform.UPDATE: [ATTR_INSTALL_COMMAND],
-    INPUT_BOOLEAN_DOMAIN: [ATTR_SET],
-    INPUT_BUTTON_DOMAIN: [ATTR_SET],
-    INPUT_NUMBER_DOMAIN: [ATTR_SET],
-    INPUT_SELECT_DOMAIN: [ATTR_SET],
-    INPUT_TEXT_DOMAIN: [ATTR_SET],
+    Platform.SWITCH: [COMMAND_SET],
+    Platform.TEXT: [COMMAND_SET],
+    Platform.UPDATE: [COMMAND_INSTALL],
+    Platform.VACUUM: [COMMAND_SEND, COMMAND_SET, COMMAND_SET_FAN_SPEED],
+    INPUT_BOOLEAN_DOMAIN: [COMMAND_SET],
+    INPUT_BUTTON_DOMAIN: [COMMAND_SET],
+    INPUT_NUMBER_DOMAIN: [COMMAND_SET],
+    INPUT_SELECT_DOMAIN: [COMMAND_SET],
+    INPUT_TEXT_DOMAIN: [COMMAND_SET],
 }
 
 OUTPUT_ENTITIES = {

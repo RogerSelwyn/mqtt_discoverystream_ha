@@ -48,11 +48,11 @@ from homeassistant.const import (
 
 from ..const import (
     ATTR_ATTRIBUTES,
-    ATTR_DIRECTION_COMMAND,
-    ATTR_OSCILLATION_COMMAND,
-    ATTR_PERCENTAGE_COMMAND,
-    ATTR_PRESET_COMMAND,
-    ATTR_SET,
+    COMMAND_DIRECTION,
+    COMMAND_OSCILLATION,
+    COMMAND_PERCENTAGE,
+    COMMAND_PRESET,
+    COMMAND_SET,
     CONF_CMD_T,
 )
 from ..utils import (
@@ -74,7 +74,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a fan."""
-        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET)
+        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
 
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
@@ -89,7 +89,7 @@ class DiscoveryItem(DiscoveryEntity):
                 config,
                 entity_info,
                 CONF_DIRECTION_COMMAND_TOPIC,
-                ATTR_DIRECTION_COMMAND,
+                COMMAND_DIRECTION,
             )
 
         if ATTR_OSCILLATING in entity_info.attributes or (
@@ -103,7 +103,7 @@ class DiscoveryItem(DiscoveryEntity):
                 config,
                 entity_info,
                 CONF_OSCILLATION_COMMAND_TOPIC,
-                ATTR_OSCILLATION_COMMAND,
+                COMMAND_OSCILLATION,
             )
             config[CONF_PAYLOAD_OSCILLATION_ON] = True
             config[CONF_PAYLOAD_OSCILLATION_OFF] = False
@@ -120,7 +120,7 @@ class DiscoveryItem(DiscoveryEntity):
                 config,
                 entity_info,
                 CONF_PRESET_MODE_COMMAND_TOPIC,
-                ATTR_PRESET_COMMAND,
+                COMMAND_PRESET,
             )
             config[CONF_PRESET_MODE_STATE_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_PRESET_MODE_VALUE_TEMPLATE] = (
@@ -136,7 +136,7 @@ class DiscoveryItem(DiscoveryEntity):
                 config,
                 entity_info,
                 CONF_PERCENTAGE_COMMAND_TOPIC,
-                ATTR_PERCENTAGE_COMMAND,
+                COMMAND_PERCENTAGE,
             )
 
         if ATTR_PERCENTAGE_STEP in entity_info.attributes:
@@ -179,7 +179,7 @@ class DiscoveryItem(DiscoveryEntity):
         service_payload = {
             ATTR_ENTITY_ID: entity_id,
         }
-        if command == ATTR_SET:
+        if command == COMMAND_SET:
             if msg.payload == STATE_ON:
                 await self._hass.services.async_call(
                     domain, SERVICE_TURN_ON, service_payload
@@ -191,17 +191,17 @@ class DiscoveryItem(DiscoveryEntity):
             else:
                 command_error(command, msg.payload, entity)
 
-        elif command == ATTR_DIRECTION_COMMAND:
+        elif command == COMMAND_DIRECTION:
             service_payload[ATTR_DIRECTION] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_SET_DIRECTION, service_payload
             )
-        elif command == ATTR_OSCILLATION_COMMAND:
+        elif command == COMMAND_OSCILLATION:
             service_payload[ATTR_OSCILLATING] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_OSCILLATE, service_payload
             )
-        elif command == ATTR_PERCENTAGE_COMMAND:
+        elif command == COMMAND_PERCENTAGE:
             state_obj = self._hass.states.get(entity_id)
             if pct_step := state_obj.attributes.get(ATTR_PERCENTAGE_STEP):
                 service_payload[ATTR_PERCENTAGE] = int(msg.payload) * pct_step
@@ -210,7 +210,7 @@ class DiscoveryItem(DiscoveryEntity):
             await self._hass.services.async_call(
                 domain, SERVICE_SET_PERCENTAGE, service_payload
             )
-        elif command == ATTR_PRESET_COMMAND:
+        elif command == COMMAND_PRESET:
             service_payload[ATTR_PRESET_MODE] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_SET_PRESET_MODE, service_payload

@@ -27,7 +27,7 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import ATTR_ATTRIBUTES, ATTR_INSTALL, ATTR_INSTALL_COMMAND, CONF_CMD_T
+from ..const import ATTR_ATTRIBUTES, ATTR_INSTALL, COMMAND_INSTALL, CONF_CMD_T
 from ..utils import (
     EntityInfo,
     add_config_command,
@@ -52,7 +52,7 @@ class DiscoveryItem(DiscoveryEntity):
             & UpdateEntityFeature.INSTALL
         ):
             add_config_command(config, entity_info, CONF_CMD_T, ATTR_INSTALL)
-            config[CONF_PAYLOAD_INSTALL] = ATTR_INSTALL_COMMAND
+            config[CONF_PAYLOAD_INSTALL] = COMMAND_INSTALL
         config[CONF_LATEST_VERSION_TOPIC] = build_topic(ATTR_ATTRIBUTES)
         config[CONF_LATEST_VERSION_TEMPLATE] = (
             "{{ value_json['" + ATTR_LATEST_VERSION + "'] }}"
@@ -93,7 +93,7 @@ class DiscoveryItem(DiscoveryEntity):
         service_payload = {
             ATTR_ENTITY_ID: entity_id,
         }
-        if command == ATTR_INSTALL_COMMAND:
+        if command == COMMAND_INSTALL:
             await self._hass.services.async_call(
                 domain, SERVICE_INSTALL, service_payload
             )

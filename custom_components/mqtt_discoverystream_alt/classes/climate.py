@@ -42,9 +42,9 @@ from homeassistant.const import (
 )
 
 from ..const import (
-    ATTR_MODE_COMMAND,
-    ATTR_PRESET_COMMAND,
-    ATTR_TEMP_COMMAND,
+    COMMAND_MODE,
+    COMMAND_PRESET,
+    COMMAND_TEMPERATURE,
     CONF_STAT_T,
 )
 from ..utils import (
@@ -72,9 +72,7 @@ class DiscoveryItem(DiscoveryEntity):
         config[CONF_CURRENT_TEMP_TOPIC] = build_topic(ATTR_CURRENT_TEMPERATURE)
         config[CONF_TEMP_MAX] = entity_info.attributes[ATTR_MAX_TEMP]
         config[CONF_TEMP_MIN] = entity_info.attributes[ATTR_MIN_TEMP]
-        add_config_command(
-            config, entity_info, CONF_MODE_COMMAND_TOPIC, ATTR_MODE_COMMAND
-        )
+        add_config_command(config, entity_info, CONF_MODE_COMMAND_TOPIC, COMMAND_MODE)
         config[CONF_MODE_LIST] = entity_info.attributes[ATTR_HVAC_MODES]
         config[CONF_MODE_STATE_TOPIC] = build_topic(ATTR_HVAC_MODE)
         if ATTR_PRESET_MODES in entity_info.attributes:
@@ -86,12 +84,12 @@ class DiscoveryItem(DiscoveryEntity):
                 config,
                 entity_info,
                 CONF_PRESET_MODE_COMMAND_TOPIC,
-                ATTR_PRESET_COMMAND,
+                COMMAND_PRESET,
             )
         if ATTR_PRESET_MODE in entity_info.attributes:
             config[CONF_PRESET_MODE_STATE_TOPIC] = build_topic(ATTR_PRESET_MODE)
         add_config_command(
-            config, entity_info, CONF_TEMP_COMMAND_TOPIC, ATTR_TEMP_COMMAND
+            config, entity_info, CONF_TEMP_COMMAND_TOPIC, COMMAND_TEMPERATURE
         )
         config[CONF_TEMP_STATE_TOPIC] = build_topic(ATTR_TEMPERATURE)
         config[CONF_TEMP_STEP] = (
@@ -140,13 +138,13 @@ class DiscoveryItem(DiscoveryEntity):
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }
         service_name = None
-        if command == ATTR_MODE_COMMAND:
+        if command == COMMAND_MODE:
             service_payload[ATTR_HVAC_MODE] = msg.payload
             service_name = SERVICE_SET_HVAC_MODE
-        elif command == ATTR_PRESET_COMMAND:
+        elif command == COMMAND_PRESET:
             service_payload[ATTR_PRESET_MODE] = msg.payload
             service_name = SERVICE_SET_PRESET_MODE
-        elif command == ATTR_TEMP_COMMAND:
+        elif command == COMMAND_TEMPERATURE:
             service_payload[ATTR_TEMPERATURE] = msg.payload
             service_name = SERVICE_SET_TEMPERATURE
 

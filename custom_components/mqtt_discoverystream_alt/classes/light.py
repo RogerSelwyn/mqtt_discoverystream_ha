@@ -42,9 +42,9 @@ from ..const import (
     ATTR_JSON,
     ATTR_R,
     ATTR_S,
-    ATTR_SET_LIGHT,
     ATTR_X,
     ATTR_Y,
+    COMMAND_SET_LIGHT,
     CONF_CMD_T,
     CONF_JSON_ATTR_T,
     STATE_CAPITAL_OFF,
@@ -64,7 +64,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):  # noqa: F821
         """Build the config for a light."""
         del config[CONF_JSON_ATTR_T]
-        add_config_command(config, entity_info, CONF_CMD_T, ATTR_SET_LIGHT)
+        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET_LIGHT)
         config[CONF_SCHEMA] = ATTR_JSON
 
         supported_features = get_supported_features(self._hass, entity_info.entity_id)
@@ -187,7 +187,7 @@ class DiscoveryItem(DiscoveryEntity):
         else:
             _LOGGER.error(
                 'Invalid state for "%s" - payload: %s for %s',
-                ATTR_SET_LIGHT,
+                COMMAND_SET_LIGHT,
                 {msg.payload},
                 {entity},
             )
