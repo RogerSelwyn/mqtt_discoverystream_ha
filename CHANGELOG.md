@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.2.0 (2025/01/19)
+### ✨ Enhancements
+- [Add support for Image entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/45f45d96432f13393679f677a5b4198a411b82b4) - @RogerSelwyn
+- [Add support for Update entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/61811275e14391990f3a9324cdc94ac75b5bb778) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2a20c8e17e3bb48e0d301eaae76a7b9f0f126e3f) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9a923cafcda2d810adc98e6a43509a27429c7cac) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.2.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9b82ba1ed1e05050d68bb60117329973920dcf10) - @RogerSelwyn
+
+
 ## 2.1.0 (2025/01/15)
 ### ✨ Enhancements
 - [Add support for Fan entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5e873b9dd7fd6623e61320c28890a3765f2d88fa) - @RogerSelwyn
