@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.3.0 (2025/01/19)
+### ✨ Enhancements
+- [Add support for Vacuum entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/60ceffb4301ceb998da6f71dfd0ac5f7274f5fca) - @RogerSelwyn
+
+### 🔖 Release
+- [Release 2.3.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/3e531282fb77edc4418319982cc05ce4c4c74444) - @RogerSelwyn
+
+
 ## 2.2.0 (2025/01/19)
 ### ✨ Enhancements
 - [Add support for Image entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/45f45d96432f13393679f677a5b4198a411b82b4) - @RogerSelwyn
