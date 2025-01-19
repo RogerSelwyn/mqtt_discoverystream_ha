@@ -22,6 +22,8 @@ ATTR_ATTRIBUTES = "attributes"
 ATTR_COLOR = "color"
 ATTR_CONFIG = "config"
 ATTR_DIRECTION_COMMAND = "command_direction"
+ATTR_INSTALL = "install"
+ATTR_INSTALL_COMMAND = "install"
 ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
 ATTR_MODE_COMMAND = "command_mode"
@@ -118,6 +120,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.SENSOR: [],
     Platform.SWITCH: [ATTR_SET],
     Platform.TEXT: [ATTR_SET],
+    Platform.UPDATE: [ATTR_INSTALL_COMMAND],
     INPUT_BOOLEAN_DOMAIN: [ATTR_SET],
     INPUT_BUTTON_DOMAIN: [ATTR_SET],
     INPUT_NUMBER_DOMAIN: [ATTR_SET],

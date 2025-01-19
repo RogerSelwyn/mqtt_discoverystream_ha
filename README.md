@@ -21,7 +21,7 @@ Provides discovery & command support for:
 | Device Tracker  | device_tracker     |                           |           |
 | Event           | event              |                           |           |
 | Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |           |
-| Image           | image              |                           | References send HA image |
+| Image           | image              |                           | References master HA image |
 | Input Boolean   | switch             | Turn On, Turn Off         |           |
 | Input Button    | button             | Press                     |           |
 | Input Number    | number             | Set Value                 |           |
@@ -34,6 +34,7 @@ Provides discovery & command support for:
 | Select          | select             | Select Option             |           |
 | Switch          | switch             | Turn On, Turn Off         |           |
 | Text            | text               | Set Value                 |           |
+| Update          | update             | Install                   | Not able to install specific version or trigger backup |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
 I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the initial creation by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.

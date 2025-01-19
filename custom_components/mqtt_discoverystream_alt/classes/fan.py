@@ -146,7 +146,7 @@ class DiscoveryItem(DiscoveryEntity):
             )
 
     async def async_publish_state(self, new_state, mybase):
-        """Build the state for a light."""
+        """Build the state for a fan"""
         await super().async_publish_state(new_state, mybase)
         if ATTR_PERCENTAGE in new_state.attributes:
             percentage = new_state.attributes[ATTR_PERCENTAGE]

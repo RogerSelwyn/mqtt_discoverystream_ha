@@ -70,10 +70,10 @@ def translate_entity_type(entity_id):
     return f"{output_entity}.{ent_parts[1]}"
 
 
-def simple_attribute_add(config, attributes, attribute_name, conf_name):
+def simple_attribute_add(config, attributes, attribute_name, conf_name=None):
     """Simple check for attribute existence and inclusion."""
     if attribute_name in attributes:
-        config[conf_name] = attributes[attribute_name]
+        config[conf_name or attribute_name] = attributes[attribute_name]
 
 
 def simple_entry_attribute(config_device, attribute, conf_name):
