@@ -1,5 +1,7 @@
 """Update methods for MQTT Discovery Statestream."""
 
+import json
+
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.update import (
     CONF_DISPLAY_PRECISION,
@@ -22,12 +24,15 @@ from homeassistant.components.update.const import (
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
+    ATTR_ENTITY_PICTURE,
     ATTR_STATE,
     ATTR_SUPPORTED_FEATURES,
+    CONF_VALUE_TEMPLATE,
     Platform,
 )
+from homeassistant.helpers.json import JSONEncoder
 
-from ..const import ATTR_ATTRIBUTES, ATTR_INSTALL, COMMAND_INSTALL, CONF_CMD_T
+from ..const import ATTR_INSTALL, COMMAND_INSTALL, CONF_CMD_T
 from ..utils import (
     EntityInfo,
     add_config_command,
@@ -53,9 +58,12 @@ class DiscoveryItem(DiscoveryEntity):
         ):
             add_config_command(config, entity_info, CONF_CMD_T, ATTR_INSTALL)
             config[CONF_PAYLOAD_INSTALL] = COMMAND_INSTALL
-        config[CONF_LATEST_VERSION_TOPIC] = build_topic(ATTR_ATTRIBUTES)
+        config[CONF_LATEST_VERSION_TOPIC] = build_topic(ATTR_STATE)
         config[CONF_LATEST_VERSION_TEMPLATE] = (
             "{{ value_json['" + ATTR_LATEST_VERSION + "'] }}"
+        )
+        config[CONF_VALUE_TEMPLATE] = (
+            "{{ value_json['" + ATTR_INSTALLED_VERSION + "'] }}"
         )
 
         attributes = entity_info.attributes
@@ -73,10 +81,18 @@ class DiscoveryItem(DiscoveryEntity):
         """Build the state for a update."""
         await super().async_publish_state(new_state, mybase)
         attributes = new_state.attributes
+        state = {}
+        simple_attribute_add(state, attributes, ATTR_INSTALLED_VERSION)
+        simple_attribute_add(state, attributes, ATTR_LATEST_VERSION)
+        simple_attribute_add(state, attributes, ATTR_TITLE)
+        simple_attribute_add(state, attributes, ATTR_RELEASE_SUMMARY)
+        simple_attribute_add(state, attributes, ATTR_RELEASE_URL)
+        simple_attribute_add(state, attributes, ATTR_ENTITY_PICTURE)
+        encoded = json.dumps(state, cls=JSONEncoder)
         await mqtt.async_publish(
             self._hass,
             f"{mybase}{ATTR_STATE}",
-            attributes[ATTR_INSTALLED_VERSION],
+            encoded,
             1,
             self._publish_retain,
         )
