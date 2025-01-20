@@ -99,6 +99,7 @@ class Publisher:
 
     async def _async_handle_birth_message(self, msg):
         if msg.payload == self._remote_status.get(CONF_ONLINE_STATUS):
+            _LOGGER.debug("Birth Discovery")
             await self._async_publish_discovery_state()
 
     def _register_services(self):
@@ -108,7 +109,7 @@ class Publisher:
 
     def _listen_for_hass_events(self):
         self._hass.bus.async_listen_once(
-            EVENT_HOMEASSISTANT_STARTED, self._async_publish_discovery_state
+            EVENT_HOMEASSISTANT_STARTED, self._async_ha_started
         )
         self._hass.bus.async_listen_once(
             EVENT_HOMEASSISTANT_STOP, self._async_mark_unavailable
@@ -119,6 +120,10 @@ class Publisher:
             self._conf.get(CONF_REPUBLISH_TIME),
             self._async_schedule_publish,
         )
+
+    async def _async_ha_started(self, call=None):  # pylint: disable=unused-argument
+        _LOGGER.debug("HA Start Discovery")
+        await self._async_publish_discovery_state()
 
     async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
         self._discovery.subscribe_possible = True
@@ -169,6 +174,7 @@ class Publisher:
         )
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
+        _LOGGER.debug("Scheduled Discovery")
         await self._async_publish_discovery_state()
         async_call_later(
             self._hass,
