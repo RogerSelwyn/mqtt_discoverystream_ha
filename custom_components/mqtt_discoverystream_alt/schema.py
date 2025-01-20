@@ -24,7 +24,7 @@ from .const import (
     CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
     CONF_UNIQUE_PREFIX,
-    DEFAULT_LOOP_TIME,
+    DEFAULT_REFRESH_TIME,
     DEFAULT_RETAIN,
     DOMAIN,
 )
@@ -61,7 +61,7 @@ CONFIG_SCHEMA = vol.Schema(
                 vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
                 vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
                 vol.Optional(
-                    CONF_REPUBLISH_TIME, default=DEFAULT_LOOP_TIME
+                    CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME
                 ): cv.time_period,
             }
         ),

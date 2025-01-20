@@ -1,5 +1,6 @@
 """Publish simple item state changes via MQTT."""
 
+import asyncio
 import json
 import logging
 
@@ -18,6 +19,7 @@ from .const import (
     CONF_PUBLISH_RETAIN,
     CONF_PUBLISH_TIMESTAMPS,
     DOMAIN,
+    STARTUP_DELAY,
 )
 from .publisher import Publisher
 from .schema import CONFIG_SCHEMA  # noqa: F401
@@ -29,6 +31,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     # sourcery skip: assign-if-exp, boolean-if-exp-identity, reintroduce-else
     """Set up the MQTT state feed."""
     # Make sure MQTT is available and the entry is loaded
+    await asyncio.sleep(STARTUP_DELAY)
     if not await mqtt.async_wait_for_mqtt_client(hass):
         _LOGGER.error("MQTT integration is not available")
         return False

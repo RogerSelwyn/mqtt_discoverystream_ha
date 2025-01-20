@@ -55,13 +55,13 @@ CONF_REMOTE_STATUS = "remote_status"
 CONF_REPUBLISH_TIME = "republish_time"
 CONF_UNIQUE_PREFIX = "unique_prefix"
 
-DEFAULT_LOOP_TIME = timedelta(minutes=5)
+DEFAULT_REFRESH_TIME = timedelta(minutes=5)
 DEFAULT_RETAIN = False
 DEFAULT_STATE_SLEEP = 1.5
 
-
 DOMAIN = "mqtt_discoverystream_alt"
 
+STARTUP_DELAY = 0.5
 
 STATE_CAPITAL_ON = "ON"
 STATE_CAPITAL_OFF = "OFF"
