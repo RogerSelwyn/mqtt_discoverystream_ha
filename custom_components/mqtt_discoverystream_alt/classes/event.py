@@ -27,7 +27,11 @@ class DiscoveryItem(DiscoveryEntity):
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a text."""
 
-        payload = {ATTR_EVENT_TYPE: new_state.attributes[ATTR_EVENT_TYPE]}
-        await self._async_mqtt_publish(ATTR_STATE, payload, mybase, encoded=True)
+        if (
+            new_state.attributes[ATTR_EVENT_TYPE]
+            in new_state.attributes[ATTR_EVENT_TYPES]
+        ):
+            payload = {ATTR_EVENT_TYPE: new_state.attributes[ATTR_EVENT_TYPE]}
+            await self._async_mqtt_publish(ATTR_STATE, payload, mybase, encoded=True)
 
         await super().async_publish_state(new_state, mybase)
