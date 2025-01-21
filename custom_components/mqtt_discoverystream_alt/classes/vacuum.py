@@ -3,7 +3,6 @@
 import json
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.mqtt.vacuum import (
     CONF_FAN_SPEED_LIST,
     CONF_SEND_COMMAND_TOPIC,
@@ -28,7 +27,6 @@ from homeassistant.const import (
     ATTR_SUPPORTED_FEATURES,
     Platform,
 )
-from homeassistant.helpers.json import JSONEncoder
 
 from ..const import (
     COMMAND_SEND,
@@ -92,14 +90,7 @@ class DiscoveryItem(DiscoveryEntity):
         state = {ATTR_STATE: new_state.state}
         simple_attribute_add(state, attributes, ATTR_BATTERY_LEVEL)
         simple_attribute_add(state, attributes, ATTR_FAN_SPEED)
-        encoded = json.dumps(state, cls=JSONEncoder)
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{ATTR_STATE}",
-            encoded,
-            1,
-            self._publish_retain,
-        )
+        await self._async_mqtt_publish(ATTR_STATE, state, mybase, encoded=True)
 
     def _build_supported_features(self, feat_list):
         sup_feat = []

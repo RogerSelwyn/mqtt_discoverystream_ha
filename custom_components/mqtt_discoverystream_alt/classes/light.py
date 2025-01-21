@@ -3,7 +3,6 @@
 import json
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     ATTR_COLOR_MODE,
@@ -32,7 +31,6 @@ from homeassistant.const import (
     Platform,
 )
 from homeassistant.helpers.entity import get_supported_features
-from homeassistant.helpers.json import JSONEncoder
 
 from ..const import (
     ATTR_B,
@@ -102,10 +100,7 @@ class DiscoveryItem(DiscoveryEntity):
         if color := self._add_colors(new_state):
             payload[ATTR_COLOR] = color
 
-        payload = json.dumps(payload, cls=JSONEncoder)
-        await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_STATE}", payload, 1, self._publish_retain
-        )
+        await self._async_mqtt_publish(ATTR_STATE, payload, mybase, encoded=True)
 
     def _add_attribute(self, payload, new_state, attribute):
         if attribute in new_state.attributes and new_state.attributes[attribute]:

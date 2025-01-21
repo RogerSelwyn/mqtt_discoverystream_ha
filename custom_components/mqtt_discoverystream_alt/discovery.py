@@ -126,7 +126,9 @@ class Discovery:
             )
         entityclass = self.discovery_classes[ent_domain]
         if ent_domain not in self._subscribed and self.subscribe_possible:
-            await entityclass.async_subscribe(set_topic(self._conf, CONF_COMMAND_TOPIC))
+            await entityclass.async_subscribe_commands(
+                set_topic(self._conf, CONF_COMMAND_TOPIC)
+            )
             self._subscribed.append(ent_domain)
 
         entityclass.build_config(config, entity_info)

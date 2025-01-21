@@ -3,8 +3,6 @@
 import logging
 from dataclasses import dataclass, field
 
-from homeassistant.components import mqtt
-
 from .const import (
     CONF_BASE_TOPIC,
     CONF_PUBLISHED,
@@ -14,23 +12,6 @@ from .const import (
 )
 
 _LOGGER = logging.getLogger(__name__)
-
-
-async def async_publish_attribute(
-    hass, new_state, mybase, attribute_name, publish_retain, strip=False
-):
-    """Publish a specific attribute"""
-    if attribute_name in new_state.attributes:
-        value = new_state.attributes[attribute_name]
-        if value and strip:
-            value = value.strip('"')
-        await mqtt.async_publish(
-            hass,
-            f"{mybase}{attribute_name}",
-            value,
-            1,
-            publish_retain,
-        )
 
 
 def set_topic(conf, topic):

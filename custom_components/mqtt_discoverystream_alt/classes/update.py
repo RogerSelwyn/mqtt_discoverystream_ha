@@ -1,8 +1,5 @@
 """Update methods for MQTT Discovery Statestream."""
 
-import json
-
-from homeassistant.components import mqtt
 from homeassistant.components.mqtt.update import (
     CONF_DISPLAY_PRECISION,
     CONF_LATEST_VERSION_TEMPLATE,
@@ -30,7 +27,6 @@ from homeassistant.const import (
     CONF_VALUE_TEMPLATE,
     Platform,
 )
-from homeassistant.helpers.json import JSONEncoder
 
 from ..const import ATTR_INSTALL, COMMAND_INSTALL, CONF_CMD_T
 from ..utils import (
@@ -88,14 +84,7 @@ class DiscoveryItem(DiscoveryEntity):
         simple_attribute_add(state, attributes, ATTR_RELEASE_SUMMARY)
         simple_attribute_add(state, attributes, ATTR_RELEASE_URL)
         simple_attribute_add(state, attributes, ATTR_ENTITY_PICTURE)
-        encoded = json.dumps(state, cls=JSONEncoder)
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{ATTR_STATE}",
-            encoded,
-            1,
-            self._publish_retain,
-        )
+        await self._async_mqtt_publish(ATTR_STATE, state, mybase, encoded=True)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a fan."""

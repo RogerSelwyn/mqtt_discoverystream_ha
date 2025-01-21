@@ -2,7 +2,6 @@
 
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.fan import (
     ATTR_DIRECTION,
     ATTR_OSCILLATING,
@@ -155,13 +154,7 @@ class DiscoveryItem(DiscoveryEntity):
                     new_state.attributes[ATTR_PERCENTAGE]
                     / new_state.attributes[ATTR_PERCENTAGE_STEP]
                 )
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{ATTR_PERCENTAGE}",
-                int(percentage),
-                1,
-                self._publish_retain,
-            )
+            await self._async_mqtt_publish(ATTR_PERCENTAGE, int(percentage), mybase)
 
     def _add_attribute(self, payload, new_state, attribute):
         if attribute in new_state.attributes and new_state.attributes[attribute]:

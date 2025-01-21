@@ -59,32 +59,20 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             await publisher.async_state_publish(entity_id, new_state, mybase)
         else:
             payload = new_state.state
-            await mqtt.async_publish(hass, f"{mybase}state", payload, 1, publish_retain)
+            await _async_mqtt_publish(f"{mybase}state", payload)
 
         if publish_timestamps:
             if new_state.last_updated:
-                await mqtt.async_publish(
-                    hass,
-                    f"{mybase}last_updated",
-                    new_state.last_updated.isoformat(),
-                    1,
-                    publish_retain,
+                await _async_mqtt_publish(
+                    f"{mybase}last_updated", new_state.last_updated.isoformat()
                 )
             if new_state.last_changed:
-                await mqtt.async_publish(
-                    hass,
-                    f"{mybase}last_changed",
-                    new_state.last_changed.isoformat(),
-                    1,
-                    publish_retain,
+                await _async_mqtt_publish(
+                    f"{mybase}last_changed", new_state.last_changed.isoformat()
                 )
-
         if publish_attributes:
             for key, val in new_state.attributes.items():
-                encoded_val = json.dumps(val, cls=JSONEncoder)
-                await mqtt.async_publish(
-                    hass, mybase + key, encoded_val, 1, publish_retain
-                )
+                await _async_mqtt_publish(f"{mybase}{key}", val, encoded=True)
 
     @callback
     def _ha_started(hass: HomeAssistant) -> None:
@@ -107,6 +95,11 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             callback_handler()
 
         hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STOP, _ha_stopping)
+
+    async def _async_mqtt_publish(mybase, value, encoded=False):
+        if encoded:
+            value = json.dumps(value, cls=JSONEncoder)
+        await mqtt.async_publish(hass, mybase, value, 1, publish_retain)
 
     async_at_start(hass, _ha_started)
 

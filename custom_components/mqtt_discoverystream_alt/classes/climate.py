@@ -2,7 +2,6 @@
 
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.climate import (
     ATTR_CURRENT_TEMPERATURE,
     ATTR_HVAC_ACTION,
@@ -50,7 +49,6 @@ from ..const import (
 from ..utils import (
     EntityInfo,
     add_config_command,
-    async_publish_attribute,
     build_topic,
     validate_message,
 )
@@ -100,21 +98,21 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a climate."""
-        await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_HVAC_ACTION, self._publish_retain
+        await self.async_publish_attribute_if_exists(
+            new_state,
+            mybase,
+            ATTR_HVAC_ACTION,
         )
-        await async_publish_attribute(
-            self._hass,
+        await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
             ATTR_CURRENT_TEMPERATURE,
-            self._publish_retain,
         )
-        await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_PRESET_MODE, self._publish_retain
+        await self.async_publish_attribute_if_exists(
+            new_state, mybase, ATTR_PRESET_MODE
         )
-        await async_publish_attribute(
-            self._hass, new_state, mybase, ATTR_TEMPERATURE, self._publish_retain
+        await self.async_publish_attribute_if_exists(
+            new_state, mybase, ATTR_TEMPERATURE
         )
 
         await super().async_publish_state(new_state, mybase)
@@ -122,9 +120,7 @@ class DiscoveryItem(DiscoveryEntity):
         payload = new_state.state
         if payload == STATE_UNAVAILABLE:
             payload = STATE_OFF
-        await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_HVAC_MODE}", payload, 1, self._publish_retain
-        )
+        await self._async_mqtt_publish(ATTR_HVAC_MODE, payload, mybase)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""

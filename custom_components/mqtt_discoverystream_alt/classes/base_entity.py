@@ -42,8 +42,8 @@ class DiscoveryEntity:
             mybase,
         )
 
-    async def async_subscribe(self, command_topic):
-        """Subscribe to messages for a cover."""
+    async def async_subscribe_commands(self, command_topic):
+        """Subscribe to messages for an entity."""
         if not self._commands:
             return
 
@@ -62,16 +62,30 @@ class DiscoveryEntity:
     async def _async_publish_base_attributes(self, new_state, mybase):
         """Publish the basic attributes for the entity state."""
         if self._publish_state:
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{ATTR_STATE}",
-                new_state.state,
-                1,
-                self._publish_retain,
-            )
+            await self._async_mqtt_publish(ATTR_STATE, new_state.state, mybase)
 
         attributes = dict(new_state.attributes.items())
-        encoded = json.dumps(attributes, cls=JSONEncoder)
-        await mqtt.async_publish(
-            self._hass, f"{mybase}{ATTR_ATTRIBUTES}", encoded, 1, self._publish_retain
+        await self._async_mqtt_publish(
+            ATTR_ATTRIBUTES, attributes, mybase, encoded=True
         )
+
+    async def _async_mqtt_publish(self, topic, value, mybase, encoded=False):
+        if encoded:
+            value = json.dumps(value, cls=JSONEncoder)
+        await mqtt.async_publish(
+            self._hass,
+            f"{mybase}{topic}",
+            value,
+            1,
+            self._publish_retain,
+        )
+
+    async def async_publish_attribute_if_exists(
+        self, new_state, mybase, attribute_name, strip=False
+    ):
+        """Publish a specific attribute"""
+        if attribute_name in new_state.attributes:
+            value = new_state.attributes[attribute_name]
+            if value and strip:
+                value = value.strip('"')
+            await self._async_mqtt_publish(attribute_name, value, mybase)

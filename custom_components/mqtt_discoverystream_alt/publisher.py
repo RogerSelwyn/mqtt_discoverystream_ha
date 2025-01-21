@@ -69,24 +69,16 @@ class Publisher:
             return
 
         if new_state.state in (STATE_UNAVAILABLE, None):
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{CONF_AVAILABILITY}",
-                DEFAULT_PAYLOAD_NOT_AVAILABLE,
-                1,
-                self._publish_retain,
+            await self._async_mqtt_publish(
+                mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_NOT_AVAILABLE
             )
             return
 
         entityclass = self._discovery.discovery_classes[ent_domain]
         await entityclass.async_publish_state(new_state, mybase)
 
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{CONF_AVAILABILITY}",
-            DEFAULT_PAYLOAD_AVAILABLE,
-            1,
-            self._publish_retain,
+        await self._async_mqtt_publish(
+            mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_AVAILABLE
         )
 
     async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
@@ -165,12 +157,8 @@ class Publisher:
     async def _async_mark_entity_unavailable(self, entity_id):
         mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
         _LOGGER.info(entity_id)
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{CONF_AVAILABILITY}",
-            DEFAULT_PAYLOAD_NOT_AVAILABLE,
-            0,
-            self._publish_retain,
+        await self._async_mqtt_publish(
+            mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_NOT_AVAILABLE, qos=0
         )
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
@@ -192,3 +180,8 @@ class Publisher:
             if not remote_status_topic.endswith("/status"):
                 remote_status_topic = f"{remote_status_topic}/status"
         return remote_status, remote_status_topic
+
+    async def _async_mqtt_publish(self, mybase, topic, value, qos=1):
+        await mqtt.async_publish(
+            self._hass, f"{mybase}{topic}", value, qos, self._publish_retain
+        )

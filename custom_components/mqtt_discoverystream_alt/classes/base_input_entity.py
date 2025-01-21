@@ -2,7 +2,6 @@
 
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.button.const import SERVICE_PRESS
 from homeassistant.components.number import (
     ATTR_MAX,
@@ -167,13 +166,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
         """Publish the state for a text."""
 
         if new_state.state != STATE_UNKNOWN:
-            await mqtt.async_publish(
-                self._hass,
-                f"{mybase}{ATTR_STATE}",
-                new_state.state,
-                1,
-                self._publish_retain,
-            )
+            await self._async_mqtt_publish(ATTR_STATE, new_state.state, mybase)
 
         await super().async_publish_state(new_state, mybase)
 

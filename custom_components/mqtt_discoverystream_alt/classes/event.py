@@ -1,12 +1,9 @@
 """event methods for MQTT Discovery Statestream."""
 
-import json
 import logging
 
-from homeassistant.components import mqtt
 from homeassistant.components.event import ATTR_EVENT_TYPE, ATTR_EVENT_TYPES
 from homeassistant.const import ATTR_STATE, Platform
-from homeassistant.helpers.json import JSONEncoder
 
 from ..const import (
     CONF_EVT_TYP,
@@ -30,15 +27,7 @@ class DiscoveryItem(DiscoveryEntity):
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a text."""
 
-        payload = json.dumps(
-            {ATTR_EVENT_TYPE: new_state.attributes[ATTR_EVENT_TYPE]}, cls=JSONEncoder
-        )
-        await mqtt.async_publish(
-            self._hass,
-            f"{mybase}{ATTR_STATE}",
-            payload,
-            1,
-            self._publish_retain,
-        )
+        payload = {ATTR_EVENT_TYPE: new_state.attributes[ATTR_EVENT_TYPE]}
+        await self._async_mqtt_publish(ATTR_STATE, payload, mybase, encoded=True)
 
         await super().async_publish_state(new_state, mybase)
