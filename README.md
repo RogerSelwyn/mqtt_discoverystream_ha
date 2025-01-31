@@ -55,7 +55,6 @@ I work on this integration because I like things to work well for myself and oth
 
 1. Launch HACS
 1. Navigate to the Integrations section
-1. Add this repository as an Custom Repository (Integration) via the menu at top right (Only required if you wish to use this forked version).
 1. Search for "MQTT DiscoveryStream Alt"
 1. Select "Install this repository"
 1. Restart Home Assistant
