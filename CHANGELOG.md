@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.4.0 (2025/01/31)
+### 🐛 Fixes
+- [Fix invalid event type being sent](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4b21a8b2e5be23339aaa42c5ce9e9ef541a2f6a8) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Tidy up Update](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2974c58d89dc945cd3bc7f626a7658a74cf5bad1) - @RogerSelwyn
+- [Identify discovery initiator](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/226b1fae9ec020cd17786c2d70ec9255c6b61dd4) - @RogerSelwyn
+- [Delay startup to avoid MQTT miss](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/19f7958eab7837da14451b09d9fb3475b5d81ceb) - @RogerSelwyn
+- [Code tidy-up](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d87e8c60087dea5964cc2376dd4b30d49c94c859) - @RogerSelwyn
+
+### 📚 Documentation
+- [Integration is now on HACS default](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c1ecc9387624b7851aa9b49144759a73cd7dcee8) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.4.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ee3974bf4df22d58d949303e6b92539a21d5d10e) - @RogerSelwyn
+
 ## 2.3.0 (2025/01/19)
 ### ✨ Enhancements
 - [Add support for Vacuum entity](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/60ceffb4301ceb998da6f71dfd0ac5f7274f5fca) - @RogerSelwyn
