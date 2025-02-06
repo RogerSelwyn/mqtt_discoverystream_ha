@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.5.0 (2025/02/06)
+### ✨ Enhancements
+- [Add support for extra Climate commands](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ba9d91ce80d71580ceb057bb3bf649c7556df0d2) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v2.5.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b7e17e11a0764c522e05706d2eeb639f01296d5f) - @RogerSelwyn
+
 ## 2.4.0 (2025/01/31)
 ### 🐛 Fixes
 - [Fix invalid event type being sent](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4b21a8b2e5be23339aaa42c5ce9e9ef541a2f6a8) - @RogerSelwyn
