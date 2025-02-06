@@ -27,6 +27,8 @@ ATTR_MODE = "mode"
 ATTR_SUGGESTED_DISPLAY_PRECISION = "suggested_display_precision"
 
 COMMAND_DIRECTION = "command_direction"
+COMMAND_FAN = "command_fan"
+COMMAND_HUMIDITY = "command_humidity"
 COMMAND_INSTALL = "install"
 COMMAND_MODE = "command_mode"
 COMMAND_OSCILLATION = "command_oscillation"
@@ -38,7 +40,9 @@ COMMAND_SET_FAN_SPEED = "set_fan_speed"
 COMMAND_SET_LIGHT = "set_light"
 COMMAND_SET_POSITION = "set_position"
 COMMAND_SET_TILT = "set_tilt"
+COMMAND_SWING = "command_swing"
 COMMAND_TEMPERATURE = "command_temperature"
+
 
 CONF_BASE_TOPIC = "base_topic"
 CONF_COMMAND_TOPIC = "command_topic"
@@ -104,7 +108,15 @@ CONF_PL_OFF = "pl_off"
 SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.BINARY_SENSOR: [],
     Platform.BUTTON: [COMMAND_SET],
-    Platform.CLIMATE: [COMMAND_MODE, COMMAND_PRESET, COMMAND_TEMPERATURE],
+    Platform.CLIMATE: [
+        COMMAND_FAN,
+        COMMAND_HUMIDITY,
+        COMMAND_MODE,
+        COMMAND_SET,
+        COMMAND_PRESET,
+        COMMAND_SWING,
+        COMMAND_TEMPERATURE,
+    ],
     Platform.COVER: [COMMAND_SET, COMMAND_SET_POSITION, COMMAND_SET_TILT],
     Platform.DEVICE_TRACKER: [],
     Platform.EVENT: [],
