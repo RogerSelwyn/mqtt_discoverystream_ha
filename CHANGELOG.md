@@ -1,5 +1,28 @@
 # Changelog
 
+## v2.5.1 (2025/10/02)
+### 🐛 Fixes
+- [Fix deprecation of obj_id by HA Core](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8576a2fd73f8da58790ead45ea05302bb7ad6b21) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Workflow ordering](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fd24ff91e12b3e90dfbe5dfcb441ea23445d5a5c) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump ruff from 0.9.3 to 0.9.7](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/50d1959dabd536bf2c75af8b2f47a3cf3d3925d7) - @dependabot[bot]
+- [bump ruff from 0.9.7 to 0.11.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ef1eb5a54950fb2d0af1fadfcc16baa58f267753) - @dependabot[bot]
+- [bump ruff from 0.11.0 to 0.11.5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/934c1e9231c5f47c5a22cb8e497a06008f013c99) - @dependabot[bot]
+- [bump ruff from 0.11.5 to 0.12.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d4dd6d63a6ec9be581e6cc73e0e541eaa47ce7d8) - @dependabot[bot]
+- [bump actions/checkout from 4 to 5](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2ad64530bff50fc0f8de7903c2308193d5c6e469) - @dependabot[bot]
+- [bump actions/stale from 9 to 10](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c7ba09e24e44a54c809f90149657166ef8199443) - @dependabot[bot]
+- [bump actions/setup-python from 5 to 6](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/eb4502c5451311628a217ecdd0c37c49cfab02cf) - @dependabot[bot]
+- [bump ruff from 0.12.1 to 0.13.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b12dddbf51e51648d2d09f437a08eb1a55efd6e5) - @dependabot[bot]
+
+### 🔖 Release
+- [Release v2.5.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e5bc7c2cf17fd21d7010fd8c27f8f6ced128a6d1) - @RogerSelwyn
+
+
+
+
 ## 2.5.0 (2025/02/06)
 ### ✨ Enhancements
 - [Add support for extra Climate commands](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ba9d91ce80d71580ceb057bb3bf649c7556df0d2) - @RogerSelwyn
