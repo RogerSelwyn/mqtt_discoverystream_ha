@@ -1,5 +1,19 @@
 # Changelog
 
+## v2.5.2 (2025/11/18)
+### ✨ Enhancements
+- [Add basic script support via button](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9f3e0406c7785d3d168951229bfdb85886256fcd) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump ruff from 0.13.1 to 0.14.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5b70ab294e8241ebabc9706f85c6a6aa2f08b00f) - @dependabot[bot]
+
+### 🔖 Release
+- [Release v2.5.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/54359b8956a786e8422cd244bbbd47f39b2c57a7) - @RogerSelwyn
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0d7666988829b7b4b78738b901d6a42dd7bf42d9) - @actions-user
+
+
+
+
 ## v2.5.1 (2025/10/02)
 ### 🐛 Fixes
 - [Fix deprecation of obj_id by HA Core](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8576a2fd73f8da58790ead45ea05302bb7ad6b21) - @RogerSelwyn
