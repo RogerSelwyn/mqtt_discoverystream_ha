@@ -34,6 +34,7 @@ from ..const import (
     CONF_PATTERN,
     CONF_PL_OFF,
     CONF_PL_ON,
+    CONF_PL_PRS,
     CONF_STAT_T,
     CONF_STEP,
 )
@@ -146,6 +147,29 @@ class SwitchDiscoveryEntity(DiscoveryEntity):
             )
         else:
             command_error(command, msg.payload, entity)
+
+
+class ScriptDiscoveryEntity(DiscoveryEntity):
+    """Button class."""
+
+    PUBLISH_STATE = False
+
+    def build_config(self, config, entity_info: EntityInfo):
+        """Build the config for a button."""
+        del config[CONF_STAT_T]
+        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        ent_parts = entity_info.entity_id.split(".")
+        config[CONF_PL_PRS] = ent_parts[1]
+
+    async def _async_handle_message(self, msg):
+        """Handle a message for a button."""
+        valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
+            self._hass, msg, self._platform
+        )
+        if not valid:
+            return
+
+        await self._hass.services.async_call(domain, msg.payload)
 
 
 class TextDiscoveryEntity(DiscoveryEntity):

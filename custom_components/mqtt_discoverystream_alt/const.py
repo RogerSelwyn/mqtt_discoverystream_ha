@@ -7,6 +7,7 @@ from homeassistant.components.input_button import DOMAIN as INPUT_BUTTON_DOMAIN
 from homeassistant.components.input_number import DOMAIN as INPUT_NUMBER_DOMAIN
 from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.input_text import DOMAIN as INPUT_TEXT_DOMAIN
+from homeassistant.components.script import DOMAIN as SCRIPT_DOMAIN
 from homeassistant.const import Platform
 
 ATTR_COLOR = "color"
@@ -86,6 +87,7 @@ CONF_MIN = "min"
 CONF_MODE = "mode"
 CONF_OPS = "ops"
 CONF_PATTERN = "pattern"
+CONF_PL_PRS = "pl_prs"
 CONF_SET_POS_T = "set_pos_t"
 CONF_STAT_T = "stat_t"
 CONF_STAT_CLA = "stat_cla"
@@ -142,6 +144,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     INPUT_NUMBER_DOMAIN: [COMMAND_SET],
     INPUT_SELECT_DOMAIN: [COMMAND_SET],
     INPUT_TEXT_DOMAIN: [COMMAND_SET],
+    SCRIPT_DOMAIN: [COMMAND_SET],
 }
 
 OUTPUT_ENTITIES = {
@@ -150,4 +153,5 @@ OUTPUT_ENTITIES = {
     INPUT_NUMBER_DOMAIN: Platform.NUMBER,
     INPUT_SELECT_DOMAIN: Platform.SELECT,
     INPUT_TEXT_DOMAIN: Platform.TEXT,
+    SCRIPT_DOMAIN: Platform.BUTTON,
 }

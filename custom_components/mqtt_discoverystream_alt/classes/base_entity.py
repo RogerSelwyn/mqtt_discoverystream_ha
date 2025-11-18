@@ -22,6 +22,7 @@ class DiscoveryEntity:
     """Base discovery entity class."""
 
     PUBLISH_STATE = True
+    PLATFORM = None
 
     def __init__(self, hass, publish_retain, platform, publish_state):
         """Initialise the base class."""
