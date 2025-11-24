@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.0.0 (2025/11/24)
+### 💥 Breaking Changes
+- [Support multiple MQTT Discovery Configs](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/abb20bc384198348d555ab52cf739c5d0c9a23f5) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a947d915413614385232c17d4522bf230c7d4f7f) - @RogerSelwyn
+
+### 🔖 Release
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/595fb14fcc85c2f39ad0231bb0794db99488287f) - @actions-user
+
+
+
+
 ## v2.5.2 (2025/11/18)
 ### ✨ Enhancements
 - [Add basic script support via button](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9f3e0406c7785d3d168951229bfdb85886256fcd) - @RogerSelwyn
