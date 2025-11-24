@@ -74,11 +74,7 @@ class MQTTUnit:
             def _event_filter(event_data: EventStateChangedData) -> bool:
                 entity_id = event_data["entity_id"]
                 new_state = event_data["new_state"]
-                if new_state is None:
-                    return False
-                if not publish_filter(entity_id):
-                    return False
-                return True
+                return False if new_state is None else bool(publish_filter(entity_id))
 
             callback_handler = hass.bus.async_listen(
                 EVENT_STATE_CHANGED, _state_publisher, _event_filter
