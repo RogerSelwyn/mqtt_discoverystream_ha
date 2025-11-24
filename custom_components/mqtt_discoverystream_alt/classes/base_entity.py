@@ -24,9 +24,10 @@ class DiscoveryEntity:
     PUBLISH_STATE = True
     PLATFORM = None
 
-    def __init__(self, hass, publish_retain, platform, publish_state):
+    def __init__(self, hass, base_topic, publish_retain, platform, publish_state):
         """Initialise the base class."""
         self._hass = hass
+        self._base_topic = base_topic
         self._publish_retain = publish_retain
         self._publish_state = publish_state
         self._platform = platform
@@ -55,7 +56,9 @@ class DiscoveryEntity:
                 self._async_handle_message,
             )
 
-        _LOGGER.info("MQTT '%s' subscribe successful", self._platform)
+        _LOGGER.info(
+            "MQTT '%s' - '%s' subscribe successful", self._base_topic, self._platform
+        )
 
     async def _async_handle_message(self, msg):
         """Handle a message for a discovery entity."""

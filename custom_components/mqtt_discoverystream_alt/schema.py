@@ -46,25 +46,33 @@ REMOTE_STATUS = vol.Schema(
     }
 )
 
+BASE_SCHEMA = {
+    vol.Required(CONF_BASE_TOPIC): valid_publish_topic,
+    vol.Optional(CONF_DISCOVERY_TOPIC): vol.Any(valid_publish_topic, None),
+    vol.Optional(CONF_COMMAND_TOPIC): vol.Any(valid_publish_topic, None),
+    vol.Optional(CONF_REMOTE_STATUS): REMOTE_STATUS,
+    vol.Optional(CONF_LOCAL_STATUS): LOCAL_STATUS,
+    vol.Optional(CONF_PUBLISH_ATTRIBUTES, default=False): cv.boolean,
+    vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
+    vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
+    vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
+    vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
+    vol.Optional(CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME): cv.time_period,
+}
+
+
 CONFIG_SCHEMA = vol.Schema(
     {
-        DOMAIN: INCLUDE_EXCLUDE_BASE_FILTER_SCHEMA.extend(
-            {
-                vol.Required(CONF_BASE_TOPIC): valid_publish_topic,
-                vol.Optional(CONF_DISCOVERY_TOPIC): vol.Any(valid_publish_topic, None),
-                vol.Optional(CONF_COMMAND_TOPIC): vol.Any(valid_publish_topic, None),
-                vol.Optional(CONF_REMOTE_STATUS): REMOTE_STATUS,
-                vol.Optional(CONF_LOCAL_STATUS): LOCAL_STATUS,
-                vol.Optional(CONF_PUBLISH_ATTRIBUTES, default=False): cv.boolean,
-                vol.Optional(CONF_PUBLISH_TIMESTAMPS, default=False): cv.boolean,
-                vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
-                vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
-                vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
-                vol.Optional(
-                    CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME
-                ): cv.time_period,
-            }
+        DOMAIN: vol.Schema(
+            [INCLUDE_EXCLUDE_BASE_FILTER_SCHEMA.extend(BASE_SCHEMA)],
+            "schema_type",
         ),
     },
     extra=vol.ALLOW_EXTRA,
 )
+# CONFIG_SCHEMA = vol.Schema(
+#     {
+#         DOMAIN: [INCLUDE_EXCLUDE_BASE_FILTER_SCHEMA.extend(BASE_SCHEMA)],
+#     },
+#     extra=vol.ALLOW_EXTRA,
+# )

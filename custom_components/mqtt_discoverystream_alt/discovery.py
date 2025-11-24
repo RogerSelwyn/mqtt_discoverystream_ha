@@ -252,6 +252,7 @@ class Discovery:
 
         module_class = module.DiscoveryItem(
             self._hass,
+            self._conf.get(CONF_BASE_TOPIC),
             self._publish_retain,
             module.DiscoveryItem.PLATFORM,
             publish_state,
