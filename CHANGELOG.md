@@ -4,6 +4,23 @@
 ### 💥 Breaking Changes
 - [Support multiple MQTT Discovery Configs](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/abb20bc384198348d555ab52cf739c5d0c9a23f5) - @RogerSelwyn
 
+### 🧰 Maintenance
+- [Sourcery recommendation](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/df7ffae8a3d2a81b464841cb3e504fc78d9c5414) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a947d915413614385232c17d4522bf230c7d4f7f) - @RogerSelwyn
+- [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/43dd65ced5cd4eea6ec4dd243100f5cd58d400eb) - @actions-user
+
+### 🔖 Release
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/595fb14fcc85c2f39ad0231bb0794db99488287f) - @actions-user
+
+
+
+
+## v3.0.0 (2025/11/24)
+### 💥 Breaking Changes
+- [Support multiple MQTT Discovery Configs](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/abb20bc384198348d555ab52cf739c5d0c9a23f5) - @RogerSelwyn
+
 ### 📚 Documentation
 - [Update CHANGELOG.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a947d915413614385232c17d4522bf230c7d4f7f) - @RogerSelwyn
 
