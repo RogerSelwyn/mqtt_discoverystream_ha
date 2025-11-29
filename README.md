@@ -67,18 +67,21 @@ Example:
 
 ```yaml
 mqtt_discoverystream_alt:
-  base_topic: test_HA
-  publish_attributes: false
-  publish_timestamps: true
-  publish_discovery: true
-  include:
-    entities:
-      - sensor.owm_hourly_humidity
-      - sensor.jellyfin_cloud
-      - light.wled_esp
-  exclude:
-    entities:
-      - sensor.plug_xiaomi_1_electrical_measurement
+  - base_topic: test_HA
+    publish_attributes: false
+    publish_timestamps: true
+    publish_discovery: true
+    include:
+      entities:
+        - sensor.owm_hourly_humidity
+        - sensor.jellyfin_cloud
+        - light.wled_esp
+    exclude:
+      entities:
+        - sensor.plug_xiaomi_1_electrical_measurement
+  - base_topic: test_HA_2
+    ...
+
 ```
 
 ## Configuration
