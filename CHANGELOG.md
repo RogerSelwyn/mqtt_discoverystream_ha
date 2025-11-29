@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.0.1 (2025/11/29)
+### 🐛 Fixes
+- [Fix sensor publication](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fd56a99a26569f8908c1a879f3d51f7d4be6bdca) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump actions/checkout from 5 to 6](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d50adfd3ccfbdd0ec4574fd501112e4ff8f1ceeb) - @dependabot[bot]
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5f7da73592d8c0dbdea9370571c197d3f9a8d457) - @RogerSelwyn
+
+### 🔖 Release
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e925452a6f88b7d697a7b575c86798d742980ba4) - @actions-user
+
+
+
+
 ## v3.0.0 (2025/11/24)
 ### 💥 Breaking Changes
 - [Support multiple MQTT Discovery Configs](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/abb20bc384198348d555ab52cf739c5d0c9a23f5) - @RogerSelwyn
