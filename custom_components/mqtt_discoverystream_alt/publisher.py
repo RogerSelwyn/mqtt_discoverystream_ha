@@ -24,11 +24,9 @@ from homeassistant.setup import async_when_setup
 from .const import (
     CONF_BASE_TOPIC,
     CONF_ONLINE_STATUS,
-    CONF_PUBLISHED,
     CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
     DEFAULT_STATE_SLEEP,
-    DOMAIN,
 )
 from .discovery import Discovery
 
@@ -45,13 +43,11 @@ class Publisher:
         self._publish_retain = publish_retain
         self._conf = conf
         self._remote_status, self._remote_status_topic = self._set_remote_status()
-        self._hass.data[DOMAIN] = {CONF_PUBLISHED: []}
-        self._discovery = Discovery(self._hass, self._conf)
+        self.discovery = Discovery(self._hass, self._conf)
         self._entity_states = {}
         self._publish_filter = convert_include_exclude_filter(self._conf)
         if self._remote_status:
             async_when_setup(hass, MQTT_DOMAIN, self._async_birth_subscribe)
-        self._register_services()
         self._listen_for_hass_events()
 
     async def async_state_publish(self, entity_id, new_state, mybase):
@@ -60,8 +56,8 @@ class Publisher:
         ent_domain = ent_parts[0]
 
         valid = True
-        if entity_id not in self._hass.data[DOMAIN][CONF_PUBLISHED]:
-            valid = await self._discovery.async_discovery_publish(
+        if entity_id not in self.discovery.discovered_entities:
+            valid = await self.discovery.async_discovery_publish(
                 entity_id, new_state.attributes, mybase
             )
 
@@ -74,7 +70,7 @@ class Publisher:
             )
             return
 
-        entityclass = self._discovery.discovery_classes[ent_domain]
+        entityclass = self.discovery.discovery_classes[ent_domain]
         await entityclass.async_publish_state(new_state, mybase)
 
         await self._async_mqtt_publish(
@@ -92,12 +88,7 @@ class Publisher:
     async def _async_handle_birth_message(self, msg):
         if msg.payload == self._remote_status.get(CONF_ONLINE_STATUS):
             _LOGGER.debug("Birth Discovery")
-            await self._async_publish_discovery_state()
-
-    def _register_services(self):
-        self._hass.services.async_register(
-            DOMAIN, "publish_discovery_state", self._async_publish_discovery_state
-        )
+            await self.async_publish_discovery_state()
 
     def _listen_for_hass_events(self):
         self._hass.bus.async_listen_once(
@@ -115,10 +106,11 @@ class Publisher:
 
     async def _async_ha_started(self, call=None):  # pylint: disable=unused-argument
         _LOGGER.debug("HA Start Discovery")
-        await self._async_publish_discovery_state()
+        await self.async_publish_discovery_state()
 
-    async def _async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
-        self._discovery.subscribe_possible = True
+    async def async_publish_discovery_state(self, call=None):  # pylint: disable=unused-argument
+        """Publish discovery and state for this MQTTUnit."""
+        self.discovery.subscribe_possible = True
         ent_reg = entity_registry.async_get(self._hass)
         self._entity_states = {}
         _LOGGER.debug("Discovery/State publishing - start")
@@ -136,7 +128,7 @@ class Publisher:
             if current_state := self._hass.states.get(entity_id):
                 _LOGGER.debug("Discovery/State publishing - %s - discovery", entity_id)
                 mybase = f"{self._base_topic}{entity_id.replace('.', '/')}/"
-                valid = await self._discovery.async_discovery_publish(
+                valid = await self.discovery.async_discovery_publish(
                     entity_id, current_state.attributes, mybase
                 )
                 if valid:
@@ -163,7 +155,7 @@ class Publisher:
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
         _LOGGER.debug("Scheduled Discovery")
-        await self._async_publish_discovery_state()
+        await self.async_publish_discovery_state()
         async_call_later(
             self._hass,
             self._conf.get(CONF_REPUBLISH_TIME),

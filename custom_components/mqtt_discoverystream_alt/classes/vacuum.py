@@ -110,7 +110,7 @@ class DiscoveryItem(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a vacuum."""
         valid, domain, entity, command = validate_message(
-            self._hass, msg, DiscoveryItem.PLATFORM
+            msg, DiscoveryItem.PLATFORM, self._discovered_entities
         )
         if not valid:
             return

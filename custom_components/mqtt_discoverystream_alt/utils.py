@@ -5,8 +5,6 @@ from dataclasses import dataclass, field
 
 from .const import (
     CONF_BASE_TOPIC,
-    CONF_PUBLISHED,
-    DOMAIN,
     OUTPUT_ENTITIES,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
@@ -22,7 +20,7 @@ def set_topic(conf, topic):
     return response_topic
 
 
-def validate_message(hass, msg, platform):
+def validate_message(msg, platform, discovered_entities):
     """Handle a message for a switch."""
     explode_topic = msg.topic.split("/")
     domain = explode_topic[1]
@@ -30,7 +28,7 @@ def validate_message(hass, msg, platform):
     command = explode_topic[3]
 
     # Only handle service calls for discoveries we published
-    if f"{domain}.{entity}" not in hass.data[DOMAIN][CONF_PUBLISHED]:
+    if f"{domain}.{entity}" not in discovered_entities:
         return False, None, None, None
 
     if command not in SUPPORTED_ENTITY_TYPE_COMMANDS[platform]:

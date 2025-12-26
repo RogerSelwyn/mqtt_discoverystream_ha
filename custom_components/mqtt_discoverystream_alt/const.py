@@ -10,7 +10,7 @@ from homeassistant.components.input_text import DOMAIN as INPUT_TEXT_DOMAIN
 from homeassistant.components.script import DOMAIN as SCRIPT_DOMAIN
 from homeassistant.const import Platform
 
-ATTR_COLOR = "color"
+ATTR_COLOR = "color"  # pylint: disable=invalid-name
 ATTR_H = "h"
 ATTR_S = "s"
 ATTR_X = "x"
@@ -20,7 +20,7 @@ ATTR_G = "g"
 ATTR_B = "b"
 
 ATTR_ATTRIBUTES = "attributes"
-ATTR_COLOR = "color"
+ATTR_COLOR = "color"  # pylint: disable=invalid-name
 ATTR_CONFIG = "config"
 ATTR_INSTALL = "install"
 ATTR_JSON = "JSON"
@@ -54,7 +54,6 @@ CONF_ONLINE_STATUS = "online_status"
 CONF_PUBLISH_ATTRIBUTES = "publish_attributes"
 CONF_PUBLISH_TIMESTAMPS = "publish_timestamps"
 CONF_PUBLISH_DISCOVERY = "publish_discovery"
-CONF_PUBLISHED = "conf_published"
 CONF_PUBLISH_RETAIN = "publish_retain"
 CONF_REMOTE_STATUS = "remote_status"
 CONF_REPUBLISH_TIME = "republish_time"

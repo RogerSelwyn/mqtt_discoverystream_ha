@@ -4,7 +4,7 @@ import asyncio
 import logging
 
 from homeassistant.components import mqtt
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, ServiceCall
 from homeassistant.helpers.typing import ConfigType
 
 from .const import (
@@ -27,8 +27,23 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         return False
 
     conf: ConfigType = config[DOMAIN]
+    hass.data[DOMAIN] = []
     for mqtt_config in conf:
         unit = MQTTUnit(mqtt_config)
         unit.setup_unit(hass)
+        hass.data[DOMAIN].append(unit)
+
+    _register_services(hass)
 
     return True
+
+
+def _register_services(hass):
+    async def _async_publish_discovery_state(call: ServiceCall):
+        async with asyncio.TaskGroup() as group:
+            for unit in hass.data[DOMAIN]:
+                group.create_task(unit.publisher.async_publish_discovery_state(call))
+
+    hass.services.async_register(
+        DOMAIN, "publish_discovery_state", _async_publish_discovery_state
+    )

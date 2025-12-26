@@ -49,7 +49,6 @@ from .const import (
     CONF_OFFLINE_STATUS,
     CONF_ONLINE_STATUS,
     CONF_PUBLISH_RETAIN,
-    CONF_PUBLISHED,
     CONF_STAT_CLA,
     CONF_STAT_T,
     CONF_SW,
@@ -57,7 +56,6 @@ from .const import (
     CONF_UNIQ_ID,
     CONF_UNIQUE_PREFIX,
     CONF_UNIT_OF_MEAS,
-    DOMAIN,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 from .utils import (
@@ -80,6 +78,7 @@ class Discovery:
         self._hass = hass
         self._conf = conf
         self.discovery_classes = {}
+        self.discovered_entities = []
         self._subscribed = []
         self._publish_retain: bool = conf.get(CONF_PUBLISH_RETAIN)
         self._command_topic = set_topic(conf, CONF_COMMAND_TOPIC)
@@ -136,7 +135,7 @@ class Discovery:
         if device := self._build_device(entity_id):
             config[CONF_DEV] = device
 
-        self._hass.data[DOMAIN][CONF_PUBLISHED].append(entity_id)
+        self.discovered_entities.append(entity_id)
 
         entity_id = translate_entity_type(entity_id)
 
@@ -254,6 +253,7 @@ class Discovery:
             self._hass,
             self._conf.get(CONF_BASE_TOPIC),
             self._publish_retain,
+            self.discovered_entities,
             module.DiscoveryItem.PLATFORM,
             publish_state,
         )

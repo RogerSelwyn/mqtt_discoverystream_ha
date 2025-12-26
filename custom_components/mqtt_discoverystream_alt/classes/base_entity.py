@@ -24,11 +24,20 @@ class DiscoveryEntity:
     PUBLISH_STATE = True
     PLATFORM = None
 
-    def __init__(self, hass, base_topic, publish_retain, platform, publish_state):
+    def __init__(
+        self,
+        hass,
+        base_topic,
+        publish_retain,
+        discovered_entities,
+        platform,
+        publish_state,
+    ):
         """Initialise the base class."""
         self._hass = hass
         self._base_topic = base_topic
         self._publish_retain = publish_retain
+        self._discovered_entities = discovered_entities
         self._publish_state = publish_state
         self._platform = platform
         self._commands = SUPPORTED_ENTITY_TYPE_COMMANDS[self._platform]

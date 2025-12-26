@@ -28,6 +28,7 @@ class MQTTUnit:
     def __init__(self, conf):
         """Initialise MQTT unit."""
         self._conf = conf
+        self.publisher = None
 
     def setup_unit(self, hass):
         """Setup the MQTT Unit."""
@@ -41,7 +42,7 @@ class MQTTUnit:
 
         publish_discovery = self._conf.get(CONF_PUBLISH_DISCOVERY)
         if publish_discovery:
-            publisher = Publisher(hass, self._conf, base_topic, publish_retain)
+            self.publisher = Publisher(hass, self._conf, base_topic, publish_retain)
 
         async def _state_publisher(evt: Event[EventStateChangedData]) -> None:
             entity_id = evt.data["entity_id"]
@@ -50,7 +51,7 @@ class MQTTUnit:
 
             mybase = f"{base_topic}{entity_id.replace('.', '/')}/"
             if publish_discovery:
-                await publisher.async_state_publish(entity_id, new_state, mybase)
+                await self.publisher.async_state_publish(entity_id, new_state, mybase)
             else:
                 payload = new_state.state
                 await _async_mqtt_publish(f"{mybase}state", payload)

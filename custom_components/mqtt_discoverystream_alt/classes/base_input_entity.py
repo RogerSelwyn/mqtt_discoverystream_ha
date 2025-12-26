@@ -57,7 +57,7 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return
@@ -82,7 +82,7 @@ class NumberDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a number."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return
@@ -106,7 +106,7 @@ class SelectDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a select."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return
@@ -132,7 +132,7 @@ class SwitchDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
         valid, domain, entity, command = validate_message(
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return
@@ -164,7 +164,7 @@ class ScriptDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return
@@ -197,7 +197,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a text."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass, msg, self._platform
+            msg, self._platform, self._discovered_entities
         )
         if not valid:
             return

@@ -133,9 +133,7 @@ class DiscoveryItem(DiscoveryEntity):
     async def _async_handle_message(self, msg):
         """Handle a message for a light."""
         valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            self._hass,
-            msg,
-            DiscoveryItem.PLATFORM,
+            msg, DiscoveryItem.PLATFORM, self._discovered_entities
         )
         if not valid:
             return
