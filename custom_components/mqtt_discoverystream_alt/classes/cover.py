@@ -42,8 +42,6 @@ from ..utils import (
     EntityInfo,
     add_config_command,
     build_topic,
-    command_error,
-    validate_message,
 )
 from .base_entity import DiscoveryEntity
 
@@ -90,8 +88,8 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a cover."""
-        valid, domain, entity, command = validate_message(
-            msg, DiscoveryItem.PLATFORM, self._discovered_entities
+        valid, domain, entity, command = self.validate_message(
+            msg,
         )
         if not valid:
             return
@@ -113,7 +111,7 @@ class DiscoveryItem(DiscoveryEntity):
                     domain, SERVICE_STOP_COVER, service_payload
                 )
             else:
-                command_error(command, msg.payload, entity)
+                self.command_error(command, msg.payload, entity)
         elif command == COMMAND_SET_POSITION:
             service_payload[ATTR_POSITION] = msg.payload
             await self._hass.services.async_call(

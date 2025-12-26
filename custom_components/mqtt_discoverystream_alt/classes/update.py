@@ -34,7 +34,6 @@ from ..utils import (
     add_config_command,
     build_topic,
     simple_attribute_add,
-    validate_message,
 )
 from .base_entity import DiscoveryEntity
 
@@ -88,8 +87,8 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a fan."""
-        valid, domain, entity, command = validate_message(
-            msg, DiscoveryItem.PLATFORM, self._discovered_entities
+        valid, domain, entity, command = self.validate_message(
+            msg,
         )
         if not valid:
             return

@@ -48,7 +48,7 @@ from ..const import (
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
-from ..utils import EntityInfo, add_config_command, validate_message
+from ..utils import EntityInfo, add_config_command
 from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
@@ -132,8 +132,8 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a light."""
-        valid, domain, entity, command = validate_message(  # pylint: disable=unused-variable
-            msg, DiscoveryItem.PLATFORM, self._discovered_entities
+        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+            msg,
         )
         if not valid:
             return

@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from .const import (
     CONF_BASE_TOPIC,
     OUTPUT_ENTITIES,
-    SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -18,25 +17,6 @@ def set_topic(conf, topic):
     if not response_topic.endswith("/"):
         response_topic = f"{response_topic}/"
     return response_topic
-
-
-def validate_message(msg, platform, discovered_entities):
-    """Handle a message for a switch."""
-    explode_topic = msg.topic.split("/")
-    domain = explode_topic[1]
-    entity = explode_topic[2]
-    command = explode_topic[3]
-
-    # Only handle service calls for discoveries we published
-    if f"{domain}.{entity}" not in discovered_entities:
-        return False, None, None, None
-
-    if command not in SUPPORTED_ENTITY_TYPE_COMMANDS[platform]:
-        command_error(command, msg.payload, entity)
-        return False, None, None, None
-
-    _LOGGER.debug("Message received: topic %s; payload: %s", {msg.topic}, {msg.payload})
-    return True, domain, entity, command
 
 
 def translate_entity_type(entity_id):
@@ -59,16 +39,6 @@ def simple_entry_attribute(config_device, attribute, conf_name):
     """Simple check for attribute existence and inclusion."""
     if attribute:
         config_device[conf_name] = attribute
-
-
-def command_error(command, payload, entity):
-    """Log error for invalid command."""
-    _LOGGER.error(
-        'Invalid service for "%s" - payload: %s for %s',
-        command,
-        {payload},
-        {entity},
-    )
 
 
 @dataclass

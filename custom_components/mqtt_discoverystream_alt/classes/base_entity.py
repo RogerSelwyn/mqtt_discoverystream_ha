@@ -102,3 +102,32 @@ class DiscoveryEntity:
             if value and strip:
                 value = value.strip('"')
             await self._async_mqtt_publish(attribute_name, value, mybase)
+
+    def validate_message(self, msg):
+        """Handle a message for a switch."""
+        explode_topic = msg.topic.split("/")
+        domain = explode_topic[1]
+        entity = explode_topic[2]
+        command = explode_topic[3]
+
+        # Only handle service calls for discoveries we published
+        if f"{domain}.{entity}" not in self._discovered_entities:
+            return False, None, None, None
+
+        if command not in SUPPORTED_ENTITY_TYPE_COMMANDS[self.PLATFORM]:
+            self.command_error(command, msg.payload, entity)
+            return False, None, None, None
+
+        _LOGGER.debug(
+            "Message received: topic %s; payload: %s", {msg.topic}, {msg.payload}
+        )
+        return True, domain, entity, command
+
+    def command_error(self, command, payload, entity):
+        """Log error for invalid command."""
+        _LOGGER.error(
+            'Invalid service for "%s" - payload: %s for %s',
+            command,
+            {payload},
+            {entity},
+        )

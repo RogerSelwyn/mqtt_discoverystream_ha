@@ -88,8 +88,6 @@ from ..utils import (
     EntityInfo,
     add_config_command,
     build_topic,
-    command_error,
-    validate_message,
 )
 from .base_entity import DiscoveryEntity
 
@@ -227,8 +225,8 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
-        valid, domain, entity, command = validate_message(
-            msg, DiscoveryItem.PLATFORM, self._discovered_entities
+        valid, domain, entity, command = self.validate_message(
+            msg,
         )
         if not valid:
             return
@@ -261,5 +259,5 @@ class DiscoveryItem(DiscoveryEntity):
             elif msg.payload == STATE_OFF:
                 service_name = SERVICE_TURN_OFF
             else:
-                command_error(command, msg.payload, entity)
+                self.command_error(command, msg.payload, entity)
         await self._hass.services.async_call(domain, service_name, service_payload)
