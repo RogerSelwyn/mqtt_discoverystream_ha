@@ -149,13 +149,13 @@ A service called `publish_discovery_state` is provided when `publish_discovery` 
 * Discovery messages will be published to the `discovery_topic` when `publish_discovery` is enabled. 
 * State messages will be sent to the `base_topic`.
 * Commands from entities at the slave site will be subscribed to on the `command_topic`.
-* Birth messages from the slave site will be subscribed to on the `remote_status`, which must end in `/status`. `/status` will be added to the topic if missing. 
+* Birth messages from the slave site will be subscribed to on the `remote_status/topic`, which must end in `/status`. `/status` will be added to the topic if missing. 
 
 ## Discovery of entities and Publication of states
 
 Discovery and state messages will be published under 4 situations:
 1. Completion of Home Assistant startup
-1. Connection of slave broker and receipt of `online` message at the `remote_status`
+1. Connection of slave broker and receipt of `online` message at the `remote_status/topic`
 1. Initiation of `publish_discovery_state` service
 1. First change of state of an entity, where none of the first 3 items has occurred 
 
