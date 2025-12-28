@@ -1,5 +1,22 @@
 # Changelog
 
+## v3.0.2 (2025/12/28)
+### 🐛 Fixes
+- [Fix service call to publish all config](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/23f3957f60cb63347138a95d0b399604209c247a) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Remove unnecessary importing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/02df464173a8701fefdbfd3da161353d1d1814bd) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/99ede1197d87d60aeff558d0b2a7b3476dd9a94a) - @RogerSelwyn
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/586073ca2446f456eb4184a55ae4102e36746ca1) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.0.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/14d335beb529e427696dcc59ceab7cb0f6827c2c) - @RogerSelwyn
+
+
+
+
 ## v3.0.1 (2025/11/29)
 ### 🐛 Fixes
 - [Fix sensor publication](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fd56a99a26569f8908c1a879f3d51f7d4be6bdca) - @RogerSelwyn
