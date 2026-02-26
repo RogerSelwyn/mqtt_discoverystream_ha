@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.0.4 (2026/02/26)
+### 🐛 Fixes
+- [Do not convert color temp if already kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62540eb861f3b78bb8a09c62a34933eb788fca9a) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.0.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/558b0ef75f8ec8326adad5db71d86720f4fe8463) - @RogerSelwyn
+
+
+
+
 ## v3.0.3 (2026/02/26)
 ### 🐛 Fixes
 - [Handle core removal of color_temp](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7a0751a00bb4be667138851542908025884607c3) - @RogerSelwyn
