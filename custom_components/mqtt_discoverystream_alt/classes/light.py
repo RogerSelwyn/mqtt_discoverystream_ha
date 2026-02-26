@@ -81,6 +81,8 @@ class DiscoveryItem(DiscoveryEntity):
                 entity_info.entity_id,
                 ATTR_SUPPORTED_COLOR_MODES,
             )
+        if ATTR_COLOR_TEMP_KELVIN in entity_info.attributes:
+            config[ATTR_COLOR_TEMP_KELVIN] = True
 
     async def async_publish_state(self, new_state, mybase):
         """Build the state for a light."""
