@@ -94,6 +94,11 @@ class DiscoveryItem(DiscoveryEntity):
         self._add_attribute(payload, new_state, ATTR_MAX_COLOR_TEMP_KELVIN)
         self._add_attribute(payload, new_state, ATTR_MIN_COLOR_TEMP_KELVIN)
         self._add_attribute(payload, new_state, ATTR_COLOR_TEMP_KELVIN)
+        if (
+            ATTR_COLOR_TEMP_KELVIN in new_state.attributes
+            and new_state.attributes[ATTR_COLOR_TEMP_KELVIN]
+        ):
+            payload[CONF_COLOR_TEMP] = new_state.attributes[ATTR_COLOR_TEMP_KELVIN]
         self._add_attribute(payload, new_state, CONF_COLOR_TEMP)
         self._add_attribute(payload, new_state, ATTR_EFFECT)
 
