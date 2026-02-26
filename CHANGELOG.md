@@ -1,5 +1,21 @@
 # Changelog
 
+## v3.0.3 (2026/02/26)
+### 🐛 Fixes
+- [Handle core removal of color_temp](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7a0751a00bb4be667138851542908025884607c3) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump ruff from 0.14.4 to 0.15.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6f586de18ec84d332e3cfd0e39724113f46947e8) - @dependabot[bot]
+
+### 📚 Documentation
+- [Update README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/89c5e5ab46a857c04338b97ca23e955edbde18e8) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.0.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cdbba7da8118a5da87e3b553194dbdaa7a48f9cd) - @RogerSelwyn
+
+
+
+
 ## v3.0.2 (2025/12/28)
 ### 🐛 Fixes
 - [Fix service call to publish all config](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/23f3957f60cb63347138a95d0b399604209c247a) - @RogerSelwyn
