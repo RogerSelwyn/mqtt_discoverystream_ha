@@ -3,6 +3,20 @@
 ## v3.0.4 (2026/02/26)
 ### 🐛 Fixes
 - [Do not convert color temp if already kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62540eb861f3b78bb8a09c62a34933eb788fca9a) - @RogerSelwyn
+- [Fix color temperature attribute priority](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/904451c9657e3ef960aac23a2fc85820f310660d) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f718f9ea6759081c38e3943dfed7afaa157d7623) - @actions-user
+
+### 🔖 Release
+- [Release v3.0.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/558b0ef75f8ec8326adad5db71d86720f4fe8463) - @RogerSelwyn
+
+
+
+
+## v3.0.4 (2026/02/26)
+### 🐛 Fixes
+- [Do not convert color temp if already kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62540eb861f3b78bb8a09c62a34933eb788fca9a) - @RogerSelwyn
 
 ### 🔖 Release
 - [Release v3.0.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/558b0ef75f8ec8326adad5db71d86720f4fe8463) - @RogerSelwyn
