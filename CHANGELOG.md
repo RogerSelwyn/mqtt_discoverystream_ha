@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.1.1 (2026/04/22)
+### 🐛 Fixes
+- [Fix to handle multi-level command_topic](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/93686beeb61afbb73b3c08c86fa7ba199500ec95) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.1.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/dc916f69b3b5a2726ee7d5ff9961ce3f191ea27e) - @RogerSelwyn
+
+
+
+
 ## v3.1.0 (2026/04/22)
 ### ✨ Enhancements
 - [Added support for locks](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1d58e08eeae7251f94896d42710ac0c76b0f3fd5) - @RogerSelwyn
