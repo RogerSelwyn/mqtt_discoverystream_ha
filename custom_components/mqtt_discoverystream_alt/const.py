@@ -27,6 +27,8 @@ ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
 ATTR_SUGGESTED_DISPLAY_PRECISION = "suggested_display_precision"
 
+COMMAND_ACTION = "action"
+COMMAND_CODE = "code"
 COMMAND_DIRECTION = "command_direction"
 COMMAND_FAN = "command_fan"
 COMMAND_HUMIDITY = "command_humidity"
@@ -74,20 +76,28 @@ STATE_CAPITAL_OFF = "OFF"
 CONF_AVTY = "avty"
 CONF_AVTY_MODE = "avty_mode"
 CONF_CMD_T = "cmd_t"
+CONF_CMD_TPL = "cmd_tpl"
 CONF_DEF_ENT_ID = "def_ent_id"
 CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"
 CONF_ENT_CAT = "ent_cat"
 CONF_ENT_PIC = "ent_pic"
 CONF_EVT_TYP = "evt_typ"
+CONF_COD_FORM = "cod_form"
 CONF_JSON_ATTR_T = "json_attr_t"
 CONF_MAX = "max"
 CONF_MIN = "min"
 CONF_MODE = "mode"
 CONF_OPS = "ops"
 CONF_PATTERN = "pattern"
+CONF_PL_OPEN = "pl_open"
 CONF_PL_PRS = "pl_prs"
 CONF_SET_POS_T = "set_pos_t"
+CONF_STAT_JAM = "stat_jam"
+CONF_STAT_LOCKED = "stat_locked"
+CONF_STAT_LOCKING = "stat_locking"
+CONF_STAT_UNLOCKED = "stat_unlocked"
+CONF_STAT_UNLOCKING = "stat_unlocking"
 CONF_STAT_T = "stat_t"
 CONF_STAT_CLA = "stat_cla"
 CONF_STEP = "step"
@@ -130,6 +140,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     ],
     Platform.IMAGE: [],
     Platform.LIGHT: [COMMAND_SET_LIGHT],
+    Platform.LOCK: [COMMAND_SET],
     Platform.NUMBER: [COMMAND_SET],
     Platform.SCENE: [COMMAND_SET],
     Platform.SELECT: [COMMAND_SET],

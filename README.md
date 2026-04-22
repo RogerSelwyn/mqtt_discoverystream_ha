@@ -28,6 +28,7 @@ Provides discovery & command support for:
 | Input Select    | select             | Select Option             |           |
 | Input Text      | text               | Set Value                 |           |
 | Light           | light              | Turn On, Turn Off         |           |
+| Lock            | lock               | Lock, Unlock, Open        |           |
 | Number          | number             | Set Value                 |           |
 | Scene           | scene              | Apply                     |           |
 | Sensor          | sensor             |                           |           |
