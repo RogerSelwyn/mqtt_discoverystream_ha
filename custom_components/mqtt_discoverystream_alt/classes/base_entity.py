@@ -28,6 +28,7 @@ class DiscoveryEntity:
         self,
         hass,
         base_topic,
+        command_topic,
         publish_retain,
         discovered_entities,
         platform,
@@ -36,6 +37,7 @@ class DiscoveryEntity:
         """Initialise the base class."""
         self._hass = hass
         self._base_topic = base_topic
+        self._command_topic = command_topic
         self._publish_retain = publish_retain
         self._discovered_entities = discovered_entities
         self._publish_state = publish_state
@@ -53,7 +55,7 @@ class DiscoveryEntity:
             mybase,
         )
 
-    async def async_subscribe_commands(self, command_topic):
+    async def async_subscribe_commands(self):
         """Subscribe to messages for an entity."""
         if not self._commands:
             return
@@ -61,12 +63,12 @@ class DiscoveryEntity:
         for command in self._commands:
             await mqtt.async_subscribe(
                 self._hass,
-                f"{command_topic}{self._platform}/+/{command}",
+                f"{self._command_topic}{self._platform}/+/{command}",
                 self._async_handle_message,
             )
 
         _LOGGER.info(
-            "MQTT '%s' - '%s' subscribe successful", self._base_topic, self._platform
+            "MQTT '%s' - '%s' subscribe successful", self._command_topic, self._platform
         )
 
     async def _async_handle_message(self, msg):
@@ -105,10 +107,10 @@ class DiscoveryEntity:
 
     def validate_message(self, msg):
         """Handle a message for a switch."""
-        explode_topic = msg.topic.split("/")
-        domain = explode_topic[1]
-        entity = explode_topic[2]
-        command = explode_topic[3]
+        explode_topic = msg.topic.removeprefix(self._command_topic).split("/")
+        domain = explode_topic[0]
+        entity = explode_topic[1]
+        command = explode_topic[2]
 
         # Only handle service calls for discoveries we published
         if f"{domain}.{entity}" not in self._discovered_entities:

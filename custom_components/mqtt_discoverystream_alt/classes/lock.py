@@ -80,7 +80,7 @@ class DiscoveryItem(DiscoveryEntity):
         }
         if command == COMMAND_SET:
             payload = json.loads(msg.payload)
-            if COMMAND_CODE in payload:
+            if COMMAND_CODE in payload and payload[COMMAND_CODE] != "None":
                 service_payload[COMMAND_CODE] = payload[COMMAND_CODE]
             if payload[COMMAND_ACTION] == DEFAULT_PAYLOAD_OPEN:
                 await self._hass.services.async_call(
