@@ -1,5 +1,19 @@
 # Changelog
 
+## v3.1.0 (2026/04/22)
+### ✨ Enhancements
+- [Added support for locks](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1d58e08eeae7251f94896d42710ac0c76b0f3fd5) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Add local brand logos](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fcc108ed2fc273c91913ea055f349651d724afde) - @RogerSelwyn
+- [Do not HACS validate for Changelog](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b333d3286e290e392010456c999302cefaa71547) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.1.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6d13fe2a306b053a92990b4f9f2b4f7176a7b473) - @RogerSelwyn
+
+
+
+
 ## v3.0.4 (2026/02/26)
 ### 🐛 Fixes
 - [Do not convert color temp if already kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62540eb861f3b78bb8a09c62a34933eb788fca9a) - @RogerSelwyn
