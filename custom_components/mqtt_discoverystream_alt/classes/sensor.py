@@ -18,6 +18,7 @@ class DiscoveryItem(DiscoveryEntity):
         self,
         hass,
         base_topic,
+        command_topic,
         publish_retain,
         discovered_entities,
         platform,
@@ -27,6 +28,7 @@ class DiscoveryItem(DiscoveryEntity):
         super().__init__(
             hass,
             base_topic,
+            command_topic,
             publish_retain,
             discovered_entities,
             platform,
