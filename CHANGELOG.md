@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.2.0 (2026/04/27)
+### ✨ Enhancements
+- [Add Alarm Control Panel support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4d53e5bc199222b9216efbec7ef1ae8931072578) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.2.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ec7d4a98e9b8c0fa3c6de16fecd1ee04d6a44a22) - @RogerSelwyn
+
+
+
+
 ## v3.1.2 (2026/04/23)
 ### 🐛 Fixes
 - [Fix mismatching parameters on sensor cxlass](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a47425dfb7fb742e3feffbfeffd5e9cf27bdfe5b) - @RogerSelwyn
