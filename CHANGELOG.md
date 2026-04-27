@@ -1,5 +1,15 @@
 # Changelog
 
+## v3.1.2 (2026/04/23)
+### 🐛 Fixes
+- [Fix mismatching parameters on sensor cxlass](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a47425dfb7fb742e3feffbfeffd5e9cf27bdfe5b) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.1.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/82d34b49c552023035a13dc689b60ff29421f306) - @RogerSelwyn
+
+
+
+
 ## v3.1.1 (2026/04/22)
 ### 🐛 Fixes
 - [Fix to handle multi-level command_topic](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/93686beeb61afbb73b3c08c86fa7ba199500ec95) - @RogerSelwyn
