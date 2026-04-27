@@ -20,6 +20,8 @@ ATTR_G = "g"
 ATTR_B = "b"
 
 ATTR_ATTRIBUTES = "attributes"
+ATTR_CODE_DISARM_REQUIRED = "code_disarm_required"
+ATTR_CODE_TRIGGER_REQUIRED = "code_trigger_required"
 ATTR_COLOR = "color"  # pylint: disable=invalid-name
 ATTR_CONFIG = "config"
 ATTR_INSTALL = "install"
@@ -77,13 +79,16 @@ CONF_AVTY = "avty"
 CONF_AVTY_MODE = "avty_mode"
 CONF_CMD_T = "cmd_t"
 CONF_CMD_TPL = "cmd_tpl"
+CONF_COD_ARM_REQ = "cod_arm_req"
+CONF_COD_DIS_REQ = "cod_dis_req"
+CONF_COD_FORM = "cod_form"
+CONF_COD_TRIG_REQ = "cod_trig_req"
 CONF_DEF_ENT_ID = "def_ent_id"
 CONF_DEV = "dev"
 CONF_DEV_CLA = "dev_cla"
 CONF_ENT_CAT = "ent_cat"
 CONF_ENT_PIC = "ent_pic"
 CONF_EVT_TYP = "evt_typ"
-CONF_COD_FORM = "cod_form"
 CONF_JSON_ATTR_T = "json_attr_t"
 CONF_MAX = "max"
 CONF_MIN = "min"
@@ -102,6 +107,7 @@ CONF_STAT_T = "stat_t"
 CONF_STAT_CLA = "stat_cla"
 CONF_STEP = "step"
 CONF_SUG_DSP_PRC = "sug_dsp_prc"
+CONF_SUP_FEAT = "sup_feat"
 CONF_TILDA = "~"
 CONF_TILT_CMD_T = "tilt_cmd_t"
 CONF_UNIQ_ID = "uniq_id"
@@ -117,6 +123,7 @@ CONF_PL_OFF = "pl_off"
 
 
 SUPPORTED_ENTITY_TYPE_COMMANDS = {
+    Platform.ALARM_CONTROL_PANEL: [COMMAND_SET],
     Platform.BINARY_SENSOR: [],
     Platform.BUTTON: [COMMAND_SET],
     Platform.CLIMATE: [

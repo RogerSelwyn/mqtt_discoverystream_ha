@@ -14,6 +14,7 @@ Provides discovery & command support for:
 
 | **Entity Type** | **Entity Created** | **Commands Supported**    | **Notes** |
 |:----------------|:-------------------|:--------------------------|:----------|
+| Alarm Control Panel | alarm_control_panel | Arm (all), Disarm, Trigger |           |
 | Binary Sensor   | binary_sensor      |                           |           |
 | Button          | button             | Press                     |           |
 | Climate         | climate            | Set Humidity, Set HVAC Mode, Set Preset Mode, Set Temperature, Set Swing, Set Fan, Turn On, Turn Off |  |
