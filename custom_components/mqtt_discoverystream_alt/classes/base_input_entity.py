@@ -296,4 +296,4 @@ class TextDiscoveryEntity(DiscoveryEntity):
 
 
 def _is_datetime(attributes):
-    return True if attributes[CONF_HAS_DATE] and attributes[CONF_HAS_TIME] else False
+    return bool(attributes[CONF_HAS_DATE] and attributes[CONF_HAS_TIME])
