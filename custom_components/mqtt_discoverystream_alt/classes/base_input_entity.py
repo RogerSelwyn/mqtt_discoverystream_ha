@@ -3,6 +3,8 @@
 import logging
 
 from homeassistant.components.button.const import SERVICE_PRESS
+from homeassistant.components.input_datetime import CONF_HAS_DATE, CONF_HAS_TIME
+from homeassistant.components.input_datetime import DOMAIN as INPUT_DATETIME_DOMAIN
 from homeassistant.components.number import (
     ATTR_MAX,
     ATTR_MIN,
@@ -13,19 +15,27 @@ from homeassistant.components.number import (
 from homeassistant.components.select import ATTR_OPTION, ATTR_OPTIONS
 from homeassistant.components.text import ATTR_PATTERN
 from homeassistant.const import (
+    ATTR_DATE,
     ATTR_ENTITY_ID,
     ATTR_STATE,
+    ATTR_TIME,
     SERVICE_SELECT_OPTION,
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
     STATE_OFF,
     STATE_ON,
     STATE_UNKNOWN,
+    Platform,
 )
+from homeassistant.util import dt as dt_util
 
 from ..const import (
+    ATTR_DATETIME,
     ATTR_MODE,
     COMMAND_SET,
+    COMMAND_SET_DATE,
+    COMMAND_SET_DATETIME,
+    COMMAND_SET_TIME,
     CONF_CMD_T,
     CONF_MAX,
     CONF_MIN,
@@ -37,6 +47,7 @@ from ..const import (
     CONF_PL_PRS,
     CONF_STAT_T,
     CONF_STEP,
+    SERVICE_SET_DATETIME,
 )
 from ..utils import EntityInfo, add_config_command
 from .base_entity import DiscoveryEntity
@@ -66,6 +77,81 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
             ATTR_ENTITY_ID: f"{domain}.{entity}",
         }
         await self._hass.services.async_call(domain, SERVICE_PRESS, service_payload)
+
+
+class DateTimeDiscoveryEntity(DiscoveryEntity):
+    """DateTime class."""
+
+    def build_config(self, config, entity_info: EntityInfo):
+        """Build the config for a datetime."""
+        if self.PLATFORM == Platform.DATETIME:
+            command = COMMAND_SET_DATETIME
+        elif self.PLATFORM == Platform.DATE:
+            command = COMMAND_SET_DATE
+        elif self.PLATFORM == Platform.TIME:
+            command = COMMAND_SET_TIME
+        elif _is_datetime(entity_info.attributes):
+            command = COMMAND_SET_DATETIME
+        elif entity_info.attributes[CONF_HAS_DATE]:
+            command = COMMAND_SET_DATE
+        else:
+            command = COMMAND_SET_TIME
+        add_config_command(config, entity_info, CONF_CMD_T, command)
+
+    async def _async_publish_base_attributes(self, new_state, mybase):
+        """Publish the basic attributes for the entity state."""
+
+        if self.PLATFORM == INPUT_DATETIME_DOMAIN and _is_datetime(
+            new_state.attributes
+        ):
+            publish_dt = dt_util.parse_datetime(new_state.state).replace(
+                tzinfo=dt_util.get_default_time_zone()
+            )
+        else:
+            publish_dt = new_state.state
+
+        await self._async_mqtt_publish(ATTR_STATE, publish_dt, mybase)
+
+    async def _async_handle_message(self, msg):
+        """Handle a message for a datetime."""
+        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+            msg
+        )
+        if not valid:
+            return
+
+        service_payload = {
+            ATTR_ENTITY_ID: f"{domain}.{entity}",
+        }
+        if command == COMMAND_SET_DATETIME:
+            service_payload[ATTR_DATETIME] = msg.payload
+        elif command == COMMAND_SET_DATE:
+            service_payload[ATTR_DATE] = msg.payload
+        elif command == COMMAND_SET_TIME:
+            service_payload[ATTR_TIME] = msg.payload
+
+        if self.PLATFORM == INPUT_DATETIME_DOMAIN:
+            await self._hass.services.async_call(
+                domain, SERVICE_SET_DATETIME, service_payload
+            )
+        else:
+            await self._hass.services.async_call(
+                domain, SERVICE_SET_VALUE, service_payload
+            )
+
+    def translate_entity_type(self, entity_id, attributes=None):
+        """Translate the entity type to the output type."""
+        ent_parts = entity_id.split(".")
+        if self.PLATFORM in [Platform.DATETIME, Platform.DATE, Platform.TIME]:
+            output_entity = self.PLATFORM
+        elif _is_datetime(attributes):
+            output_entity = Platform.DATETIME
+        elif attributes[CONF_HAS_DATE]:
+            output_entity = Platform.DATE
+        else:
+            output_entity = Platform.TIME
+
+        return f"{output_entity}.{ent_parts[1]}"
 
 
 class NumberDiscoveryEntity(DiscoveryEntity):
@@ -207,3 +293,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
             ATTR_VALUE: msg.payload,
         }
         await self._hass.services.async_call(domain, SERVICE_SET_VALUE, service_payload)
+
+
+def _is_datetime(attributes):
+    return True if attributes[CONF_HAS_DATE] and attributes[CONF_HAS_TIME] else False

@@ -64,7 +64,6 @@ from .utils import (
     set_topic,
     simple_attribute_add,
     simple_entry_attribute,
-    translate_entity_type,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -117,13 +116,14 @@ class Discovery:
             return False
 
         entity_info = EntityInfo(mycommand, attributes, mybase, entity_id)
-        config = self._build_base(entity_info)
 
         if ent_domain not in self.discovery_classes:
             await self._hass.async_add_executor_job(
                 self._build_discovery_class, ent_domain
             )
         entityclass = self.discovery_classes[ent_domain]
+        config = self._build_base(entity_info, entityclass)
+
         if ent_domain not in self._subscribed and self.subscribe_possible:
             await entityclass.async_subscribe_commands()
             self._subscribed.append(ent_domain)
@@ -135,7 +135,7 @@ class Discovery:
 
         self.discovered_entities.append(entity_id)
 
-        entity_id = translate_entity_type(entity_id)
+        entity_id = entityclass.translate_entity_type(entity_id, attributes)
 
         encoded = json.dumps(config, cls=JSONEncoder)
         entity_disc_topic = (
@@ -147,7 +147,7 @@ class Discovery:
 
         return True
 
-    def _build_base(self, entity_info: EntityInfo):
+    def _build_base(self, entity_info: EntityInfo, entityclass):
         ent_parts = entity_info.entity_id.split(".")
         ent_id = ent_parts[1]
         availability = [{CONF_TOPIC: f"~/{CONF_AVAILABILITY}"}]
@@ -160,9 +160,12 @@ class Discovery:
                 }
             )
 
+        uid = entityclass.translate_entity_type(
+            entity_info.entity_id, entity_info.attributes
+        )
         config = {
             CONF_TILDA: entity_info.mybase.removesuffix("/"),
-            CONF_UNIQ_ID: f"{self._unique_prefix}_{translate_entity_type(entity_info.entity_id)}",
+            CONF_UNIQ_ID: f"{self._unique_prefix}_{uid}",
             CONF_DEF_ENT_ID: entity_info.entity_id,
             CONF_STAT_T: build_topic(ATTR_STATE),
             CONF_JSON_ATTR_T: build_topic(ATTR_ATTRIBUTES),

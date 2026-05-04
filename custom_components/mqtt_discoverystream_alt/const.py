@@ -4,6 +4,7 @@ from datetime import timedelta
 
 from homeassistant.components.input_boolean import DOMAIN as INPUT_BOOLEAN_DOMAIN
 from homeassistant.components.input_button import DOMAIN as INPUT_BUTTON_DOMAIN
+from homeassistant.components.input_datetime import DOMAIN as INPUT_DATETIME_DOMAIN
 from homeassistant.components.input_number import DOMAIN as INPUT_NUMBER_DOMAIN
 from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.input_text import DOMAIN as INPUT_TEXT_DOMAIN
@@ -24,6 +25,7 @@ ATTR_CODE_DISARM_REQUIRED = "code_disarm_required"
 ATTR_CODE_TRIGGER_REQUIRED = "code_trigger_required"
 ATTR_COLOR = "color"  # pylint: disable=invalid-name
 ATTR_CONFIG = "config"
+ATTR_DATETIME = "datetime"
 ATTR_INSTALL = "install"
 ATTR_JSON = "JSON"
 ATTR_MODE = "mode"
@@ -41,10 +43,13 @@ COMMAND_PERCENTAGE = "command_percentage"
 COMMAND_PRESET = "command_preset"
 COMMAND_SEND = "command_send"
 COMMAND_SET = "set"
+COMMAND_SET_DATE = "set_date"
+COMMAND_SET_DATETIME = "set_datetime"
 COMMAND_SET_FAN_SPEED = "set_fan_speed"
 COMMAND_SET_LIGHT = "set_light"
 COMMAND_SET_POSITION = "set_position"
 COMMAND_SET_TILT = "set_tilt"
+COMMAND_SET_TIME = "set_time"
 COMMAND_SWING = "command_swing"
 COMMAND_TEMPERATURE = "command_temperature"
 
@@ -136,6 +141,8 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
         COMMAND_TEMPERATURE,
     ],
     Platform.COVER: [COMMAND_SET, COMMAND_SET_POSITION, COMMAND_SET_TILT],
+    Platform.DATE: [COMMAND_SET_DATE],
+    Platform.DATETIME: [COMMAND_SET_DATETIME],
     Platform.DEVICE_TRACKER: [],
     Platform.EVENT: [],
     Platform.FAN: [
@@ -154,16 +161,20 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.SENSOR: [],
     Platform.SWITCH: [COMMAND_SET],
     Platform.TEXT: [COMMAND_SET],
+    Platform.TIME: [COMMAND_SET_TIME],
     Platform.UPDATE: [COMMAND_INSTALL],
     Platform.VACUUM: [COMMAND_SEND, COMMAND_SET, COMMAND_SET_FAN_SPEED],
     INPUT_BOOLEAN_DOMAIN: [COMMAND_SET],
     INPUT_BUTTON_DOMAIN: [COMMAND_SET],
+    INPUT_DATETIME_DOMAIN: [COMMAND_SET_DATETIME, COMMAND_SET_DATE, COMMAND_SET_TIME],
     INPUT_NUMBER_DOMAIN: [COMMAND_SET],
     INPUT_SELECT_DOMAIN: [COMMAND_SET],
     INPUT_TEXT_DOMAIN: [COMMAND_SET],
     SCRIPT_DOMAIN: [COMMAND_SET],
 }
 
+# INPUT_DATETIME not included here since it is a special case
+# and is translated to datetime, date or time as appropriate
 OUTPUT_ENTITIES = {
     INPUT_BOOLEAN_DOMAIN: Platform.SWITCH,
     INPUT_BUTTON_DOMAIN: Platform.BUTTON,
@@ -172,3 +183,5 @@ OUTPUT_ENTITIES = {
     INPUT_TEXT_DOMAIN: Platform.TEXT,
     SCRIPT_DOMAIN: Platform.BUTTON,
 }
+
+SERVICE_SET_DATETIME = "set_datetime"

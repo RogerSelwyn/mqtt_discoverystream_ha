@@ -11,6 +11,7 @@ from homeassistant.helpers.json import JSONEncoder
 
 from ..const import (
     ATTR_ATTRIBUTES,
+    OUTPUT_ENTITIES,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 from ..utils import EntityInfo
@@ -133,3 +134,12 @@ class DiscoveryEntity:
             {payload},
             {entity},
         )
+
+    def translate_entity_type(self, entity_id, attributes=None):  # pylint: disable=unused-argument
+        """Translate the entity type to the output type."""
+        ent_parts = entity_id.split(".")
+        if ent_parts[0] in OUTPUT_ENTITIES:
+            output_entity = OUTPUT_ENTITIES[ent_parts[0]]
+        else:
+            output_entity = ent_parts[0]
+        return f"{output_entity}.{ent_parts[1]}"

@@ -154,10 +154,6 @@ class DiscoveryItem(DiscoveryEntity):
                 )
             await self._async_mqtt_publish(ATTR_PERCENTAGE, int(percentage), mybase)
 
-    def _add_attribute(self, payload, new_state, attribute):
-        if attribute in new_state.attributes and new_state.attributes[attribute]:
-            payload[attribute] = new_state.attributes[attribute]
-
     async def _async_handle_message(self, msg):
         """Handle a message for a fan."""
         valid, domain, entity, command = self.validate_message(

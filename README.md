@@ -19,12 +19,15 @@ Provides discovery & command support for:
 | Button          | button             | Press                     |           |
 | Climate         | climate            | Set Humidity, Set HVAC Mode, Set Preset Mode, Set Temperature, Set Swing, Set Fan, Turn On, Turn Off |  |
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |  |
+| Date            | date               | Set Value                 |           |
+| DateTime        | datetime           | Set Value                 |           |
 | Device Tracker  | device_tracker     |                           |           |
 | Event           | event              |                           |           |
 | Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |  |
 | Image           | image              |                           | References master HA image |
 | Input Boolean   | switch             | Turn On, Turn Off         |           |
 | Input Button    | button             | Press                     |           |
+| Input DateTime  | datetime/date/time | Set DateTime/Date/Time    | Entity created is based on configuration of `has_date` and `has_time` |
 | Input Number    | number             | Set Value                 |           |
 | Input Select    | select             | Select Option             |           |
 | Input Text      | text               | Set Value                 |           |
@@ -36,6 +39,7 @@ Provides discovery & command support for:
 | Select          | select             | Select Option             |           |
 | Switch          | switch             | Turn On, Turn Off         |           |
 | Text            | text               | Set Value                 |           |
+| Time            | time              | Set Value                 |           |
 | Update          | update             | Install                   | Not able to install specific version or trigger backup |
 | Vacuum          | vacuum             | Start, Stop, Pause, Return To Base, Locate, Clean Spot, Set Fan Speed, Send Custom Command |  |
 
