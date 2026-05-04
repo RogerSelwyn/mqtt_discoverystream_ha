@@ -95,13 +95,7 @@ class DiscoveryItem(DiscoveryEntity):
         self._add_attribute(payload, new_state, ATTR_COLOR_MODE)
         self._add_attribute(payload, new_state, ATTR_MAX_COLOR_TEMP_KELVIN)
         self._add_attribute(payload, new_state, ATTR_MIN_COLOR_TEMP_KELVIN)
-        self._add_attribute(payload, new_state, CONF_COLOR_TEMP)
-        self._add_attribute(payload, new_state, ATTR_COLOR_TEMP_KELVIN)
-        if (
-            ATTR_COLOR_TEMP_KELVIN in new_state.attributes
-            and new_state.attributes[ATTR_COLOR_TEMP_KELVIN]
-        ):
-            payload[CONF_COLOR_TEMP] = new_state.attributes[ATTR_COLOR_TEMP_KELVIN]
+        self._add_attribute(payload, new_state, ATTR_COLOR_TEMP_KELVIN, CONF_COLOR_TEMP)
         self._add_attribute(payload, new_state, ATTR_EFFECT)
 
         if color := self._add_colors(new_state):
@@ -109,9 +103,10 @@ class DiscoveryItem(DiscoveryEntity):
 
         await self._async_mqtt_publish(ATTR_STATE, payload, mybase, encoded=True)
 
-    def _add_attribute(self, payload, new_state, attribute):
+    def _add_attribute(self, payload, new_state, attribute, alt_attribute=None):
+        save_attribute = alt_attribute or attribute
         if attribute in new_state.attributes and new_state.attributes[attribute]:
-            payload[attribute] = new_state.attributes[attribute]
+            payload[save_attribute] = new_state.attributes[attribute]
 
     def _add_colors(self, new_state):
         color = {}
@@ -157,7 +152,7 @@ class DiscoveryItem(DiscoveryEntity):
             if ATTR_BRIGHTNESS in payload_json:
                 service_payload[ATTR_BRIGHTNESS] = payload_json[ATTR_BRIGHTNESS]
             if CONF_COLOR_TEMP in payload_json:
-                service_payload[CONF_COLOR_TEMP] = payload_json[CONF_COLOR_TEMP]
+                service_payload[ATTR_COLOR_TEMP_KELVIN] = payload_json[CONF_COLOR_TEMP]
             if ATTR_COLOR in payload_json:
                 if ATTR_H in payload_json[ATTR_COLOR]:
                     service_payload[ATTR_HS_COLOR] = [
