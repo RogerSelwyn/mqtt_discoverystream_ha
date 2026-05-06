@@ -175,6 +175,13 @@ participant I as Integration
 participant M as Core/<br/>Master Broker
 participant S as Core/<br/>Slave Broker
 participant R as Home Assistant Slave
+H->>M: Home Assistant Started<br/>(homeassistant/status)
+M->>S: Bridge HA Online<br/>(local_topic)
+I->>H: Listen for event `homeassistant_started`
+H->>I: Event `homeassistant_started`
+note right of I: Perform Discovery and State Publication
+I->>H: Listen for event `homeassistant_stop`
+
 opt
   H->>I: Entity changed state
   I->>M: Publish discovery<br/>(discovery_topic)
@@ -186,14 +193,7 @@ note right of I: Wait 1.5 seconds
   I->>M: Publish state<br/>(base_topic)
   M->>S: Bridge state<br/>(base_topic)
   S->>R: Set state
-
 end
-H->>M: Home Assistant Started<br/>(homeassistant/status)
-M->>S: Bridge HA Online<br/>(local_topic)
-I->>H: Listen for event `homeassistant_started`
-H->>I: Event `homeassistant_started`
-note right of I: Perform Discovery and State Publication
-I->>H: Listen for event `homeassistant_stop`
 ```
 
 ### Running
