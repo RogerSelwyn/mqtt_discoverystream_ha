@@ -1,5 +1,28 @@
 # Changelog
 
+## v3.3.0 (2026/05/20)
+### ✨ Enhancements
+- [Add support for (input) datetime, date and time](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fae3fd9a512307ca5c8f936c8dc85ceea29b4e3b) - @RogerSelwyn
+- [Add support for Water Heaters](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/646b698141b505c464c060e327fac89a8e023096) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Fixing changing of color temperature on slave](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/de0782d545dd218e357fbab7cb4e57a953b65737) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Sourcery recommendation](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c961dfbaa2fc2b6b3f8667fab95566c814210b76) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [update pygithub requirement from >=1.51 to >=2.9.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c6e952eaaef74fcc0b5956df30fe3e0f0823bcb4) - @dependabot[bot]
+
+### 📚 Documentation
+- [Update startup diagram](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/82e1c50441895e39d37d4abac2c622864f9c7084) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.3.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/abcf322f5b3fb081f71c871834836dcdc758af9a) - @RogerSelwyn
+
+
+
+
 ## v3.2.0 (2026/04/27)
 ### ✨ Enhancements
 - [Add Alarm Control Panel support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4d53e5bc199222b9216efbec7ef1ae8931072578) - @RogerSelwyn
