@@ -39,9 +39,10 @@ Provides discovery & command support for:
 | Select          | select             | Select Option             |           |
 | Switch          | switch             | Turn On, Turn Off         |           |
 | Text            | text               | Set Value                 |           |
-| Time            | time              | Set Value                 |           |
+| Time            | time               | Set Value                 |           |
 | Update          | update             | Install                   | Not able to install specific version or trigger backup |
 | Vacuum          | vacuum             | Start, Stop, Pause, Return To Base, Locate, Clean Spot, Set Fan Speed, Send Custom Command |  |
+| Water Heater    | water_heater       | Set Mode, Set Temperature, Turn On, Turn Off | Does not support `Set Away Mode` |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
 I work on this integration because I like things to work well for myself and others. Whilst I have now made significant changes to the integration, it would not be as it stands today without the initial creation by @koying. Please don't feel you are obligated to donate, but of course it is appreciated.
