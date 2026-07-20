@@ -28,5 +28,3 @@ jobs:
 
       - name: "Ruff"
         run: uv run python3 -m ruff check .
-
-          run: python3 -m ruff check .
