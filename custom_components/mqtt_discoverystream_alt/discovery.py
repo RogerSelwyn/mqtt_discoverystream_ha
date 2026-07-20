@@ -54,6 +54,7 @@ from .const import (
     CONF_SW,
     CONF_TILDA,
     CONF_UNIQ_ID,
+    CONF_UNIQUE_ENTITY_PREFIX,
     CONF_UNIQUE_PREFIX,
     CONF_UNIT_OF_MEAS,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
@@ -149,7 +150,6 @@ class Discovery:
 
     def _build_base(self, entity_info: EntityInfo, entityclass):
         ent_parts = entity_info.entity_id.split(".")
-        ent_id = ent_parts[1]
         availability = [{CONF_TOPIC: f"~/{CONF_AVAILABILITY}"}]
         if self._local_status:
             availability.append(
@@ -166,7 +166,7 @@ class Discovery:
         config = {
             CONF_TILDA: entity_info.mybase.removesuffix("/"),
             CONF_UNIQ_ID: f"{self._unique_prefix}_{uid}",
-            CONF_DEF_ENT_ID: entity_info.entity_id,
+            CONF_DEF_ENT_ID: self._build_default_entity_id(entity_info.entity_id),
             CONF_STAT_T: build_topic(ATTR_STATE),
             CONF_JSON_ATTR_T: build_topic(ATTR_ATTRIBUTES),
             CONF_AVTY: availability,
@@ -176,7 +176,7 @@ class Discovery:
         if ATTR_FRIENDLY_NAME in entity_info.attributes:
             name = entity_info.attributes[ATTR_FRIENDLY_NAME]
         else:
-            name = ent_id.replace("_", " ").title()
+            name = ent_parts[1].replace("_", " ").title()
         if entry := self._ent_reg.async_get(entity_info.entity_id):
             if entry.device_id and name:
                 device = self._dev_reg.async_get(entry.device_id)
@@ -201,6 +201,15 @@ class Discovery:
         )
 
         return config
+
+    def _build_default_entity_id(self, entity_id):
+        """Add the source namespace to a default entity ID when configured."""
+
+        if ent_prefix := self._conf[CONF_UNIQUE_ENTITY_PREFIX]:
+            domain, output_id = entity_id.split(".", 1)
+            return f"{domain}.{ent_prefix}_{output_id}"
+
+        return entity_id
 
     def _build_device(self, entity_id):  # sourcery skip: extract-method
         config_device = {}

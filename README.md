@@ -98,20 +98,21 @@ mqtt_discoverystream_alt:
 This integration can only be configured via YAML.
 The base options are the same as the mqtt_statestream one. 
 
-| key                | default | required | description                                                                        |
-| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------- |
-| base_topic         | none    | yes      | Base topic used to generate the actual topic used to publish.                      |
-| discovery_topic    | --->    | no       | Topic where the configuration topics will be created. Defaults to base_topic       |
-| command_topic      | --->    | no       | Topic where any command responses will be created. Defaults to base_topic          |
-| publish_attributes | false   | no       | Publish attributes of the entity as well as the state.                             |
-| publish_timestamps | false   | no       | Publish the last_changed and last_updated timestamps for the entity.               |
-| publish_discovery  | false   | no       | Publish the discovery topic ("config").                                            |
-| publish_retain     | false   | no       | When set to true publishes messages with retain bit turned on.                     |
-| unique_prefix      | mqtt    | no       | Prefix applied to the unique id of the created entity                              |
-| republish_time     | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
-| include / exclude  | none    | no       | Configure which integrations should be included / excluded from publishing.        |
-| local_status       | none    | no       | See below                                                                          |
-| remote_status      | none    | no       | See below                                                                          |
+| key                  | default | required | description                                                                        |
+| -------------------- | ------- | -------- | ---------------------------------------------------------------------------------- |
+| base_topic           | none    | yes      | Base topic used to generate the actual topic used to publish.                      |
+| discovery_topic      | --->    | no       | Topic where the configuration topics will be created. Defaults to base_topic       |
+| command_topic        | --->    | no       | Topic where any command responses will be created. Defaults to base_topic          |
+| publish_attributes   | false   | no       | Publish attributes of the entity as well as the state.                             |
+| publish_timestamps   | false   | no       | Publish the last_changed and last_updated timestamps for the entity.               |
+| publish_discovery    | false   | no       | Publish the discovery topic ("config").                                            |
+| publish_retain       | false   | no       | When set to true publishes messages with retain bit turned on.                     |
+| unique_prefix        | mqtt    | no       | Prefix applied to the unique id of the created entity                              |
+| unique_entity_prefix | none    | no       | Prefix applied to the entity_id of the created entity                              |
+| republish_time       | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
+| include / exclude    | none    | no       | Configure which integrations should be included / excluded from publishing.        |
+| local_status         | none    | no       | See below                                                                          |
+| remote_status        | none    | no       | See below                                                                          |
 
 
 #### local_status
