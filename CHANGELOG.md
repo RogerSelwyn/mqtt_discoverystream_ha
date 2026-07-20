@@ -1,5 +1,28 @@
 # Changelog
 
+## v3.4.0 (2026/07/20)
+### ✨ Enhancements
+- [Add optional entity_id prefix](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1cf8a136fe26d0c671f68952cd13ad7066542786) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Correct the config of color_temp_kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/826560ea20cf765dd6d86e26cae907b22a5e4a74) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Create license](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0e448396d37cd35adf051159aee596d49ae7d75d) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump actions/checkout from 6 to 7](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bf3ee167e641170d2d2130ab425ddd99c964acf0) - @dependabot[bot]
+- [Add versioning strategy to Dependabot config](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1fcefb9c6f6a36577820854799fe71fec09842ab) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update HACS badge to reflect default status](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e871d8a3a5fca62dff4679fc38a2b5ff5e0ff39e) - @RogerSelwyn
+
+### 🔖 Release
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/897e615b01b1421ca94eaaf981f18b73da8158a4) - @actions-user
+
+
+
+
 ## v3.3.0 (2026/05/20)
 ### ✨ Enhancements
 - [Add support for (input) datetime, date and time](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fae3fd9a512307ca5c8f936c8dc85ceea29b4e3b) - @RogerSelwyn
