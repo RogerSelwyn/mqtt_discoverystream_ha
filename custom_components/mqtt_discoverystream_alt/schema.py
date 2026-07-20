@@ -58,7 +58,7 @@ BASE_SCHEMA = {
     vol.Optional(CONF_PUBLISH_DISCOVERY, default=False): cv.boolean,
     vol.Optional(CONF_PUBLISH_RETAIN, default=DEFAULT_RETAIN): cv.boolean,
     vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
-    vol.Optional(CONF_UNIQUE_ENTITY_PREFIX, default=None): cv.string,
+    vol.Optional(CONF_UNIQUE_ENTITY_PREFIX): cv.string,
     vol.Optional(CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME): cv.time_period,
 }
 

@@ -205,7 +205,7 @@ class Discovery:
     def _build_default_entity_id(self, entity_id):
         """Add the source namespace to a default entity ID when configured."""
 
-        if ent_prefix := self._conf[CONF_UNIQUE_ENTITY_PREFIX]:
+        if ent_prefix := self._conf.get(CONF_UNIQUE_ENTITY_PREFIX):
             domain, output_id = entity_id.split(".", 1)
             return f"{domain}.{ent_prefix}_{output_id}"
 
