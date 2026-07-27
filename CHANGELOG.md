@@ -8,6 +8,36 @@
 - [Correct the config of color_temp_kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/826560ea20cf765dd6d86e26cae907b22a5e4a74) - @RogerSelwyn
 - [Fix lint workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cdf2f77de66211fc84d4d56320b8f01f0507debe) - @RogerSelwyn
 - [Fix update_requirements workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ea66eaf63bfa82c6a23a17a582a99d769f8cbc81) - @RogerSelwyn
+- [Fix empty entity prefix error](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ae503acaab98ec487e2e45fef6ce6696d8c609ac) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Create license](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0e448396d37cd35adf051159aee596d49ae7d75d) - @RogerSelwyn
+- [Update workflows to current standard](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4417e380da8ff0843247adfccbe1907ceaf94b0b) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump actions/checkout from 6 to 7](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bf3ee167e641170d2d2130ab425ddd99c964acf0) - @dependabot[bot]
+- [Add versioning strategy to Dependabot config](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1fcefb9c6f6a36577820854799fe71fec09842ab) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update HACS badge to reflect default status](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e871d8a3a5fca62dff4679fc38a2b5ff5e0ff39e) - @RogerSelwyn
+- [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7a7e3f50d3137c046c601f9081f4e58a60520195) - @actions-user
+- [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/66a74a2ba9d99657106f5a9a7cfc5a1e3fb46c79) - @actions-user
+
+### 🔖 Release
+- [Release v3.4.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d5528c1a2457d9f13a5b27c0bbc8e5b07f9bcd25) - @RogerSelwyn
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/897e615b01b1421ca94eaaf981f18b73da8158a4) - @actions-user
+
+
+
+
+## v3.4.0 (2026/07/20)
+### ✨ Enhancements
+- [Add optional entity_id prefix](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1cf8a136fe26d0c671f68952cd13ad7066542786) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Correct the config of color_temp_kelvin](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/826560ea20cf765dd6d86e26cae907b22a5e4a74) - @RogerSelwyn
+- [Fix lint workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cdf2f77de66211fc84d4d56320b8f01f0507debe) - @RogerSelwyn
+- [Fix update_requirements workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ea66eaf63bfa82c6a23a17a582a99d769f8cbc81) - @RogerSelwyn
 
 ### 🧰 Maintenance
 - [Create license](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0e448396d37cd35adf051159aee596d49ae7d75d) - @RogerSelwyn
