@@ -23,7 +23,8 @@ Provides discovery & command support for:
 | DateTime        | datetime           | Set Value                 |           |
 | Device Tracker  | device_tracker     |                           |           |
 | Event           | event              |                           |           |
-| Fan             | Fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |  |
+| Fan             | fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |  |
+| Humidifier      | humidifier         | Set Humidity, Set Mode, Turn On, Turn Off |  |
 | Image           | image              |                           | References master HA image |
 | Input Boolean   | switch             | Turn On, Turn Off         |           |
 | Input Button    | button             | Press                     |           |
