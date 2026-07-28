@@ -1,4 +1,4 @@
-"""Fan methods for MQTT Discovery Statestream."""
+"""Humidifier methods for MQTT Discovery Statestream."""
 
 import logging
 
@@ -48,12 +48,12 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class DiscoveryItem(DiscoveryEntity):
-    """Fan class."""
+    """Humidifier class."""
 
     PLATFORM = Platform.HUMIDIFIER
 
     def build_config(self, config, entity_info: EntityInfo):
-        """Build the config for a fan."""
+        """Build the config for a humidifier."""
         attributes = entity_info.attributes
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
@@ -89,7 +89,7 @@ class DiscoveryItem(DiscoveryEntity):
             ]
 
     async def async_publish_state(self, new_state, mybase):
-        """Build the state for a fan"""
+        """Build the state for a humidifier"""
         await super().async_publish_state(new_state, mybase)
         await self.async_publish_attribute_if_exists(
             new_state,
@@ -108,7 +108,7 @@ class DiscoveryItem(DiscoveryEntity):
         )
 
     async def _async_handle_message(self, msg):
-        """Handle a message for a fan."""
+        """Handle a message for a humidifier."""
         valid, domain, entity, command = self.validate_message(
             msg,
         )
