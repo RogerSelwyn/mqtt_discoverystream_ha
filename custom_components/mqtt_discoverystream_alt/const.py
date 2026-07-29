@@ -9,6 +9,7 @@ from homeassistant.components.input_number import DOMAIN as INPUT_NUMBER_DOMAIN
 from homeassistant.components.input_select import DOMAIN as INPUT_SELECT_DOMAIN
 from homeassistant.components.input_text import DOMAIN as INPUT_TEXT_DOMAIN
 from homeassistant.components.script import DOMAIN as SCRIPT_DOMAIN
+from homeassistant.components.tag import DOMAIN as TAG_DOMAIN
 from homeassistant.const import Platform
 
 ATTR_COLOR = "color"  # pylint: disable=invalid-name
@@ -176,6 +177,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     INPUT_SELECT_DOMAIN: [COMMAND_SET],
     INPUT_TEXT_DOMAIN: [COMMAND_SET],
     SCRIPT_DOMAIN: [COMMAND_SET],
+    TAG_DOMAIN: [],
 }
 
 # INPUT_DATETIME not included here since it is a special case
@@ -187,6 +189,7 @@ OUTPUT_ENTITIES = {
     INPUT_SELECT_DOMAIN: Platform.SELECT,
     INPUT_TEXT_DOMAIN: Platform.TEXT,
     SCRIPT_DOMAIN: Platform.BUTTON,
+    TAG_DOMAIN: Platform.SENSOR,
 }
 
 SERVICE_SET_DATETIME = "set_datetime"

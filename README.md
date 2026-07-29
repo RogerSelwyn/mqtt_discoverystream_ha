@@ -41,6 +41,7 @@ Provides discovery & command support for:
 | Select          | select             | Select Option             |           |
 | Siren           | siren              | Turn On, Turn Off         |           |
 | Switch          | switch             | Turn On, Turn Off         |           |
+| Tag             | Sensor             |                           |           |
 | Text            | text               | Set Value                 |           |
 | Time            | time               | Set Value                 |           |
 | Update          | update             | Install                   | Not able to install specific version or trigger backup |
