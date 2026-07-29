@@ -39,6 +39,7 @@ Provides discovery & command support for:
 | Scene           | scene              | Apply                     |           |
 | Sensor          | sensor             |                           |           |
 | Select          | select             | Select Option             |           |
+| Siren           | siren              | Turn On, Turn Off         |           |
 | Switch          | switch             | Turn On, Turn Off         |           |
 | Text            | text               | Set Value                 |           |
 | Time            | time               | Set Value                 |           |

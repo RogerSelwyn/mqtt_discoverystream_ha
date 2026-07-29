@@ -162,6 +162,7 @@ SUPPORTED_ENTITY_TYPE_COMMANDS = {
     Platform.SCENE: [COMMAND_SET],
     Platform.SELECT: [COMMAND_SET],
     Platform.SENSOR: [],
+    Platform.SIREN: [COMMAND_SET],
     Platform.SWITCH: [COMMAND_SET],
     Platform.TEXT: [COMMAND_SET],
     Platform.TIME: [COMMAND_SET_TIME],
