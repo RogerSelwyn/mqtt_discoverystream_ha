@@ -1,6 +1,7 @@
 {
   "domain": "mqtt_discoverystream_alt",
   "name": "MQTT Discoverystream Alt",
+  "after_dependencies": ["tag"],
   "codeowners": ["@rogerselwyn"],
   "dependencies": ["mqtt"],
   "documentation": "https://github.com/RogerSelwyn/mqtt_discoverystream_ha",
