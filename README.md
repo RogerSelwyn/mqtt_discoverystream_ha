@@ -22,6 +22,7 @@ Provides discovery & command support for:
 | Date            | date               | Set Value                 |           |
 | DateTime        | datetime           | Set Value                 |           |
 | Device Tracker  | device_tracker     |                           |           |
+| Device Trigger  |                    |                           | Unsuppported |
 | Event           | event              |                           |           |
 | Fan             | fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |  |
 | Humidifier      | humidifier         | Set Humidity, Set Mode, Turn On, Turn Off |  |
@@ -46,6 +47,7 @@ Provides discovery & command support for:
 | Time            | time               | Set Value                 |           |
 | Update          | update             | Install                   | Not able to install specific version or trigger backup |
 | Vacuum          | vacuum             | Start, Stop, Pause, Return To Base, Locate, Clean Spot, Set Fan Speed, Send Custom Command |  |
+| Valve           | valve              | Open, Close, Stop, Set Position |  |
 | Water Heater    | water_heater       | Set Mode, Set Temperature, Turn On, Turn Off | Does not support `Set Away Mode` |
 
 ## [Buy Me A Beer 🍻](https://buymeacoffee.com/rogtp)
