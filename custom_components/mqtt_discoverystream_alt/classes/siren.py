@@ -35,7 +35,6 @@ from ..const import (
 from ..utils import (
     EntityInfo,
     add_config_command,
-    build_topic,
 )
 from .base_entity import DiscoveryEntity
 
