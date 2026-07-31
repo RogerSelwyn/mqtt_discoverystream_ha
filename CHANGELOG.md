@@ -8,22 +8,20 @@
 - [Add tag support as sensor](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2b023f47c43d187bd00696dac8b850d515c7865e) - @RogerSelwyn
 - [Add valve support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e7ea8cea18a16260b7ff7b59a99e15116f105706) - @RogerSelwyn
 
+### 🐛 Fixes
+- [Fix MQTT light color temperature state publishing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/pull/94) - @S1146468
+
 ### 🧰 Maintenance
 - [Correct method descriptions](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7ebf7a135147d10eedbe7262011c23ee99e53763) - @RogerSelwyn
 - [Remove unused import](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/41b0ef5402f4ce8531c8ac7cd978cf4b866677b2) - @RogerSelwyn
 - [Add tag as after_dependency](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8752530d85ccbeaeebb0ae6f9564ac66ccf89e26) - @RogerSelwyn
-- [Just re-ordered slightly to deal with how my mind works](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2507c0b28d25cb2b7dff1d7a1ff23064e725b650) - @RogerSelwyn
+
 
 ### 📚 Documentation
 - [Update badge links in README.md](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/48f9b54b2d0ba3a38ff29ec45ba48f4947f465cf) - @RogerSelwyn
 
 ### 🔖 Release
 - [Release v3.4.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7811db4351bafaf43f1912e25c4e134d3d887d03) - @RogerSelwyn
-
-### Other
-- [Fix MQTT light color temperature state publishing](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/dbdc72f045ad4076981929b20a8c0db824c68f68) - @S1146468
-
-
 
 
 ## v3.4.0 (2026/07/20)
