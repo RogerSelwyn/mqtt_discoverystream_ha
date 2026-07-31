@@ -16,6 +16,7 @@ from homeassistant.components.light import (
     ATTR_SUPPORTED_COLOR_MODES,
     ATTR_TRANSITION,
     ATTR_XY_COLOR,
+    ColorMode,
     LightEntityFeature,
 )
 from homeassistant.components.mqtt.const import CONF_SCHEMA
@@ -70,20 +71,18 @@ class DiscoveryItem(DiscoveryEntity):
             config[CONF_EFFECT] = True
             config[ATTR_EFFECT_LIST] = entity_info.attributes[ATTR_EFFECT_LIST]
         if ATTR_SUPPORTED_COLOR_MODES in entity_info.attributes:
-            config[ATTR_SUPPORTED_COLOR_MODES] = entity_info.attributes[
-                ATTR_SUPPORTED_COLOR_MODES
-            ]
+            supported_color_modes = entity_info.attributes[ATTR_SUPPORTED_COLOR_MODES]
+            config[ATTR_SUPPORTED_COLOR_MODES] = supported_color_modes
             config[CONF_BRIGHTNESS] = True
+            if ColorMode.COLOR_TEMP in supported_color_modes:
+                # MQTT color_temp values are published and consumed as Kelvin.
+                config[ATTR_COLOR_TEMP_KELVIN] = True
         else:
             config[ATTR_COLOR_MODE] = False
             _LOGGER.warning(
                 "Light '%s' has no '%s' attribute which is mandatory. Please report to owner.",
                 entity_info.entity_id,
                 ATTR_SUPPORTED_COLOR_MODES,
-            )
-        if ATTR_COLOR_TEMP_KELVIN in entity_info.attributes:
-            config[ATTR_COLOR_TEMP_KELVIN] = bool(
-                entity_info.attributes[ATTR_COLOR_TEMP_KELVIN]
             )
 
     async def async_publish_state(self, new_state, mybase):
@@ -94,11 +93,22 @@ class DiscoveryItem(DiscoveryEntity):
             else STATE_CAPITAL_OFF,
         }
         self._add_attribute(payload, new_state, ATTR_BRIGHTNESS)
-        self._add_attribute(payload, new_state, ATTR_COLOR_MODE)
         self._add_attribute(payload, new_state, ATTR_MAX_COLOR_TEMP_KELVIN)
         self._add_attribute(payload, new_state, ATTR_MIN_COLOR_TEMP_KELVIN)
-        self._add_attribute(payload, new_state, ATTR_COLOR_TEMP_KELVIN, CONF_COLOR_TEMP)
         self._add_attribute(payload, new_state, ATTR_EFFECT)
+
+        # Home Assistant's MQTT JSON light schema requires color_temp whenever
+        # color_mode is color_temp. Source lights may briefly expose the mode
+        # before their temperature value is available, so omit the mode for
+        # that transient state instead of publishing an invalid payload.
+        color_mode = new_state.attributes.get(ATTR_COLOR_MODE)
+        color_temp_kelvin = new_state.attributes.get(ATTR_COLOR_TEMP_KELVIN)
+        if color_mode == ColorMode.COLOR_TEMP:
+            if color_temp_kelvin is not None:
+                payload[ATTR_COLOR_MODE] = color_mode
+                payload[CONF_COLOR_TEMP] = color_temp_kelvin
+        elif color_mode is not None:
+            payload[ATTR_COLOR_MODE] = color_mode
 
         if color := self._add_colors(new_state):
             payload[ATTR_COLOR] = color
