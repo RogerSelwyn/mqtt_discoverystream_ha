@@ -3,11 +3,10 @@
 import logging
 
 from homeassistant.components.cover import (
-    ATTR_CURRENT_POSITION,
-    ATTR_CURRENT_TILT_POSITION,
     ATTR_POSITION,
     ATTR_TILT_POSITION,
     CoverEntityFeature,
+    CoverEntityStateAttribute,
 )
 from homeassistant.components.mqtt.cover import (
     CONF_GET_POSITION_TEMPLATE,
@@ -38,12 +37,12 @@ from ..const import (
     CONF_SET_POS_T,
     CONF_TILT_CMD_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
     build_topic,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -57,13 +56,13 @@ class DiscoveryItem(DiscoveryEntity):
         """Build the config for a cover."""
         add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
 
-        if ATTR_CURRENT_POSITION in entity_info.attributes or (
+        if CoverEntityStateAttribute.CURRENT_POSITION in entity_info.attributes or (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & CoverEntityFeature.SET_POSITION
         ):
             config[CONF_GET_POSITION_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_GET_POSITION_TEMPLATE] = (
-                "{{ value_json['" + ATTR_CURRENT_POSITION + "'] }}"
+                "{{ value_json['" + CoverEntityStateAttribute.CURRENT_POSITION + "'] }}"
             )
 
         if (
@@ -80,10 +79,12 @@ class DiscoveryItem(DiscoveryEntity):
         ):
             add_config_command(config, entity_info, CONF_TILT_CMD_T, COMMAND_SET_TILT)
 
-        if ATTR_CURRENT_TILT_POSITION in entity_info.attributes:
+        if CoverEntityStateAttribute.CURRENT_TILT_POSITION in entity_info.attributes:
             config[CONF_TILT_STATUS_TOPIC] = build_topic(ATTR_ATTRIBUTES)
             config[CONF_TILT_STATUS_TEMPLATE] = (
-                "{{ value_json['" + ATTR_CURRENT_TILT_POSITION + "'] }}"
+                "{{ value_json['"
+                + CoverEntityStateAttribute.CURRENT_TILT_POSITION
+                + "'] }}"
             )
 
     async def _async_handle_message(self, msg):

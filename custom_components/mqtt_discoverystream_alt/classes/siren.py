@@ -9,10 +9,10 @@ from homeassistant.components.mqtt.siren import (
     CONF_SUPPORT_VOLUME_SET,
 )
 from homeassistant.components.siren import (
-    ATTR_AVAILABLE_TONES,
     ATTR_DURATION,
     ATTR_TONE,
     ATTR_VOLUME_LEVEL,
+    SirenEntityCapabilityAttribute,
     SirenEntityFeature,
 )
 from homeassistant.const import (
@@ -32,11 +32,11 @@ from ..const import (
     COMMAND_SET,
     CONF_CMD_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,10 +52,14 @@ class DiscoveryItem(DiscoveryEntity):
         attributes = entity_info.attributes
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
-        config[CONF_AVAILABLE_TONES] = attributes[ATTR_AVAILABLE_TONES]
+        config[CONF_AVAILABLE_TONES] = attributes[
+            SirenEntityCapabilityAttribute.AVAILABLE_TONES
+        ]
         add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
         if attributes[ATTR_SUPPORTED_FEATURES] & SirenEntityFeature.TONES:
-            config[CONF_AVAILABLE_TONES] = attributes[ATTR_AVAILABLE_TONES]
+            config[CONF_AVAILABLE_TONES] = attributes[
+                SirenEntityCapabilityAttribute.AVAILABLE_TONES
+            ]
         config[CONF_SUPPORT_DURATION] = (
             attributes[ATTR_SUPPORTED_FEATURES] & SirenEntityFeature.DURATION
         )

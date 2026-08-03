@@ -4,8 +4,8 @@ import json
 import logging
 
 from homeassistant.components.alarm_control_panel import (
-    ATTR_CODE_ARM_REQUIRED,
     AlarmControlPanelEntityFeature,
+    AlarmControlPanelEntityStateAttribute,
 )
 from homeassistant.components.mqtt.const import (
     DEFAULT_PAYLOAD_ARM_AWAY,
@@ -19,7 +19,6 @@ from homeassistant.components.mqtt.const import (
     REMOTE_CODE_TEXT,
 )
 from homeassistant.const import (
-    ATTR_CODE_FORMAT,
     ATTR_ENTITY_ID,
     ATTR_SUPPORTED_FEATURES,
     CONF_CODE,
@@ -46,12 +45,12 @@ from ..const import (
     CONF_COD_TRIG_REQ,
     CONF_SUP_FEAT,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
     simple_attribute_add,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -77,13 +76,20 @@ class DiscoveryItem(DiscoveryEntity):
                 config[CONF_SUP_FEAT].append(feature.name.lower())
 
         simple_attribute_add(
-            config, entity_info.attributes, ATTR_CODE_ARM_REQUIRED, CONF_COD_ARM_REQ
+            config,
+            entity_info.attributes,
+            AlarmControlPanelEntityStateAttribute.CODE_ARM_REQUIRED,
+            CONF_COD_ARM_REQ,
         )
-        if (
-            ATTR_CODE_ARM_REQUIRED in entity_info.attributes
-            and entity_info.attributes[ATTR_CODE_ARM_REQUIRED]
+        if entity_info.attributes.get(
+            AlarmControlPanelEntityStateAttribute.CODE_ARM_REQUIRED
         ):
-            if entity_info.attributes[ATTR_CODE_FORMAT] == "number":
+            if (
+                entity_info.attributes[
+                    AlarmControlPanelEntityStateAttribute.CODE_FORMAT
+                ]
+                == "number"
+            ):
                 config[CONF_CODE] = REMOTE_CODE
             else:
                 config[CONF_CODE] = REMOTE_CODE_TEXT

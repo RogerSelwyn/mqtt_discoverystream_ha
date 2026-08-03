@@ -12,12 +12,12 @@ from homeassistant.components.mqtt.vacuum import (
     STRING_TO_SERVICE,
 )
 from homeassistant.components.vacuum import (
-    ATTR_FAN_SPEED,
-    ATTR_FAN_SPEED_LIST,
     ATTR_PARAMS,
     SERVICE_SEND_COMMAND,
     SERVICE_SET_FAN_SPEED,
+    VacuumEntityCapabilityAttribute,
     VacuumEntityFeature,
+    VacuumEntityStateAttribute,
 )
 from homeassistant.const import (
     ATTR_BATTERY_LEVEL,
@@ -34,12 +34,12 @@ from ..const import (
     COMMAND_SET_FAN_SPEED,
     CONF_CMD_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
     simple_attribute_add,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -58,11 +58,13 @@ class DiscoveryItem(DiscoveryEntity):
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
         )
 
-        if ATTR_FAN_SPEED_LIST in entity_info.attributes or (
+        if VacuumEntityCapabilityAttribute.FAN_SPEED_LIST in entity_info.attributes or (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & VacuumEntityFeature.FAN_SPEED
         ):
-            config[CONF_FAN_SPEED_LIST] = entity_info.attributes[ATTR_FAN_SPEED_LIST]
+            config[CONF_FAN_SPEED_LIST] = entity_info.attributes[
+                VacuumEntityCapabilityAttribute.FAN_SPEED_LIST
+            ]
 
             add_config_command(
                 config,
@@ -87,7 +89,7 @@ class DiscoveryItem(DiscoveryEntity):
         attributes = new_state.attributes
         state = {ATTR_STATE: new_state.state}
         simple_attribute_add(state, attributes, ATTR_BATTERY_LEVEL)
-        simple_attribute_add(state, attributes, ATTR_FAN_SPEED)
+        simple_attribute_add(state, attributes, VacuumEntityStateAttribute.FAN_SPEED)
         await self._async_mqtt_publish(ATTR_STATE, state, mybase, encoded=True)
 
     def _build_supported_features(self, feat_list):
@@ -129,7 +131,7 @@ class DiscoveryItem(DiscoveryEntity):
                 self.command_error(command, msg.payload, entity)
 
         elif command == COMMAND_SET_FAN_SPEED:
-            service_payload[ATTR_FAN_SPEED] = msg.payload
+            service_payload[VacuumEntityStateAttribute.FAN_SPEED] = msg.payload
             await self._hass.services.async_call(
                 domain, SERVICE_SET_FAN_SPEED, service_payload
             )

@@ -5,8 +5,8 @@ from homeassistant.const import Platform
 from homeassistant.helpers import entity_registry
 
 from ..const import ATTR_SUGGESTED_DISPLAY_PRECISION, CONF_SUG_DSP_PRC
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import EntityInfo
-from .base_entity import DiscoveryEntity
 
 
 class DiscoveryItem(DiscoveryEntity):
@@ -39,11 +39,10 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a sensor."""
 
-        if entry := self._ent_reg.async_get(entity_info.entity_id):
-            if options := entry.options:
-                if sensordomain in options:
-                    sensor_options = options[sensordomain]
-                    if ATTR_SUGGESTED_DISPLAY_PRECISION in sensor_options:
-                        config[CONF_SUG_DSP_PRC] = sensor_options[
-                            ATTR_SUGGESTED_DISPLAY_PRECISION
-                        ]
+        entry = self._ent_reg.async_get(entity_info.entity_id)
+        if entry and (options := entry.options) and sensordomain in options:
+            sensor_options = options[sensordomain]
+            if ATTR_SUGGESTED_DISPLAY_PRECISION in sensor_options:
+                config[CONF_SUG_DSP_PRC] = sensor_options[
+                    ATTR_SUGGESTED_DISPLAY_PRECISION
+                ]

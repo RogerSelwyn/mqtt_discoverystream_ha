@@ -3,14 +3,17 @@
 import json
 import logging
 
-from homeassistant.components.lock import LockEntityFeature, LockState
+from homeassistant.components.lock import (
+    LockEntityFeature,
+    LockEntityStateAttribute,
+    LockState,
+)
 from homeassistant.components.mqtt.const import (
     DEFAULT_PAYLOAD_LOCK,
     DEFAULT_PAYLOAD_OPEN,
     DEFAULT_PAYLOAD_UNLOCK,
 )
 from homeassistant.const import (
-    ATTR_CODE_FORMAT,
     ATTR_ENTITY_ID,
     ATTR_SUPPORTED_FEATURES,
     SERVICE_LOCK,
@@ -33,11 +36,11 @@ from ..const import (
     CONF_STAT_UNLOCKED,
     CONF_STAT_UNLOCKING,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -64,8 +67,10 @@ class DiscoveryItem(DiscoveryEntity):
         )
         if entity_info.attributes[ATTR_SUPPORTED_FEATURES] & LockEntityFeature.OPEN:
             config[CONF_PL_OPEN] = DEFAULT_PAYLOAD_OPEN
-        if ATTR_CODE_FORMAT in entity_info.attributes:
-            config[CONF_COD_FORM] = entity_info.attributes[ATTR_CODE_FORMAT]
+        if LockEntityStateAttribute.CODE_FORMAT in entity_info.attributes:
+            config[CONF_COD_FORM] = entity_info.attributes[
+                LockEntityStateAttribute.CODE_FORMAT
+            ]
 
     async def _async_handle_message(self, msg):
         """Handle a message for a lock."""

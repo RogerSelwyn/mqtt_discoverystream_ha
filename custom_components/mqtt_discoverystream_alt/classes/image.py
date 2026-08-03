@@ -7,8 +7,8 @@ from homeassistant.const import ATTR_ENTITY_PICTURE, ATTR_STATE, Platform
 from homeassistant.helpers.network import get_url
 
 from ..const import ATTR_ATTRIBUTES, CONF_ENT_PIC
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import EntityInfo, build_topic
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -5,8 +5,8 @@ import logging
 from homeassistant.const import ATTR_ENTITY_ID, SERVICE_TURN_ON, STATE_ON, Platform
 
 from ..const import COMMAND_SET, CONF_CMD_T, CONF_PL_ON
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import EntityInfo, add_config_command
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a scene."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg,
         )
         if not valid:

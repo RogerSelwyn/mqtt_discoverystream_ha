@@ -6,7 +6,7 @@ from homeassistant.const import (
     Platform,
 )
 
-from .base_input_entity import SwitchDiscoveryEntity
+from ..helpers.base_input_entity import SwitchDiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

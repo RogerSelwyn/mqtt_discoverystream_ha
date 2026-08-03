@@ -1,4 +1,4 @@
-"""water heater methods for MQTT Discovery Statestream."""
+"""Water heater methods for MQTT Discovery Statestream."""
 
 import logging
 
@@ -14,16 +14,11 @@ from homeassistant.components.mqtt.water_heater import (
     CONF_TEMP_STATE_TOPIC,
 )
 from homeassistant.components.water_heater import (
-    ATTR_CURRENT_TEMPERATURE,
-    ATTR_MAX_TEMP,
-    ATTR_MIN_TEMP,
-    ATTR_OPERATION_LIST,
-    ATTR_OPERATION_MODE,
-    ATTR_TARGET_TEMP_HIGH,
-    ATTR_TARGET_TEMP_LOW,
     SERVICE_SET_OPERATION_MODE,
     SERVICE_SET_TEMPERATURE,
+    WaterHeaterCapabilityAttribute,
     WaterHeaterEntityFeature,
+    WaterHeaterStateAttribute,
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -44,12 +39,12 @@ from ..const import (
     COMMAND_TEMPERATURE,
     CONF_STAT_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
     build_topic,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -66,9 +61,11 @@ class DiscoveryItem(DiscoveryEntity):
         del config[CONF_STAT_T]
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
-        config[CONF_CURRENT_TEMP_TOPIC] = build_topic(ATTR_CURRENT_TEMPERATURE)
-        config[CONF_TEMP_MAX] = attributes[ATTR_MAX_TEMP]
-        config[CONF_TEMP_MIN] = attributes[ATTR_MIN_TEMP]
+        config[CONF_CURRENT_TEMP_TOPIC] = build_topic(
+            WaterHeaterStateAttribute.CURRENT_TEMPERATURE
+        )
+        config[CONF_TEMP_MAX] = attributes[WaterHeaterCapabilityAttribute.MAX_TEMP]
+        config[CONF_TEMP_MIN] = attributes[WaterHeaterCapabilityAttribute.MIN_TEMP]
         add_config_command(config, entity_info, CONF_MODE_COMMAND_TOPIC, COMMAND_MODE)
         if (
             attributes[ATTR_SUPPORTED_FEATURES]
@@ -79,25 +76,29 @@ class DiscoveryItem(DiscoveryEntity):
             )
         config[CONF_TEMP_STATE_TOPIC] = build_topic(ATTR_TEMPERATURE)
         add_config_command(config, entity_info, CONF_POWER_COMMAND_TOPIC, COMMAND_SET)
-        config[CONF_MODE_LIST] = attributes[ATTR_OPERATION_LIST]
-        config[CONF_MODE_STATE_TOPIC] = build_topic(ATTR_OPERATION_MODE)
+        config[CONF_MODE_LIST] = attributes[
+            WaterHeaterCapabilityAttribute.OPERATION_LIST
+        ]
+        config[CONF_MODE_STATE_TOPIC] = build_topic(
+            WaterHeaterStateAttribute.OPERATION_MODE
+        )
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a water_heater."""
         await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
-            ATTR_CURRENT_TEMPERATURE,
+            WaterHeaterStateAttribute.CURRENT_TEMPERATURE,
         )
         await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
-            ATTR_TARGET_TEMP_LOW,
+            WaterHeaterStateAttribute.TARGET_TEMP_LOW,
         )
         await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
-            ATTR_TARGET_TEMP_HIGH,
+            WaterHeaterStateAttribute.TARGET_TEMP_HIGH,
         )
         await self.async_publish_attribute_if_exists(
             new_state, mybase, ATTR_TEMPERATURE
@@ -108,7 +109,9 @@ class DiscoveryItem(DiscoveryEntity):
         payload = new_state.state
         # if payload == STATE_UNAVAILABLE:
         #     payload = STATE_OFF
-        await self._async_mqtt_publish(ATTR_OPERATION_MODE, payload, mybase)
+        await self._async_mqtt_publish(
+            WaterHeaterStateAttribute.OPERATION_MODE, payload, mybase
+        )
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
@@ -124,7 +127,7 @@ class DiscoveryItem(DiscoveryEntity):
         service_name = None
 
         if command == COMMAND_MODE:
-            service_payload[ATTR_OPERATION_MODE] = msg.payload
+            service_payload[WaterHeaterStateAttribute.OPERATION_MODE] = msg.payload
             service_name = SERVICE_SET_OPERATION_MODE
         elif command == COMMAND_TEMPERATURE:
             service_payload[ATTR_TEMPERATURE] = msg.payload

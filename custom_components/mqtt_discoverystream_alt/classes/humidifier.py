@@ -37,12 +37,12 @@ from ..const import (
     COMMAND_SET,
     CONF_CMD_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
     build_topic,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 

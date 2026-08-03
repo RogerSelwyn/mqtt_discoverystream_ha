@@ -2,7 +2,7 @@
 
 from homeassistant.components.input_datetime import DOMAIN as INPUT_DATETIME_DOMAIN
 
-from .base_input_entity import DateTimeDiscoveryEntity
+from ..helpers.base_input_entity import DateTimeDiscoveryEntity
 
 
 class DiscoveryItem(DateTimeDiscoveryEntity):

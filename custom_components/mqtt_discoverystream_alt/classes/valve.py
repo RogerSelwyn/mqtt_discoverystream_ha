@@ -31,11 +31,11 @@ from ..const import (
     COMMAND_SET,
     CONF_CMD_T,
 )
+from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
     add_config_command,
 )
-from .base_entity import DiscoveryEntity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -77,10 +77,7 @@ class DiscoveryItem(DiscoveryEntity):
         await super().async_publish_state(new_state, mybase)
         attributes = new_state.attributes
         state = new_state.state
-        if (
-            ValveEntityStateAttribute.CURRENT_POSITION in attributes
-            and attributes[ValveEntityStateAttribute.CURRENT_POSITION]
-        ):
+        if attributes.get(ValveEntityStateAttribute.CURRENT_POSITION):
             state = attributes[ValveEntityStateAttribute.CURRENT_POSITION]
 
         await self._async_mqtt_publish(ATTR_STATE, state, mybase)

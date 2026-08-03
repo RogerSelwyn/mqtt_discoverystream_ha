@@ -2,7 +2,7 @@
 
 from homeassistant.const import Platform
 
-from .base_input_entity import DateTimeDiscoveryEntity
+from ..helpers.base_input_entity import DateTimeDiscoveryEntity
 
 
 class DiscoveryItem(DateTimeDiscoveryEntity):
