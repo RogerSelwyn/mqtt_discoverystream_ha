@@ -1,5 +1,16 @@
 # Changelog
 
+## v3.4.2 (2026/08/03)
+### 🧰 Maintenance
+- [Improve discovery/publish process](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c39a29ebfc17177db23352c675fbaa1089b32e11) - @RogerSelwyn
+- [Code tidy up to use entity attribute enums](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f6b4f65fd1c23e0b57f95d5e92662a822fe5c49b) - @RogerSelwyn
+
+### 🔖 Release
+- [Release 3.4.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62dad0da75b45b64cb15846d88d85c453a11a11a) - @RogerSelwyn
+
+
+
+
 ## v3.4.1 (2026/07/31)
 ### ✨ Enhancements
 - [Add humidifier support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a4d27866d1d5331f6d45b6cdb99f8add64606478) - @RogerSelwyn
