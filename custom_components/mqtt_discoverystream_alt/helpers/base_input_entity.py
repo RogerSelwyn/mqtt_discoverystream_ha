@@ -67,7 +67,7 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg
         )
         if not valid:
@@ -167,7 +167,7 @@ class NumberDiscoveryEntity(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a number."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg,
         )
         if not valid:
@@ -191,7 +191,7 @@ class SelectDiscoveryEntity(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a select."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg,
         )
         if not valid:
@@ -249,7 +249,7 @@ class ScriptDiscoveryEntity(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, _entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg,
         )
         if not valid:
@@ -282,7 +282,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
 
     async def _async_handle_message(self, msg):
         """Handle a message for a text."""
-        valid, domain, entity, command = self.validate_message(  # pylint: disable=unused-variable
+        valid, domain, entity, _command = self.validate_message(  # pylint: disable=unused-variable
             msg,
         )
         if not valid:
