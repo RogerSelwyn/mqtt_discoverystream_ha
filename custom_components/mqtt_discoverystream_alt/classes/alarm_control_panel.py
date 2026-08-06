@@ -73,14 +73,14 @@ class DiscoveryItem(DiscoveryEntity):
             if entity_info.attributes[ATTR_SUPPORTED_FEATURES] & feature:
                 config[CONF_SUPPORTED_FEATURES].append(feature.name.lower())
 
-        simple_attribute_add(
-            config,
-            entity_info.attributes,
-            CONF_CODE_ARM_REQUIRED,
-        )
         if entity_info.attributes.get(
             AlarmControlPanelEntityStateAttribute.CODE_ARM_REQUIRED
         ):
+            simple_attribute_add(
+                config,
+                entity_info.attributes,
+                CONF_CODE_ARM_REQUIRED,
+            )
             if (
                 entity_info.attributes[
                     AlarmControlPanelEntityStateAttribute.CODE_FORMAT
