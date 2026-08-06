@@ -118,7 +118,7 @@ class DiscoveryItem(DiscoveryEntity):
             config, entity_info, CONF_TEMP_COMMAND_TOPIC, COMMAND_TEMPERATURE
         )
         config[CONF_TEMP_STATE_TOPIC] = build_topic(
-            ClimateEntityStateAttribute.TEMPERATURE
+            ClimateEntityStateAttribute.TARGET_TEMPERATURE
         )
         config[CONF_TEMP_STEP] = attributes.get(
             ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP, 0.5
@@ -212,7 +212,7 @@ class DiscoveryItem(DiscoveryEntity):
             new_state, mybase, ClimateEntityStateAttribute.PRESET_MODE
         )
         await self.async_publish_attribute_if_exists(
-            new_state, mybase, ClimateEntityStateAttribute.TEMPERATURE
+            new_state, mybase, ClimateEntityStateAttribute.TARGET_TEMPERATURE
         )
         await self.async_publish_attribute_if_exists(
             new_state, mybase, ClimateEntityStateAttribute.FAN_MODE
@@ -264,7 +264,7 @@ class DiscoveryItem(DiscoveryEntity):
             service_payload[ClimateEntityStateAttribute.SWING_MODE] = msg.payload
             service_name = SERVICE_SET_SWING_MODE
         elif command == COMMAND_HUMIDITY:
-            service_payload[ClimateEntityStateAttribute.HUMIDITY] = msg.payload
+            service_payload[ClimateEntityStateAttribute.TARGET_HUMIDITY] = msg.payload
             service_name = SERVICE_SET_HUMIDITY
         elif command == COMMAND_SET:
             if msg.payload == STATE_ON:
