@@ -9,6 +9,15 @@ from homeassistant.components.lock import (
     LockState,
 )
 from homeassistant.components.mqtt.const import (
+    CONF_CODE_FORMAT,
+    CONF_COMMAND_TEMPLATE,
+    CONF_COMMAND_TOPIC,
+    CONF_PAYLOAD_OPEN,
+    CONF_STATE_JAMMED,
+    CONF_STATE_LOCKED,
+    CONF_STATE_LOCKING,
+    CONF_STATE_UNLOCKED,
+    CONF_STATE_UNLOCKING,
     DEFAULT_PAYLOAD_LOCK,
     DEFAULT_PAYLOAD_OPEN,
     DEFAULT_PAYLOAD_UNLOCK,
@@ -26,15 +35,6 @@ from ..const import (
     COMMAND_ACTION,
     COMMAND_CODE,
     COMMAND_SET,
-    CONF_CMD_T,
-    CONF_CMD_TPL,
-    CONF_COD_FORM,
-    CONF_PL_OPEN,
-    CONF_STAT_JAM,
-    CONF_STAT_LOCKED,
-    CONF_STAT_LOCKING,
-    CONF_STAT_UNLOCKED,
-    CONF_STAT_UNLOCKING,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -52,13 +52,13 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a lock."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
-        config[CONF_STAT_JAM] = LockState.JAMMED
-        config[CONF_STAT_LOCKED] = LockState.LOCKED
-        config[CONF_STAT_LOCKING] = LockState.LOCKING
-        config[CONF_STAT_UNLOCKED] = LockState.UNLOCKED
-        config[CONF_STAT_UNLOCKING] = LockState.UNLOCKING
-        config[CONF_CMD_TPL] = (
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
+        config[CONF_STATE_JAMMED] = LockState.JAMMED
+        config[CONF_STATE_LOCKED] = LockState.LOCKED
+        config[CONF_STATE_LOCKING] = LockState.LOCKING
+        config[CONF_STATE_UNLOCKED] = LockState.UNLOCKED
+        config[CONF_STATE_UNLOCKING] = LockState.UNLOCKING
+        config[CONF_COMMAND_TEMPLATE] = (
             '{ "'
             + COMMAND_ACTION
             + '": "{{ value }}", "'
@@ -66,9 +66,9 @@ class DiscoveryItem(DiscoveryEntity):
             + '":"{{ code }}" }'
         )
         if entity_info.attributes[ATTR_SUPPORTED_FEATURES] & LockEntityFeature.OPEN:
-            config[CONF_PL_OPEN] = DEFAULT_PAYLOAD_OPEN
+            config[CONF_PAYLOAD_OPEN] = DEFAULT_PAYLOAD_OPEN
         if LockEntityStateAttribute.CODE_FORMAT in entity_info.attributes:
-            config[CONF_COD_FORM] = entity_info.attributes[
+            config[CONF_CODE_FORMAT] = entity_info.attributes[
                 LockEntityStateAttribute.CODE_FORMAT
             ]
 

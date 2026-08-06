@@ -3,6 +3,7 @@
 import json
 import logging
 
+from homeassistant.components.mqtt.const import CONF_COMMAND_TOPIC
 from homeassistant.components.mqtt.siren import (
     CONF_AVAILABLE_TONES,
     CONF_SUPPORT_DURATION,
@@ -30,7 +31,6 @@ from homeassistant.const import (
 
 from ..const import (
     COMMAND_SET,
-    CONF_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -55,7 +55,7 @@ class DiscoveryItem(DiscoveryEntity):
         config[CONF_AVAILABLE_TONES] = attributes[
             SirenEntityCapabilityAttribute.AVAILABLE_TONES
         ]
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         if attributes[ATTR_SUPPORTED_FEATURES] & SirenEntityFeature.TONES:
             config[CONF_AVAILABLE_TONES] = attributes[
                 SirenEntityCapabilityAttribute.AVAILABLE_TONES

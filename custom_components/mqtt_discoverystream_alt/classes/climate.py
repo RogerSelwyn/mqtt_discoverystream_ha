@@ -44,6 +44,7 @@ from homeassistant.components.mqtt.climate import (
     CONF_TEMP_STATE_TOPIC,
     CONF_TEMP_STEP,
 )
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     ATTR_SUPPORTED_FEATURES,
@@ -65,7 +66,6 @@ from ..const import (
     COMMAND_SET,
     COMMAND_SWING,
     COMMAND_TEMPERATURE,
-    CONF_STAT_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -86,7 +86,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a climate."""
         attributes = entity_info.attributes
-        del config[CONF_STAT_T]
+        del config[CONF_STATE_TOPIC]
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
         config[CONF_ACTION_TOPIC] = build_topic(ClimateEntityStateAttribute.HVAC_ACTION)
@@ -118,7 +118,7 @@ class DiscoveryItem(DiscoveryEntity):
             config, entity_info, CONF_TEMP_COMMAND_TOPIC, COMMAND_TEMPERATURE
         )
         config[CONF_TEMP_STATE_TOPIC] = build_topic(
-            ClimateEntityStateAttribute.TARGET_TEMPERATURE
+            ClimateEntityStateAttribute.TEMPERATURE
         )
         config[CONF_TEMP_STEP] = attributes.get(
             ClimateEntityCapabilityAttribute.TARGET_TEMP_STEP, 0.5
@@ -212,7 +212,7 @@ class DiscoveryItem(DiscoveryEntity):
             new_state, mybase, ClimateEntityStateAttribute.PRESET_MODE
         )
         await self.async_publish_attribute_if_exists(
-            new_state, mybase, ClimateEntityStateAttribute.TARGET_TEMPERATURE
+            new_state, mybase, ClimateEntityStateAttribute.TEMPERATURE
         )
         await self.async_publish_attribute_if_exists(
             new_state, mybase, ClimateEntityStateAttribute.FAN_MODE

@@ -8,6 +8,11 @@ from homeassistant.components.cover import (
     CoverEntityFeature,
     CoverEntityStateAttribute,
 )
+from homeassistant.components.mqtt.const import (
+    CONF_COMMAND_TOPIC,
+    CONF_SET_POSITION_TOPIC,
+    CONF_TILT_COMMAND_TOPIC,
+)
 from homeassistant.components.mqtt.cover import (
     CONF_GET_POSITION_TEMPLATE,
     CONF_GET_POSITION_TOPIC,
@@ -33,9 +38,6 @@ from ..const import (
     COMMAND_SET,
     COMMAND_SET_POSITION,
     COMMAND_SET_TILT,
-    CONF_CMD_T,
-    CONF_SET_POS_T,
-    CONF_TILT_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -54,7 +56,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a cover."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
         if CoverEntityStateAttribute.CURRENT_POSITION in entity_info.attributes or (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
@@ -70,14 +72,16 @@ class DiscoveryItem(DiscoveryEntity):
             & CoverEntityFeature.SET_POSITION
         ):
             add_config_command(
-                config, entity_info, CONF_SET_POS_T, COMMAND_SET_POSITION
+                config, entity_info, CONF_SET_POSITION_TOPIC, COMMAND_SET_POSITION
             )
 
         if (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & CoverEntityFeature.SET_TILT_POSITION
         ):
-            add_config_command(config, entity_info, CONF_TILT_CMD_T, COMMAND_SET_TILT)
+            add_config_command(
+                config, entity_info, CONF_TILT_COMMAND_TOPIC, COMMAND_SET_TILT
+            )
 
         if CoverEntityStateAttribute.CURRENT_TILT_POSITION in entity_info.attributes:
             config[CONF_TILT_STATUS_TOPIC] = build_topic(ATTR_ATTRIBUTES)

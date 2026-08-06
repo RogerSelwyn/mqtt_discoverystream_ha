@@ -5,6 +5,15 @@ import logging
 from homeassistant.components.button.const import SERVICE_PRESS
 from homeassistant.components.input_datetime import CONF_HAS_DATE, CONF_HAS_TIME
 from homeassistant.components.input_datetime import DOMAIN as INPUT_DATETIME_DOMAIN
+from homeassistant.components.mqtt.const import (
+    CONF_COMMAND_TOPIC,
+    CONF_MAX,
+    CONF_MIN,
+    CONF_PATTERN,
+    CONF_PAYLOAD_PRESS,
+    CONF_STATE_TOPIC,
+    CONF_STEP,
+)
 from homeassistant.components.number import (
     ATTR_MAX,
     ATTR_MIN,
@@ -19,6 +28,10 @@ from homeassistant.const import (
     ATTR_ENTITY_ID,
     ATTR_STATE,
     ATTR_TIME,
+    CONF_MODE,
+    CONF_OPTIONS,
+    CONF_PAYLOAD_OFF,
+    CONF_PAYLOAD_ON,
     SERVICE_SELECT_OPTION,
     SERVICE_TURN_OFF,
     SERVICE_TURN_ON,
@@ -36,17 +49,6 @@ from ..const import (
     COMMAND_SET_DATE,
     COMMAND_SET_DATETIME,
     COMMAND_SET_TIME,
-    CONF_CMD_T,
-    CONF_MAX,
-    CONF_MIN,
-    CONF_MODE,
-    CONF_OPS,
-    CONF_PATTERN,
-    CONF_PL_OFF,
-    CONF_PL_ON,
-    CONF_PL_PRS,
-    CONF_STAT_T,
-    CONF_STEP,
     SERVICE_SET_DATETIME,
 )
 from ..utils import EntityInfo, add_config_command
@@ -62,8 +64,8 @@ class ButtonDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a button."""
-        del config[CONF_STAT_T]
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        del config[CONF_STATE_TOPIC]
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
@@ -96,7 +98,7 @@ class DateTimeDiscoveryEntity(DiscoveryEntity):
             command = COMMAND_SET_DATE
         else:
             command = COMMAND_SET_TIME
-        add_config_command(config, entity_info, CONF_CMD_T, command)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, command)
 
     async def _async_publish_base_attributes(self, new_state, mybase):
         """Publish the basic attributes for the entity state."""
@@ -159,7 +161,7 @@ class NumberDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a number."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         config[CONF_MAX] = entity_info.attributes[ATTR_MAX]
         config[CONF_MIN] = entity_info.attributes[ATTR_MIN]
         config[CONF_MODE] = entity_info.attributes[ATTR_MODE]
@@ -186,8 +188,8 @@ class SelectDiscoveryEntity(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a select."""
         if ATTR_OPTIONS in entity_info.attributes:
-            config[CONF_OPS] = entity_info.attributes[ATTR_OPTIONS]
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+            config[CONF_OPTIONS] = entity_info.attributes[ATTR_OPTIONS]
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a select."""
@@ -211,9 +213,9 @@ class SwitchDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a switch."""
-        config[CONF_PL_OFF] = STATE_OFF
-        config[CONF_PL_ON] = STATE_ON
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        config[CONF_PAYLOAD_OFF] = STATE_OFF
+        config[CONF_PAYLOAD_ON] = STATE_ON
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
     async def _async_handle_message(self, msg):
         """Handle a message for a switch."""
@@ -242,10 +244,10 @@ class ScriptDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a button."""
-        del config[CONF_STAT_T]
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        del config[CONF_STATE_TOPIC]
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         ent_parts = entity_info.entity_id.split(".")
-        config[CONF_PL_PRS] = ent_parts[1]
+        config[CONF_PAYLOAD_PRESS] = ent_parts[1]
 
     async def _async_handle_message(self, msg):
         """Handle a message for a button."""
@@ -265,7 +267,7 @@ class TextDiscoveryEntity(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a text."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         config[CONF_MAX] = entity_info.attributes[ATTR_MAX]
         config[CONF_MIN] = entity_info.attributes[ATTR_MIN]
         config[CONF_MODE] = entity_info.attributes[ATTR_MODE]

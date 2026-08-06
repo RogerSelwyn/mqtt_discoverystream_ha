@@ -1,5 +1,6 @@
 """Update methods for MQTT Discovery Statestream."""
 
+from homeassistant.components.mqtt.const import CONF_COMMAND_TOPIC
 from homeassistant.components.mqtt.update import (
     CONF_DISPLAY_PRECISION,
     CONF_LATEST_VERSION_TEMPLATE,
@@ -23,7 +24,7 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import ATTR_INSTALL, COMMAND_INSTALL, CONF_CMD_T
+from ..const import ATTR_INSTALL, COMMAND_INSTALL
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
     EntityInfo,
@@ -46,7 +47,7 @@ class DiscoveryItem(DiscoveryEntity):
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
             & UpdateEntityFeature.INSTALL
         ):
-            add_config_command(config, entity_info, CONF_CMD_T, ATTR_INSTALL)
+            add_config_command(config, entity_info, CONF_COMMAND_TOPIC, ATTR_INSTALL)
             config[CONF_PAYLOAD_INSTALL] = COMMAND_INSTALL
         config[CONF_LATEST_VERSION_TOPIC] = build_topic(ATTR_STATE)
         config[CONF_LATEST_VERSION_TEMPLATE] = (

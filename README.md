@@ -14,9 +14,10 @@ Provides discovery & command support for:
 
 | **Entity Type** | **Entity Created** | **Commands Supported**    | **Notes** |
 |:----------------|:-------------------|:--------------------------|:----------|
-| Alarm Control Panel | alarm_control_panel | Arm (all), Disarm, Trigger |           |
+| Alarm Control Panel | alarm_control_panel | Arm (all), Disarm, Trigger |     |
 | Binary Sensor   | binary_sensor      |                           |           |
 | Button          | button             | Press                     |           |
+| Camera          |                    |                           | Unsuppported |
 | Climate         | climate            | Set Humidity, Set HVAC Mode, Set Preset Mode, Set Temperature, Set Swing, Set Fan, Turn On, Turn Off |  |
 | Cover           | cover              | Open, Close, Stop, Set Position, Set Tilt Position |  |
 | Date            | date               | Set Value                 |           |
@@ -27,6 +28,7 @@ Provides discovery & command support for:
 | Fan             | fan                | Turn On, Turn Off, Set Percentage, Set Preset Mode, Set Oscillating, Set Direction |  |
 | Humidifier      | humidifier         | Set Humidity, Set Mode, Turn On, Turn Off |  |
 | Image           | image              |                           | References master HA image |
+| Infrared        | infrared           |                           | Receiver only |
 | Input Boolean   | switch             | Turn On, Turn Off         |           |
 | Input Button    | button             | Press                     |           |
 | Input DateTime  | datetime/date/time | Set DateTime/Date/Time    | Entity created is based on configuration of `has_date` and `has_time` |

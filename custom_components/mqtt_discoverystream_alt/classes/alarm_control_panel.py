@@ -8,6 +8,12 @@ from homeassistant.components.alarm_control_panel import (
     AlarmControlPanelEntityStateAttribute,
 )
 from homeassistant.components.mqtt.const import (
+    CONF_CODE_ARM_REQUIRED,
+    CONF_CODE_DISARM_REQUIRED,
+    CONF_CODE_TRIGGER_REQUIRED,
+    CONF_COMMAND_TEMPLATE,
+    CONF_COMMAND_TOPIC,
+    CONF_SUPPORTED_FEATURES,
     DEFAULT_PAYLOAD_ARM_AWAY,
     DEFAULT_PAYLOAD_ARM_CUSTOM_BYPASS,
     DEFAULT_PAYLOAD_ARM_HOME,
@@ -33,17 +39,9 @@ from homeassistant.const import (
 )
 
 from ..const import (
-    ATTR_CODE_DISARM_REQUIRED,
-    ATTR_CODE_TRIGGER_REQUIRED,
     COMMAND_ACTION,
     COMMAND_CODE,
     COMMAND_SET,
-    CONF_CMD_T,
-    CONF_CMD_TPL,
-    CONF_COD_ARM_REQ,
-    CONF_COD_DIS_REQ,
-    CONF_COD_TRIG_REQ,
-    CONF_SUP_FEAT,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -62,24 +60,23 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a alarm_control_panel."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
-        config[CONF_CMD_TPL] = (
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
+        config[CONF_COMMAND_TEMPLATE] = (
             '{ "'
             + COMMAND_ACTION
             + '": "{{ action }}", "'
             + COMMAND_CODE
             + '":"{{ code }}" }'
         )
-        config[CONF_SUP_FEAT] = []
+        config[CONF_SUPPORTED_FEATURES] = []
         for feature in AlarmControlPanelEntityFeature:
             if entity_info.attributes[ATTR_SUPPORTED_FEATURES] & feature:
-                config[CONF_SUP_FEAT].append(feature.name.lower())
+                config[CONF_SUPPORTED_FEATURES].append(feature.name.lower())
 
         simple_attribute_add(
             config,
             entity_info.attributes,
-            AlarmControlPanelEntityStateAttribute.CODE_ARM_REQUIRED,
-            CONF_COD_ARM_REQ,
+            CONF_CODE_ARM_REQUIRED,
         )
         if entity_info.attributes.get(
             AlarmControlPanelEntityStateAttribute.CODE_ARM_REQUIRED
@@ -94,14 +91,11 @@ class DiscoveryItem(DiscoveryEntity):
             else:
                 config[CONF_CODE] = REMOTE_CODE_TEXT
 
-        simple_attribute_add(
-            config, entity_info.attributes, ATTR_CODE_DISARM_REQUIRED, CONF_COD_DIS_REQ
-        )
+        simple_attribute_add(config, entity_info.attributes, CONF_CODE_DISARM_REQUIRED)
         simple_attribute_add(
             config,
             entity_info.attributes,
-            ATTR_CODE_TRIGGER_REQUIRED,
-            CONF_COD_TRIG_REQ,
+            CONF_CODE_TRIGGER_REQUIRED,
         )
 
     async def _async_handle_message(self, msg):

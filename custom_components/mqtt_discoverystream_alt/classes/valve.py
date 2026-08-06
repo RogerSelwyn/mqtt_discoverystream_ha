@@ -2,7 +2,7 @@
 
 import logging
 
-from homeassistant.components.mqtt.const import DEFAULT_PAYLOAD_STOP
+from homeassistant.components.mqtt.const import CONF_COMMAND_TOPIC, DEFAULT_PAYLOAD_STOP
 from homeassistant.components.mqtt.valve import (
     CONF_PAYLOAD_CLOSE,
     CONF_PAYLOAD_OPEN,
@@ -29,7 +29,6 @@ from homeassistant.const import (
 
 from ..const import (
     COMMAND_SET,
-    CONF_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -48,7 +47,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a valve."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
         config[CONF_REPORTS_POSITION] = (
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]

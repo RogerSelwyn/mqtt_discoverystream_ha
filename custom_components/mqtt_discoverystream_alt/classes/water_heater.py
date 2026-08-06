@@ -2,6 +2,7 @@
 
 import logging
 
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC
 from homeassistant.components.mqtt.water_heater import (
     CONF_CURRENT_TEMP_TOPIC,
     CONF_MODE_COMMAND_TOPIC,
@@ -37,7 +38,6 @@ from ..const import (
     COMMAND_MODE,
     COMMAND_SET,
     COMMAND_TEMPERATURE,
-    CONF_STAT_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -58,7 +58,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a water_heater."""
         attributes = entity_info.attributes
-        del config[CONF_STAT_T]
+        del config[CONF_STATE_TOPIC]
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
         config[CONF_CURRENT_TEMP_TOPIC] = build_topic(

@@ -6,11 +6,9 @@ from homeassistant.components.event import (
     EventEntityCapabilityAttribute,
     EventEntityStateAttribute,
 )
+from homeassistant.components.mqtt.event import CONF_EVENT_TYPES
 from homeassistant.const import ATTR_STATE, Platform
 
-from ..const import (
-    CONF_EVT_TYP,
-)
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import EntityInfo
 
@@ -25,7 +23,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a event."""
-        config[CONF_EVT_TYP] = entity_info.attributes[
+        config[CONF_EVENT_TYPES] = entity_info.attributes[
             EventEntityCapabilityAttribute.EVENT_TYPES
         ]
 

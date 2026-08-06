@@ -3,6 +3,7 @@
 import json
 import logging
 
+from homeassistant.components.mqtt.const import CONF_COMMAND_TOPIC
 from homeassistant.components.mqtt.vacuum import (
     CONF_FAN_SPEED_LIST,
     CONF_SEND_COMMAND_TOPIC,
@@ -32,7 +33,6 @@ from ..const import (
     COMMAND_SEND,
     COMMAND_SET,
     COMMAND_SET_FAN_SPEED,
-    CONF_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -53,7 +53,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a vacuum."""
 
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         config[CONF_SUPPORTED_FEATURES] = self._build_supported_features(
             entity_info.attributes[ATTR_SUPPORTED_FEATURES]
         )

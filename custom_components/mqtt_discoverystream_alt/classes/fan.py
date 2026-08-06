@@ -11,6 +11,7 @@ from homeassistant.components.fan import (
     FanEntityFeature,
     FanEntityStateAttribute,
 )
+from homeassistant.components.mqtt import CONF_COMMAND_TOPIC
 from homeassistant.components.mqtt.fan import (
     CONF_DIRECTION_COMMAND_TOPIC,
     CONF_DIRECTION_STATE_TOPIC,
@@ -48,7 +49,6 @@ from ..const import (
     COMMAND_PERCENTAGE,
     COMMAND_PRESET,
     COMMAND_SET,
-    CONF_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -67,7 +67,7 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a fan."""
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
 
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON

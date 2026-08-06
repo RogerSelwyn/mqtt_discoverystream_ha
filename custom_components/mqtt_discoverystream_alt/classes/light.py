@@ -10,7 +10,11 @@ from homeassistant.components.light import (
     LightEntityFeature,
     LightEntityStateAttribute,
 )
-from homeassistant.components.mqtt.const import CONF_SCHEMA
+from homeassistant.components.mqtt.const import (
+    CONF_COMMAND_TOPIC,
+    CONF_JSON_ATTRS_TOPIC,
+    CONF_SCHEMA,
+)
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     ATTR_STATE,
@@ -35,8 +39,6 @@ from ..const import (
     ATTR_X,
     ATTR_Y,
     COMMAND_SET_LIGHT,
-    CONF_CMD_T,
-    CONF_JSON_ATTR_T,
     STATE_CAPITAL_OFF,
     STATE_CAPITAL_ON,
 )
@@ -53,8 +55,8 @@ class DiscoveryItem(DiscoveryEntity):
 
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a light."""
-        del config[CONF_JSON_ATTR_T]
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET_LIGHT)
+        del config[CONF_JSON_ATTRS_TOPIC]
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET_LIGHT)
         config[CONF_SCHEMA] = ATTR_JSON
 
         supported_features = get_supported_features(self._hass, entity_info.entity_id)

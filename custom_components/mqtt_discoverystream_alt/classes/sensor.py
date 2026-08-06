@@ -1,12 +1,13 @@
 """sensor methods for MQTT Discovery Statestream."""
 
+from homeassistant.components.mqtt.const import CONF_SUGGESTED_DISPLAY_PRECISION
+from homeassistant.components.sensor import CONF_STATE_CLASS
 from homeassistant.components.sensor import DOMAIN as sensordomain
 from homeassistant.const import Platform
 from homeassistant.helpers import entity_registry
 
-from ..const import ATTR_SUGGESTED_DISPLAY_PRECISION, CONF_SUG_DSP_PRC
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import EntityInfo
+from ..utils import EntityInfo, simple_attribute_add
 
 
 class DiscoveryItem(DiscoveryEntity):
@@ -40,9 +41,10 @@ class DiscoveryItem(DiscoveryEntity):
         """Build the config for a sensor."""
 
         entry = self._ent_reg.async_get(entity_info.entity_id)
+        simple_attribute_add(config, entity_info.attributes, CONF_STATE_CLASS)
         if entry and (options := entry.options) and sensordomain in options:
             sensor_options = options[sensordomain]
-            if ATTR_SUGGESTED_DISPLAY_PRECISION in sensor_options:
-                config[CONF_SUG_DSP_PRC] = sensor_options[
-                    ATTR_SUGGESTED_DISPLAY_PRECISION
+            if CONF_SUGGESTED_DISPLAY_PRECISION in sensor_options:
+                config[CONF_SUGGESTED_DISPLAY_PRECISION] = sensor_options[
+                    CONF_SUGGESTED_DISPLAY_PRECISION
                 ]

@@ -8,11 +8,16 @@ from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
     AVAILABILITY_LATEST,
     CONF_AVAILABILITY,
+    CONF_AVAILABILITY_MODE,
+    CONF_DEFAULT_ENTITY_ID,
+    CONF_ENTITY_PICTURE,
+    CONF_JSON_ATTRS_TOPIC,
+    CONF_ORIGIN,
     CONF_PAYLOAD_AVAILABLE,
     CONF_PAYLOAD_NOT_AVAILABLE,
+    CONF_STATE_TOPIC,
     CONF_TOPIC,
 )
-from homeassistant.components.sensor import ATTR_STATE_CLASS
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
     ATTR_ENTITY_PICTURE,
@@ -20,8 +25,14 @@ from homeassistant.const import (
     ATTR_ICON,
     ATTR_STATE,
     ATTR_UNIT_OF_MEASUREMENT,
+    CONF_DEVICE,
+    CONF_DEVICE_CLASS,
+    CONF_ENTITY_CATEGORY,
     CONF_INCLUDE,
     CONF_NAME,
+    CONF_UNIQUE_ID,
+    CONF_UNIT_OF_MEASUREMENT,
+    CONF_URL,
     Platform,
 )
 from homeassistant.helpers import device_registry, entity_registry
@@ -30,33 +41,22 @@ from homeassistant.helpers.json import JSONEncoder
 from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
-    CONF_AVTY,
-    CONF_AVTY_MODE,
     CONF_BASE_TOPIC,
     CONF_CNS,
     CONF_COMMAND_TOPIC,
-    CONF_DEF_ENT_ID,
-    CONF_DEV,
-    CONF_DEV_CLA,
     CONF_DISCOVERY_TOPIC,
-    CONF_ENT_CAT,
-    CONF_ENT_PIC,
     CONF_IDS,
-    CONF_JSON_ATTR_T,
     CONF_LOCAL_STATUS,
     CONF_MDL,
     CONF_MF,
     CONF_OFFLINE_STATUS,
     CONF_ONLINE_STATUS,
     CONF_PUBLISH_RETAIN,
-    CONF_STAT_CLA,
-    CONF_STAT_T,
     CONF_SW,
     CONF_TILDA,
-    CONF_UNIQ_ID,
     CONF_UNIQUE_ENTITY_PREFIX,
     CONF_UNIQUE_PREFIX,
-    CONF_UNIT_OF_MEAS,
+    DOMAIN,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 from .utils import (
@@ -65,6 +65,7 @@ from .utils import (
     set_topic,
     simple_attribute_add,
     simple_entry_attribute,
+    translate_to_abbreviations,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -129,14 +130,22 @@ class Discovery:
             await entityclass.async_subscribe_commands()
             self._subscribed.append(ent_domain)
 
-        entityclass.build_config(config, entity_info)
+        result = entityclass.build_config(config, entity_info)
+        if result is False:
+            return False
 
         if device := self._build_device(entity_id):
-            config[CONF_DEV] = device
+            config[CONF_DEVICE] = device
+        config[CONF_ORIGIN] = {
+            CONF_NAME: DOMAIN,
+            CONF_URL: "https://github.com/RogerSelwyn/mqtt_discoverystream_ha",
+        }
 
         self.discovered_entities.append(entity_id)
 
         entity_id = entityclass.translate_entity_type(entity_id, attributes)
+
+        config = translate_to_abbreviations(config)
 
         encoded = json.dumps(config, cls=JSONEncoder)
         entity_disc_topic = (
@@ -165,12 +174,14 @@ class Discovery:
         )
         config = {
             CONF_TILDA: entity_info.mybase.removesuffix("/"),
-            CONF_UNIQ_ID: f"{self._unique_prefix}_{uid}",
-            CONF_DEF_ENT_ID: self._build_default_entity_id(entity_info.entity_id),
-            CONF_STAT_T: build_topic(ATTR_STATE),
-            CONF_JSON_ATTR_T: build_topic(ATTR_ATTRIBUTES),
-            CONF_AVTY: availability,
-            CONF_AVTY_MODE: AVAILABILITY_LATEST,
+            CONF_UNIQUE_ID: f"{self._unique_prefix}_{uid}",
+            CONF_DEFAULT_ENTITY_ID: self._build_default_entity_id(
+                entity_info.entity_id
+            ),
+            CONF_STATE_TOPIC: build_topic(ATTR_STATE),
+            CONF_JSON_ATTRS_TOPIC: build_topic(ATTR_ATTRIBUTES),
+            CONF_AVAILABILITY: availability,
+            CONF_AVAILABILITY_MODE: AVAILABILITY_LATEST,
         }
         name = None
         if ATTR_FRIENDLY_NAME in entity_info.attributes:
@@ -184,20 +195,22 @@ class Discovery:
                     name = name[len(device.name) + 1 :].strip()
                     if name == "":
                         name = None
-            simple_entry_attribute(config, entry.entity_category, CONF_ENT_CAT)
-            simple_entry_attribute(config, entry.original_device_class, CONF_DEV_CLA)
-            simple_entry_attribute(config, entry.device_class, CONF_DEV_CLA)
+            simple_entry_attribute(config, entry.entity_category, CONF_ENTITY_CATEGORY)
+            simple_entry_attribute(
+                config, entry.original_device_class, CONF_DEVICE_CLASS
+            )
+            simple_entry_attribute(config, entry.device_class, CONF_DEVICE_CLASS)
         config[CONF_NAME] = name
 
         simple_attribute_add(
-            config, entity_info.attributes, ATTR_UNIT_OF_MEASUREMENT, CONF_UNIT_OF_MEAS
-        )
-        simple_attribute_add(
-            config, entity_info.attributes, ATTR_STATE_CLASS, CONF_STAT_CLA
+            config,
+            entity_info.attributes,
+            ATTR_UNIT_OF_MEASUREMENT,
+            CONF_UNIT_OF_MEASUREMENT,
         )
         simple_attribute_add(config, entity_info.attributes, ATTR_ICON, ATTR_ICON)
         simple_attribute_add(
-            config, entity_info.attributes, ATTR_ENTITY_PICTURE, CONF_ENT_PIC
+            config, entity_info.attributes, ATTR_ENTITY_PICTURE, CONF_ENTITY_PICTURE
         )
 
         return config
@@ -214,7 +227,7 @@ class Discovery:
     def _build_device(self, entity_id):  # sourcery skip: extract-method
         config_device = {}
         entry = self._ent_reg.async_get(entity_id)
-        if entry and entry.device_id:
+        if entry and entry.device_id:  # noqa: SIM102
             if device := self._dev_reg.async_get(entry.device_id):
                 simple_entry_attribute(config_device, device.manufacturer, CONF_MF)
                 simple_entry_attribute(config_device, device.model, CONF_MDL)

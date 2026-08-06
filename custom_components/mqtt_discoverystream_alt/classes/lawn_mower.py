@@ -8,6 +8,7 @@ from homeassistant.components.lawn_mower import (
     SERVICE_START_MOWING,
     LawnMowerEntityFeature,
 )
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC
 from homeassistant.components.mqtt.lawn_mower import (
     CONF_ACTIVITY_STATE_TOPIC,
     CONF_DOCK_COMMAND_TOPIC,
@@ -23,7 +24,6 @@ from homeassistant.const import (
 
 from ..const import (
     COMMAND_SET,
-    CONF_STAT_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -45,7 +45,7 @@ class DiscoveryItem(DiscoveryEntity):
     def build_config(self, config, entity_info: EntityInfo):
         """Build the config for a lawn mower."""
         attributes = entity_info.attributes
-        del config[CONF_STAT_T]
+        del config[CONF_STATE_TOPIC]
         config[CONF_ACTIVITY_STATE_TOPIC] = build_topic(ATTR_STATE)
         if attributes[ATTR_SUPPORTED_FEATURES] & LawnMowerEntityFeature.DOCK:
             add_config_command(

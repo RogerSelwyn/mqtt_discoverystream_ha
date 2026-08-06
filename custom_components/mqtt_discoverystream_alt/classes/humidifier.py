@@ -9,6 +9,7 @@ from homeassistant.components.humidifier import (
     HumidifierEntityFeature,
     HumidifierEntityStateAttribute,
 )
+from homeassistant.components.mqtt import CONF_COMMAND_TOPIC
 from homeassistant.components.mqtt.humidifier import (
     CONF_AVAILABLE_MODES_LIST,
     CONF_CURRENT_HUMIDITY_TOPIC,
@@ -35,7 +36,6 @@ from ..const import (
     COMMAND_HUMIDITY,
     COMMAND_MODE,
     COMMAND_SET,
-    CONF_CMD_T,
 )
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import (
@@ -57,7 +57,7 @@ class DiscoveryItem(DiscoveryEntity):
         attributes = entity_info.attributes
         config[CONF_PAYLOAD_OFF] = STATE_OFF
         config[CONF_PAYLOAD_ON] = STATE_ON
-        add_config_command(config, entity_info, CONF_CMD_T, COMMAND_SET)
+        add_config_command(config, entity_info, CONF_COMMAND_TOPIC, COMMAND_SET)
         add_config_command(
             config, entity_info, CONF_TARGET_HUMIDITY_COMMAND_TOPIC, COMMAND_HUMIDITY
         )
