@@ -37,7 +37,6 @@ from homeassistant.const import (
     CONF_NAME,
     CONF_UNIQUE_ID,
     CONF_UNIT_OF_MEASUREMENT,
-    CONF_URL,
     Platform,
 )
 from homeassistant.helpers import device_registry, entity_registry
