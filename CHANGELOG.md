@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.5.1 (2026/08/06)
+### 🧰 Maintenance
+- [Minor optimisation in alarm](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e8725433725f15fbbb589d01ddcd6a4114a33a6b) - @RogerSelwyn
+- [Use abbreviations for mqtt messages](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/85c2cb61f54b73bd063000b9def191234a9826a1) - @RogerSelwyn
+- [Re-order consts](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c8007f192101a0c9feffa2147f9f4ef6827fbaec) - @RogerSelwyn
+- [Remove unused import](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/58f12be0d7aa7ba27c2471589700fe2746aec901) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.5.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/7d4388dee295f799e425dac2f3a7a21fb005fa1d) - @RogerSelwyn
+
+
+
+
 ## v3.5.0 (2026/08/06)
 ### 🧰 Maintenance
 - [Improve discovery/publish process](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c39a29ebfc17177db23352c675fbaa1089b32e11) - @RogerSelwyn
