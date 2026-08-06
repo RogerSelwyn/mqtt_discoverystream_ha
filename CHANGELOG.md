@@ -1,5 +1,27 @@
 # Changelog
 
+## v3.5.0 (2026/08/06)
+### 🧰 Maintenance
+- [Improve discovery/publish process](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c39a29ebfc17177db23352c675fbaa1089b32e11) - @RogerSelwyn
+- [Code tidy up to use entity attribute enums](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f6b4f65fd1c23e0b57f95d5e92662a822fe5c49b) - @RogerSelwyn
+- [Remove ruff errors](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a39a912275c32e552a35d50f63c77c398790b49d) - @RogerSelwyn
+- [Remove custom constants, use from core](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e81fcfda59daccd2f109f460c85e70c18e7b0376) - @RogerSelwyn
+- [Remove deprecated constants](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b723afcfe89672f02ac4705f9a1ef933e5827d5a) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump ruff from 0.15.2 to 0.16.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/916c30fbfb56fc81c027273a5283146c217688b0) - @dependabot[bot]
+- [Bump HA to 2026.8.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4c3a896454e8038bc4e8457979a7fc88ac03bdb9) - @RogerSelwyn
+
+### 📚 Documentation
+- [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1e6fc05dbd8bc411bb8a09870adb310ab4e7e6fd) - @actions-user
+
+### 🔖 Release
+- [Release 3.4.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62dad0da75b45b64cb15846d88d85c453a11a11a) - @RogerSelwyn
+- [Release v3.5.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/737db0574644dffd64fd90935cc327bd479ca065) - @RogerSelwyn
+
+
+
+
 ## v3.4.2 (2026/08/03)
 ### 🧰 Maintenance
 - [Improve discovery/publish process](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c39a29ebfc17177db23352c675fbaa1089b32e11) - @RogerSelwyn
