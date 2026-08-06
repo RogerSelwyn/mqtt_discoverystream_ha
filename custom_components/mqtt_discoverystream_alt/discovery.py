@@ -9,13 +9,17 @@ from homeassistant.components.mqtt.const import (
     AVAILABILITY_LATEST,
     CONF_AVAILABILITY,
     CONF_AVAILABILITY_MODE,
+    CONF_CONNECTIONS,
     CONF_DEFAULT_ENTITY_ID,
     CONF_ENTITY_PICTURE,
+    CONF_IDENTIFIERS,
     CONF_JSON_ATTRS_TOPIC,
+    CONF_MANUFACTURER,
     CONF_ORIGIN,
     CONF_PAYLOAD_AVAILABLE,
     CONF_PAYLOAD_NOT_AVAILABLE,
     CONF_STATE_TOPIC,
+    CONF_SW_VERSION,
     CONF_TOPIC,
 )
 from homeassistant.const import (
@@ -29,6 +33,7 @@ from homeassistant.const import (
     CONF_DEVICE_CLASS,
     CONF_ENTITY_CATEGORY,
     CONF_INCLUDE,
+    CONF_MODEL,
     CONF_NAME,
     CONF_UNIQUE_ID,
     CONF_UNIT_OF_MEASUREMENT,
@@ -42,17 +47,12 @@ from .const import (
     ATTR_ATTRIBUTES,
     ATTR_CONFIG,
     CONF_BASE_TOPIC,
-    CONF_CNS,
     CONF_COMMAND_TOPIC,
     CONF_DISCOVERY_TOPIC,
-    CONF_IDS,
     CONF_LOCAL_STATUS,
-    CONF_MDL,
-    CONF_MF,
     CONF_OFFLINE_STATUS,
     CONF_ONLINE_STATUS,
     CONF_PUBLISH_RETAIN,
-    CONF_SW,
     CONF_TILDA,
     CONF_UNIQUE_ENTITY_PREFIX,
     CONF_UNIQUE_PREFIX,
@@ -65,7 +65,7 @@ from .utils import (
     set_topic,
     simple_attribute_add,
     simple_entry_attribute,
-    translate_to_abbreviations,
+    translate_all_to_abbreviations,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -136,16 +136,16 @@ class Discovery:
 
         if device := self._build_device(entity_id):
             config[CONF_DEVICE] = device
+
         config[CONF_ORIGIN] = {
             CONF_NAME: DOMAIN,
-            CONF_URL: "https://github.com/RogerSelwyn/mqtt_discoverystream_ha",
         }
 
         self.discovered_entities.append(entity_id)
 
         entity_id = entityclass.translate_entity_type(entity_id, attributes)
 
-        config = translate_to_abbreviations(config)
+        config = translate_all_to_abbreviations(config)
 
         encoded = json.dumps(config, cls=JSONEncoder)
         entity_disc_topic = (
@@ -229,18 +229,26 @@ class Discovery:
         entry = self._ent_reg.async_get(entity_id)
         if entry and entry.device_id:  # noqa: SIM102
             if device := self._dev_reg.async_get(entry.device_id):
-                simple_entry_attribute(config_device, device.manufacturer, CONF_MF)
-                simple_entry_attribute(config_device, device.model, CONF_MDL)
+                simple_entry_attribute(
+                    config_device, device.manufacturer, CONF_MANUFACTURER
+                )
+                simple_entry_attribute(config_device, device.model, CONF_MODEL)
                 if device.name_by_user:
                     simple_entry_attribute(
                         config_device, device.name_by_user, CONF_NAME
                     )
                 else:
                     simple_entry_attribute(config_device, device.name, CONF_NAME)
-                simple_entry_attribute(config_device, device.sw_version, CONF_SW)
-                simple_entry_attribute(config_device, device.connections, CONF_CNS)
+                simple_entry_attribute(
+                    config_device, device.sw_version, CONF_SW_VERSION
+                )
+                simple_entry_attribute(
+                    config_device, device.connections, CONF_CONNECTIONS
+                )
                 if device.identifiers:
-                    config_device[CONF_IDS] = [id[1] for id in device.identifiers]
+                    config_device[CONF_IDENTIFIERS] = [
+                        id[1] for id in device.identifiers
+                    ]
 
         return config_device
 
