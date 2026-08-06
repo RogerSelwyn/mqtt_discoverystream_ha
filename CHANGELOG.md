@@ -16,21 +16,7 @@
 - [Update changelog with release notes](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1e6fc05dbd8bc411bb8a09870adb310ab4e7e6fd) - @actions-user
 
 ### 🔖 Release
-- [Release 3.4.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62dad0da75b45b64cb15846d88d85c453a11a11a) - @RogerSelwyn
 - [Release v3.5.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/737db0574644dffd64fd90935cc327bd479ca065) - @RogerSelwyn
-
-
-
-
-## v3.4.2 (2026/08/03)
-### 🧰 Maintenance
-- [Improve discovery/publish process](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c39a29ebfc17177db23352c675fbaa1089b32e11) - @RogerSelwyn
-- [Code tidy up to use entity attribute enums](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f6b4f65fd1c23e0b57f95d5e92662a822fe5c49b) - @RogerSelwyn
-
-### 🔖 Release
-- [Release 3.4.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/62dad0da75b45b64cb15846d88d85c453a11a11a) - @RogerSelwyn
-
-
 
 
 ## v3.4.1 (2026/07/31)
