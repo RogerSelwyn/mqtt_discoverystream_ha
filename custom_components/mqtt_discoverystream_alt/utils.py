@@ -11,9 +11,7 @@ from homeassistant.components.mqtt.abbreviations import (
 from homeassistant.components.mqtt.const import CONF_AVAILABILITY, CONF_ORIGIN
 from homeassistant.const import CONF_DEVICE
 
-from .const import (
-    CONF_BASE_TOPIC,
-)
+from .const import CONF_BASE_TOPIC
 
 ABBREVIATIONS_KEYS = list(ABBREVIATIONS.keys())
 ABBREVIATIONS_VALUES = list(ABBREVIATIONS.values())
@@ -84,10 +82,9 @@ def translate_all_to_abbreviations(
             topics.append(topic)
         payload[CONF_AVAILABILITY] = topics
 
-    payload = _translate_to_abbreviations(
+    return _translate_to_abbreviations(
         payload, ABBREVIATIONS_KEYS, ABBREVIATIONS_VALUES
     )
-    return payload
 
 
 def _translate_to_abbreviations(
@@ -95,7 +92,7 @@ def _translate_to_abbreviations(
 ) -> None:
     """Translate specific set of abbreviations."""
     if not isinstance(payload, dict):
-        return
+        return None
     return_payload = {}
     for key in payload:
         keyvalue = key

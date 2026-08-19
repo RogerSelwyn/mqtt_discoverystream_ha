@@ -3,8 +3,11 @@
 import logging
 
 from homeassistant.components.button.const import SERVICE_PRESS
-from homeassistant.components.input_datetime import CONF_HAS_DATE, CONF_HAS_TIME
-from homeassistant.components.input_datetime import DOMAIN as INPUT_DATETIME_DOMAIN
+from homeassistant.components.input_datetime import (
+    CONF_HAS_DATE,
+    CONF_HAS_TIME,
+    DOMAIN as INPUT_DATETIME_DOMAIN,
+)
 from homeassistant.components.mqtt.const import (
     CONF_COMMAND_TOPIC,
     CONF_MAX,

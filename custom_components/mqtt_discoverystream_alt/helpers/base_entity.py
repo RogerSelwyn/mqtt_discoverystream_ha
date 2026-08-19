@@ -4,16 +4,11 @@ import json
 import logging
 
 from homeassistant.components import mqtt
-from homeassistant.const import (
-    ATTR_STATE,
-)
+from homeassistant.const import ATTR_STATE
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.json import JSONEncoder
 
-from ..const import (
-    ATTR_ATTRIBUTES,
-    OUTPUT_ENTITIES,
-    SUPPORTED_ENTITY_TYPE_COMMANDS,
-)
+from ..const import ATTR_ATTRIBUTES, OUTPUT_ENTITIES, SUPPORTED_ENTITY_TYPE_COMMANDS
 from ..utils import EntityInfo
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,14 +22,14 @@ class DiscoveryEntity:
 
     def __init__(
         self,
-        hass,
+        hass: HomeAssistant,
         base_topic,
         command_topic,
         publish_retain,
         discovered_entities,
         platform,
         publish_state,
-    ):
+    ) -> None:
         """Initialise the base class."""
         self._hass = hass
         self._base_topic = base_topic
@@ -99,7 +94,7 @@ class DiscoveryEntity:
     async def async_publish_attribute_if_exists(
         self, new_state, mybase, attribute_name, strip=False
     ):
-        """Publish a specific attribute"""
+        """Publish a specific attribute."""
         if attribute_name in new_state.attributes:
             value = new_state.attributes[attribute_name]
             if value and strip:

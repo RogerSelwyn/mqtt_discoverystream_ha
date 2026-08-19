@@ -31,7 +31,7 @@ class MQTTUnit:
         self.publisher = None
 
     def setup_unit(self, hass: HomeAssistant):
-        """Setup the MQTT Unit."""
+        """Do setup of the MQTT Unit."""
         publish_filter = convert_include_exclude_filter(self._conf)
         base_topic: str | None = self._conf.get(CONF_BASE_TOPIC)
         publish_attributes: bool | None = self._conf.get(CONF_PUBLISH_ATTRIBUTES)
