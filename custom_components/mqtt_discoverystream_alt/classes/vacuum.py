@@ -29,17 +29,9 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import (
-    COMMAND_SEND,
-    COMMAND_SET,
-    COMMAND_SET_FAN_SPEED,
-)
+from ..const import COMMAND_SEND, COMMAND_SET, COMMAND_SET_FAN_SPEED
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    simple_attribute_add,
-)
+from ..utils import EntityInfo, add_config_command, simple_attribute_add
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -121,9 +113,10 @@ class DiscoveryItem(DiscoveryEntity):
         }
 
         if command == COMMAND_SET:
-            if msg.payload in STRING_TO_SERVICE or msg.payload in [
-                DEFAULT_PAYLOAD_RETURN_TO_BASE
-            ]:
+            if (
+                msg.payload in STRING_TO_SERVICE
+                or msg.payload == DEFAULT_PAYLOAD_RETURN_TO_BASE
+            ):
                 await self._hass.services.async_call(
                     domain, msg.payload, service_payload
                 )

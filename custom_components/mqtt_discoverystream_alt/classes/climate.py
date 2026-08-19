@@ -68,11 +68,7 @@ from ..const import (
     COMMAND_TEMPERATURE,
 )
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    build_topic,
-)
+from ..utils import EntityInfo, add_config_command, build_topic
 
 _LOGGER = logging.getLogger(__name__)
 

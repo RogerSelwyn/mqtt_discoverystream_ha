@@ -10,19 +10,13 @@ from homeassistant.components.infrared import (
     async_subscribe_receiver,
 )
 from homeassistant.components.mqtt.infrared import CONF_SCHEMA
-from homeassistant.const import (
-    ATTR_STATE,
-    EntityStateAttribute,
-    Platform,
-)
-from homeassistant.core import callback
+from homeassistant.const import ATTR_STATE, EntityStateAttribute, Platform
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.json import JSONEncoder
 
 from ..const import ATTR_MODULATION, ATTR_TIMINGS
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-)
+from ..utils import EntityInfo
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,7 +44,9 @@ class DiscoveryItem(DiscoveryEntity):
 class SignalConsumer:
     """Class to handle infrared receiver signals."""
 
-    def __init__(self, hass, publish_retain, base_topic, entity_info: EntityInfo):
+    def __init__(
+        self, hass: HomeAssistant, publish_retain, base_topic, entity_info: EntityInfo
+    ) -> None:
         """Class to manage signal receiver subscription."""
         self._hass = hass
         self._publish_retain = publish_retain

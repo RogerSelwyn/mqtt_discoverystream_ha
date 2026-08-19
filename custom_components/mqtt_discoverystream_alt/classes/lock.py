@@ -31,16 +31,9 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import (
-    COMMAND_ACTION,
-    COMMAND_CODE,
-    COMMAND_SET,
-)
+from ..const import COMMAND_ACTION, COMMAND_CODE, COMMAND_SET
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-)
+from ..utils import EntityInfo, add_config_command
 
 _LOGGER = logging.getLogger(__name__)
 

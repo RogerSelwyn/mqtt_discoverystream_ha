@@ -51,11 +51,7 @@ from ..const import (
     COMMAND_SET,
 )
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    build_topic,
-)
+from ..utils import EntityInfo, add_config_command, build_topic
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -140,7 +136,7 @@ class DiscoveryItem(DiscoveryEntity):
             )
 
     async def async_publish_state(self, new_state, mybase):
-        """Build the state for a fan"""
+        """Build the state for a fan."""
         await super().async_publish_state(new_state, mybase)
         if FanEntityStateAttribute.PERCENTAGE in new_state.attributes:
             percentage = new_state.attributes[FanEntityStateAttribute.PERCENTAGE]

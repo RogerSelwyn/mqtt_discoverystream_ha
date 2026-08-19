@@ -2,9 +2,7 @@
 
 import logging
 
-from homeassistant.const import (
-    Platform,
-)
+from homeassistant.const import Platform
 
 from ..helpers.base_input_entity import SwitchDiscoveryEntity
 

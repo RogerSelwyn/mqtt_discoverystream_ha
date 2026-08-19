@@ -16,6 +16,7 @@ from homeassistant.const import (
     EVENT_HOMEASSISTANT_STOP,
     STATE_UNAVAILABLE,
 )
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_call_later
 from homeassistant.setup import async_when_setup
@@ -35,7 +36,7 @@ _LOGGER = logging.getLogger(__name__)
 class Publisher:
     """Manage publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf, base_topic, publish_retain):
+    def __init__(self, hass: HomeAssistant, conf, base_topic, publish_retain) -> None:
         """Initiate publishing."""
         self._hass = hass
         self._base_topic = base_topic
@@ -76,7 +77,7 @@ class Publisher:
             mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_AVAILABLE
         )
 
-    async def _async_birth_subscribe(self, hass, component):  # pylint: disable=unused-argument
+    async def _async_birth_subscribe(self, hass: HomeAssistant, component):  # pylint: disable=unused-argument
         """Subscribe birth messages."""
         await mqtt.async_subscribe(
             self._hass,

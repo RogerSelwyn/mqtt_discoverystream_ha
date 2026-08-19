@@ -29,14 +29,9 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import (
-    COMMAND_SET,
-)
+from ..const import COMMAND_SET
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-)
+from ..utils import EntityInfo, add_config_command
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -68,7 +63,7 @@ class DiscoveryItem(DiscoveryEntity):
         )
 
     async def async_publish_state(self, new_state, mybase):
-        """Build the state for a humidifier"""
+        """Build the state for a siren."""
         await super().async_publish_state(new_state, mybase)
         state = {ATTR_STATE: new_state.state}
         if ATTR_DURATION in new_state.attributes:

@@ -32,17 +32,9 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import (
-    COMMAND_HUMIDITY,
-    COMMAND_MODE,
-    COMMAND_SET,
-)
+from ..const import COMMAND_HUMIDITY, COMMAND_MODE, COMMAND_SET
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    build_topic,
-)
+from ..utils import EntityInfo, add_config_command, build_topic
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -89,7 +81,7 @@ class DiscoveryItem(DiscoveryEntity):
             ]
 
     async def async_publish_state(self, new_state, mybase):
-        """Build the state for a humidifier"""
+        """Build the state for a humidifier."""
         await super().async_publish_state(new_state, mybase)
         await self.async_publish_attribute_if_exists(
             new_state,

@@ -39,7 +39,8 @@ from homeassistant.const import (
     CONF_UNIT_OF_MEASUREMENT,
     Platform,
 )
-from homeassistant.helpers import device_registry, entity_registry
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr, entity_registry as er
 from homeassistant.helpers.json import JSONEncoder
 
 from .const import (
@@ -73,7 +74,7 @@ _LOGGER = logging.getLogger(__name__)
 class Discovery:
     """Manage discovery publication for MQTT Discovery Statestream."""
 
-    def __init__(self, hass, conf):
+    def __init__(self, hass: HomeAssistant, conf) -> None:
         """Initiate discovery."""
         self._hass = hass
         self._conf = conf
@@ -90,8 +91,8 @@ class Discovery:
         ) = self._set_local_status()
 
         self._has_includes = bool(conf.get(CONF_INCLUDE))
-        self._dev_reg = device_registry.async_get(hass)
-        self._ent_reg = entity_registry.async_get(hass)
+        self._dev_reg = dr.async_get(hass)
+        self._ent_reg = er.async_get(hass)
         self._discovery_topic = set_topic(conf, CONF_DISCOVERY_TOPIC)
         self.subscribe_possible = False
         self._error_domain = []
@@ -226,7 +227,7 @@ class Discovery:
     def _build_device(self, entity_id):  # sourcery skip: extract-method
         config_device = {}
         entry = self._ent_reg.async_get(entity_id)
-        if entry and entry.device_id:  # noqa: SIM102
+        if entry and entry.device_id:
             if device := self._dev_reg.async_get(entry.device_id):
                 simple_entry_attribute(
                     config_device, device.manufacturer, CONF_MANUFACTURER
@@ -246,7 +247,7 @@ class Discovery:
                 )
                 if device.identifiers:
                     config_device[CONF_IDENTIFIERS] = [
-                        id[1] for id in device.identifiers
+                        deviceid[1] for deviceid in device.identifiers
                     ]
 
         return config_device

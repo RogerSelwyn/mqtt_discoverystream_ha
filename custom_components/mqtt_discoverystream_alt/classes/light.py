@@ -82,7 +82,7 @@ class DiscoveryItem(DiscoveryEntity):
         else:
             config[LightEntityStateAttribute.COLOR_MODE] = False
             _LOGGER.warning(
-                "Light '%s' has no '%s' attribute which is mandatory. Please report to owner.",
+                "Light '%s' has no '%s' attribute which is mandatory. Please report to owner",
                 entity_info.entity_id,
                 LightEntityCapabilityAttribute.SUPPORTED_COLOR_MODES,
             )

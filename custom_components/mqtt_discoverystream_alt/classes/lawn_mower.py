@@ -22,15 +22,9 @@ from homeassistant.const import (
     Platform,
 )
 
-from ..const import (
-    COMMAND_SET,
-)
+from ..const import COMMAND_SET
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    build_topic,
-)
+from ..utils import EntityInfo, add_config_command, build_topic
 
 SERVICE_LIST = [SERVICE_DOCK, SERVICE_PAUSE, SERVICE_START_MOWING]
 

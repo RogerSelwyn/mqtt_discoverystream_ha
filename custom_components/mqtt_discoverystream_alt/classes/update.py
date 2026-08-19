@@ -26,12 +26,7 @@ from homeassistant.const import (
 
 from ..const import ATTR_INSTALL, COMMAND_INSTALL
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import (
-    EntityInfo,
-    add_config_command,
-    build_topic,
-    simple_attribute_add,
-)
+from ..utils import EntityInfo, add_config_command, build_topic, simple_attribute_add
 
 
 class DiscoveryItem(DiscoveryEntity):
