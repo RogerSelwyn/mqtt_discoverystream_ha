@@ -30,13 +30,13 @@ def set_topic(conf, topic):
 
 
 def simple_attribute_add(config, attributes, attribute_name, conf_name=None):
-    """Simple check for attribute existence and inclusion."""
+    """Do simple check for attribute existence and inclusion."""
     if attribute_name in attributes:
         config[conf_name or attribute_name] = attributes[attribute_name]
 
 
 def simple_entry_attribute(config_device, attribute, conf_name):
-    """Simple check for attribute existence and inclusion."""
+    """Do simple check for attribute existence and inclusion."""
     if attribute:
         config_device[conf_name] = attribute
 
