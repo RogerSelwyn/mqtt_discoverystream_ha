@@ -1,12 +1,13 @@
 # Changelog
 
 ## v3.6.0 (2026/08/21)
+### ✨ Enhancements
+- [Add stale entity detection and configurable availability mode](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/pull/99) - @pieterjvt 
+
 ### 🧰 Maintenance
 - [Update to HA Ruff standards](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b1a679fde8c293de0781fa42d4b006ed81cd82c3) - @RogerSelwyn
 - [Minor ruff tweaks](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/006fe522e82bae08c848911fbd86ccdce8117662) - @RogerSelwyn
 - [Another ruff tweak](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/1d24f95af298c53562a76be013784d8fec28699d) - @RogerSelwyn
-- [Sorted imports](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fbb5c6a05f8622497eb9b516c90fdd79f089b58f) - @RogerSelwyn
-- [Default value is defined in the schema](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c9c105e9e241309f6a4e03460c53da44510af605) - @RogerSelwyn
 
 ### ⬆️ Dependencies
 - [bump ruff from 0.16.1 to 0.16.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e3b81853b4e05a64307cb457e17e4d8c1dd21881) - @dependabot[bot]
@@ -14,11 +15,6 @@
 
 ### 🔖 Release
 - [Release v3.6.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/faf47e21bd947f0f0ba88579587d0330c3621839) - @RogerSelwyn
-
-### Other
-- [Add stale_after entity availability support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ca5181d89ed4022ba5e7cafdfa4c673f78d965d9) - @pieterjvt
-- [Make MQTT availability mode configurable](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/afa3c5dfa0f090ebdd34fcb5443915dba0a69da1) - @pieterjvt
-
 
 
 
