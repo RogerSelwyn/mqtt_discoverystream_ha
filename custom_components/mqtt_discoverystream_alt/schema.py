@@ -24,6 +24,7 @@ from .const import (
     CONF_PUBLISH_TIMESTAMPS,
     CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
+    CONF_STALE_AFTER,
     CONF_UNIQUE_ENTITY_PREFIX,
     CONF_UNIQUE_PREFIX,
     DEFAULT_REFRESH_TIME,
@@ -61,6 +62,7 @@ BASE_SCHEMA = {
     vol.Optional(CONF_UNIQUE_PREFIX, default="mqtt"): cv.string,
     vol.Optional(CONF_UNIQUE_ENTITY_PREFIX): cv.string,
     vol.Optional(CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME): cv.time_period,
+    vol.Optional(CONF_STALE_AFTER): cv.time_period,
 }
 
 

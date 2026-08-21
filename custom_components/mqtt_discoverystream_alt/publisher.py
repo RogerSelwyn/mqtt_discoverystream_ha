@@ -20,12 +20,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entityfilter import convert_include_exclude_filter
 from homeassistant.helpers.event import async_call_later
 from homeassistant.setup import async_when_setup
+from homeassistant.util import dt as dt_util
 
 from .const import (
     CONF_BASE_TOPIC,
     CONF_ONLINE_STATUS,
     CONF_REMOTE_STATUS,
     CONF_REPUBLISH_TIME,
+    CONF_STALE_AFTER,
     DEFAULT_STATE_SLEEP,
 )
 from .discovery import Discovery
@@ -43,6 +45,7 @@ class Publisher:
         self._publish_retain = publish_retain
         self._conf = conf
         self._remote_status, self._remote_status_topic = self._set_remote_status()
+        self._stale_after = self._conf.get(CONF_STALE_AFTER)
         self.discovery = Discovery(self._hass, self._conf)
         self._entity_states = {}
         self._publish_filter = convert_include_exclude_filter(self._conf)
@@ -64,7 +67,7 @@ class Publisher:
         if not valid:
             return
 
-        if new_state.state in (STATE_UNAVAILABLE, None):
+        if new_state.state in (STATE_UNAVAILABLE, None) or self._state_is_stale(new_state):
             await self._async_mqtt_publish(
                 mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_NOT_AVAILABLE
             )
@@ -160,6 +163,17 @@ class Publisher:
             self._conf.get(CONF_REPUBLISH_TIME),
             self._async_schedule_publish,
         )
+
+    def _state_is_stale(self, state):
+        if self._stale_after is None:
+            return False
+
+        last_reported = getattr(state, "last_reported", None)
+
+        if last_reported is None:
+            return False
+
+        return dt_util.utcnow() - last_reported > self._stale_after
 
     def _set_remote_status(self):
         remote_status = self._conf.get(CONF_REMOTE_STATUS)

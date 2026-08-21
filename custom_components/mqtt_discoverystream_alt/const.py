@@ -66,6 +66,7 @@ CONF_PUBLISH_DISCOVERY = "publish_discovery"
 CONF_PUBLISH_RETAIN = "publish_retain"
 CONF_REMOTE_STATUS = "remote_status"
 CONF_REPUBLISH_TIME = "republish_time"
+CONF_STALE_AFTER = "stale_after"
 CONF_UNIQUE_PREFIX = "unique_prefix"
 CONF_UNIQUE_ENTITY_PREFIX = "unique_entity_prefix"
 
