@@ -4,6 +4,9 @@ import voluptuous as vol
 
 from homeassistant.components.mqtt import valid_publish_topic
 from homeassistant.components.mqtt.const import (
+    AVAILABILITY_MODES,
+    AVAILABILITY_LATEST,
+    CONF_AVAILABILITY_MODE,
     CONF_TOPIC,
     DEFAULT_PAYLOAD_AVAILABLE,
     DEFAULT_PAYLOAD_NOT_AVAILABLE,
@@ -63,6 +66,10 @@ BASE_SCHEMA = {
     vol.Optional(CONF_UNIQUE_ENTITY_PREFIX): cv.string,
     vol.Optional(CONF_REPUBLISH_TIME, default=DEFAULT_REFRESH_TIME): cv.time_period,
     vol.Optional(CONF_STALE_AFTER): cv.time_period,
+    vol.Optional(
+        CONF_AVAILABILITY_MODE,
+        default=AVAILABILITY_LATEST,
+    ): vol.In(AVAILABILITY_MODES),
 }
 
 

@@ -97,6 +97,10 @@ class Discovery:
         self.subscribe_possible = False
         self._error_domain = []
         self._unique_prefix = self._conf.get(CONF_UNIQUE_PREFIX)
+        self._availability_mode = self._conf.get(
+            CONF_AVAILABILITY_MODE,
+            AVAILABILITY_LATEST,
+        )
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
@@ -181,7 +185,7 @@ class Discovery:
             CONF_STATE_TOPIC: build_topic(ATTR_STATE),
             CONF_JSON_ATTRS_TOPIC: build_topic(ATTR_ATTRIBUTES),
             CONF_AVAILABILITY: availability,
-            CONF_AVAILABILITY_MODE: AVAILABILITY_LATEST,
+            CONF_AVAILABILITY_MODE: self._availability_mode,
         }
         name = None
         if ATTR_FRIENDLY_NAME in entity_info.attributes:
