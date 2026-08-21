@@ -4,8 +4,8 @@ import voluptuous as vol
 
 from homeassistant.components.mqtt import valid_publish_topic
 from homeassistant.components.mqtt.const import (
-    AVAILABILITY_MODES,
     AVAILABILITY_LATEST,
+    AVAILABILITY_MODES,
     CONF_AVAILABILITY_MODE,
     CONF_TOPIC,
     DEFAULT_PAYLOAD_AVAILABLE,
