@@ -118,6 +118,8 @@ The base options are the same as the mqtt_statestream one.
 | unique_prefix        | mqtt    | no       | Prefix applied to the unique id of the created entity                              |
 | unique_entity_prefix | none    | no       | Prefix applied to the entity_id of the created entity                              |
 | republish_time       | 5 mins  | no       | Sets the time between iterations of republishing discovery/state for all entities. |
+| stale_after          | none    | no       | Marks entities unavailable after the configured reporting timeout.                 |
+| availability_mode    | latest  | no       | Sets availability handling to `latest`, `all`, or `any`.                           |
 | include / exclude    | none    | no       | Configure which integrations should be included / excluded from publishing.        |
 | local_status         | none    | no       | See below                                                                          |
 | remote_status        | none    | no       | See below                                                                          |
