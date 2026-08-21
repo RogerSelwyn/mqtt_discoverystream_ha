@@ -6,7 +6,6 @@ import logging
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt.const import (
-    AVAILABILITY_LATEST,
     CONF_AVAILABILITY,
     CONF_AVAILABILITY_MODE,
     CONF_CONNECTIONS,
@@ -97,10 +96,7 @@ class Discovery:
         self.subscribe_possible = False
         self._error_domain = []
         self._unique_prefix = self._conf.get(CONF_UNIQUE_PREFIX)
-        self._availability_mode = self._conf.get(
-            CONF_AVAILABILITY_MODE,
-            AVAILABILITY_LATEST,
-        )
+        self._availability_mode = self._conf.get(CONF_AVAILABILITY_MODE)
 
     async def async_discovery_publish(self, entity_id, attributes, mybase):
         """Publish Discovery information for entitiy."""
