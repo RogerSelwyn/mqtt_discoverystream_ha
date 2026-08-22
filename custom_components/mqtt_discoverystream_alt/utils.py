@@ -3,12 +3,15 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from homeassistant.components.mqtt.abbreviations import (
+from homeassistant.components.mqtt.abbreviations import (  # pylint: disable=home-assistant-component-root-import
     ABBREVIATIONS,
     DEVICE_ABBREVIATIONS,
     ORIGIN_ABBREVIATIONS,
 )
-from homeassistant.components.mqtt.const import CONF_AVAILABILITY, CONF_ORIGIN
+from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
+    CONF_AVAILABILITY,
+    CONF_ORIGIN,
+)
 from homeassistant.const import CONF_DEVICE
 
 from .const import CONF_BASE_TOPIC

@@ -5,7 +5,7 @@ import logging
 
 from homeassistant.components import mqtt
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
-from homeassistant.components.mqtt.const import (
+from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
     CONF_AVAILABILITY,
     CONF_TOPIC,
     DEFAULT_PAYLOAD_AVAILABLE,
@@ -67,7 +67,9 @@ class Publisher:
         if not valid:
             return
 
-        if new_state.state in (STATE_UNAVAILABLE, None) or self._state_is_stale(new_state):
+        if new_state.state in (STATE_UNAVAILABLE, None) or self._state_is_stale(
+            new_state
+        ):
             await self._async_mqtt_publish(
                 mybase, CONF_AVAILABILITY, DEFAULT_PAYLOAD_NOT_AVAILABLE
             )

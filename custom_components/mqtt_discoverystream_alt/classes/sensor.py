@@ -1,6 +1,8 @@
 """sensor methods for MQTT Discovery Statestream."""
 
-from homeassistant.components.mqtt.const import CONF_SUGGESTED_DISPLAY_PRECISION
+from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
+    CONF_SUGGESTED_DISPLAY_PRECISION,
+)
 from homeassistant.components.sensor import CONF_STATE_CLASS, DOMAIN as SENSOR_DOMAIN
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant

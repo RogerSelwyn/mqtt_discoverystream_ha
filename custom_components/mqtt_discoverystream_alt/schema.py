@@ -3,7 +3,7 @@
 import voluptuous as vol
 
 from homeassistant.components.mqtt import valid_publish_topic
-from homeassistant.components.mqtt.const import (
+from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
     AVAILABILITY_LATEST,
     AVAILABILITY_MODES,
     CONF_AVAILABILITY_MODE,

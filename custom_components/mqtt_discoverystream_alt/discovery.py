@@ -5,7 +5,7 @@ import json
 import logging
 
 from homeassistant.components import mqtt
-from homeassistant.components.mqtt.const import (
+from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
     CONF_AVAILABILITY,
     CONF_AVAILABILITY_MODE,
     CONF_CONNECTIONS,
