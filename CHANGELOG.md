@@ -1,5 +1,24 @@
 # Changelog
 
+## v3.7.0 (2026/10/05)
+### ✨ Enhancements
+- [Split retain config parameter for discovery & state](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2ae9c953b18f10ecd16b3b470c9a166215d2e9a0) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Ignore mqtt component linting errors](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c3a71ef62eadfbb9259ef3219ce43fdfc434472f) - @RogerSelwyn
+- [Remove lint error](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/9db154d8e9d2d0d45f24f896fafe005cd7afa42e) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump astral-sh/setup-uv from 10.0.1 to 10.2.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/648f129f9b467c431b1e8968885b982982ce0396) - @dependabot[bot]
+- [bump ruff from 0.16.3 to 0.16.9](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c126f9923f71746f42b3a636f7075f7b501d6b0e) - @dependabot[bot]
+- [update pygithub requirement from >=2.9.1 to >=2.10.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f1bf7ba4d1cbaeea08fbc360a8361d2715df1b0f) - @dependabot[bot]
+
+### 🔖 Release
+- [Release v3.7.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8011340e876e301f9388b46daadaef7e5833e0eb) - @RogerSelwyn
+
+
+
+
 ## v3.6.0 (2026/08/21)
 ### ✨ Enhancements
 - [Add stale entity detection and configurable availability mode](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/pull/99) - @pieterjvt 
