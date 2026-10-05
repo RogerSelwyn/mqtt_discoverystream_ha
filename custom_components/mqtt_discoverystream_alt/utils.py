@@ -115,7 +115,7 @@ def _translate_to_abbreviations(
 
 
 def retain_setup(conf):
-    """Setup the proper retain config."""
+    """Create retain config."""
     publish_retain = conf.get(CONF_PUBLISH_RETAIN)
 
     if publish_retain is not None:
