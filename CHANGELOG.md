@@ -1,5 +1,18 @@
 # Changelog
 
+## v3.7.1 (2026/10/06)
+### 🐛 Fixes
+- [Revert change to probatio](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0ccc329a3590063af426c446d085f7cb8cfea5c8) - @RogerSelwyn
+
+### 📚 Documentation
+- [Fix casing for retain_discovery and retain_state](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c3fc391b8245510b396a744dbdb9a647cf5035a7) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.7.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f79f4d80cd968cd155cbc1012eedbc3708d301a9) - @RogerSelwyn
+
+
+
+
 ## v3.7.0 (2026/10/05)
 ### ✨ Enhancements
 - [Split retain config parameter for discovery & state](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2ae9c953b18f10ecd16b3b470c9a166215d2e9a0) - @RogerSelwyn
