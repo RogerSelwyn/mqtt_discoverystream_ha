@@ -35,7 +35,7 @@ Provides discovery & command support for:
 | Input Number    | number             | Set Value                 |           |
 | Input Select    | select             | Select Option             |           |
 | Input Text      | text               | Set Value                 |           |
-| Lawn Mower      | lawn_mower         | Dock, Pause, Start Mowing |           |
+| Lawn Mower      | lawn_mower         | Dock, Pause, Start Mowing, Stop |           |
 | Light           | light              | Turn On, Turn Off         |           |
 | Lock            | lock               | Lock, Unlock, Open        |           |
 | Number          | number             | Set Value                 |           |

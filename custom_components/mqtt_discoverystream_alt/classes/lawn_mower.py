@@ -6,16 +6,16 @@ from homeassistant.components.lawn_mower import (
     SERVICE_DOCK,
     SERVICE_PAUSE,
     SERVICE_START_MOWING,
+    SERVICE_STOP,
     LawnMowerEntityFeature,
 )
-from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
-    CONF_STATE_TOPIC,
-)
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC  # pylint: disable=home-assistant-component-root-import
 from homeassistant.components.mqtt.lawn_mower import (  # pylint: disable=home-assistant-component-root-import
     CONF_ACTIVITY_STATE_TOPIC,
     CONF_DOCK_COMMAND_TOPIC,
     CONF_PAUSE_COMMAND_TOPIC,
     CONF_START_MOWING_COMMAND_TOPIC,
+    CONF_STOP_COMMAND_TOPIC,
 )
 from homeassistant.const import (
     ATTR_ENTITY_ID,
@@ -28,7 +28,7 @@ from ..const import COMMAND_SET
 from ..helpers.base_entity import DiscoveryEntity
 from ..utils import EntityInfo, add_config_command, build_topic
 
-SERVICE_LIST = [SERVICE_DOCK, SERVICE_PAUSE, SERVICE_START_MOWING]
+SERVICE_LIST = [SERVICE_DOCK, SERVICE_PAUSE, SERVICE_START_MOWING, SERVICE_STOP]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -54,6 +54,10 @@ class DiscoveryItem(DiscoveryEntity):
         if attributes[ATTR_SUPPORTED_FEATURES] & LawnMowerEntityFeature.START_MOWING:
             add_config_command(
                 config, entity_info, CONF_START_MOWING_COMMAND_TOPIC, COMMAND_SET
+            )
+        if attributes[ATTR_SUPPORTED_FEATURES] & LawnMowerEntityFeature.STOP:
+            add_config_command(
+                config, entity_info, CONF_STOP_COMMAND_TOPIC, COMMAND_SET
             )
 
     async def _async_handle_message(self, msg):
