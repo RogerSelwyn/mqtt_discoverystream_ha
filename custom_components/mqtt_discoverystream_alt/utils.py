@@ -9,11 +9,9 @@ from homeassistant.components.mqtt.abbreviations import (  # pylint: disable=hom
     DEVICE_ABBREVIATIONS,
     ORIGIN_ABBREVIATIONS,
 )
-from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
-    CONF_AVAILABILITY,
-    CONF_ORIGIN,
-)
-from homeassistant.const import CONF_DEVICE
+from homeassistant.components.mqtt.const import CONF_AVAILABILITY, CONF_ORIGIN  # pylint: disable=home-assistant-component-root-import
+from homeassistant.const import CONF_DEVICE, CONF_TEMPERATURE_UNIT
+from homeassistant.core import HomeAssistant
 
 from .const import (
     CONF_BASE_TOPIC,
@@ -133,3 +131,9 @@ class RetainConfig:
 
     retain_discovery: bool
     retain_state: bool
+
+
+def get_temperature_unit(hass: HomeAssistant, attributes):
+    """Return the correct temperature unit, use sysatem if empty."""
+    unit = attributes.get(CONF_TEMPERATURE_UNIT, hass.config.units.temperature_unit)
+    return unit[1:] if len(unit) == 2 else unit

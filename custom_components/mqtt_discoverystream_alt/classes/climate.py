@@ -43,10 +43,9 @@ from homeassistant.components.mqtt.climate import (  # pylint: disable=home-assi
     CONF_TEMP_MIN,
     CONF_TEMP_STATE_TOPIC,
     CONF_TEMP_STEP,
+    CONF_TEMPERATURE_UNIT,
 )
-from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
-    CONF_STATE_TOPIC,
-)
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC  # pylint: disable=home-assistant-component-root-import
 from homeassistant.const import (
     ATTR_ENTITY_ID,
     ATTR_SUPPORTED_FEATURES,
@@ -70,7 +69,7 @@ from ..const import (
     COMMAND_TEMPERATURE,
 )
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import EntityInfo, add_config_command, build_topic
+from ..utils import EntityInfo, add_config_command, build_topic, get_temperature_unit
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -167,7 +166,6 @@ class DiscoveryItem(DiscoveryEntity):
             config[CONF_CURRENT_HUMIDITY_TOPIC] = build_topic(
                 ClimateEntityStateAttribute.CURRENT_HUMIDITY
             )
-
         if (
             attributes[ATTR_SUPPORTED_FEATURES]
             & ClimateEntityFeature.TARGET_TEMPERATURE_RANGE
@@ -183,6 +181,8 @@ class DiscoveryItem(DiscoveryEntity):
             config[CONF_TEMP_HIGH_STATE_TOPIC] = build_topic(
                 ClimateEntityStateAttribute.TARGET_TEMP_HIGH
             )
+        if ClimateEntityStateAttribute.TEMPERATURE_UNIT in attributes:
+            config[CONF_TEMPERATURE_UNIT] = get_temperature_unit(self._hass, attributes)
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a climate."""
@@ -194,7 +194,7 @@ class DiscoveryItem(DiscoveryEntity):
         await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
-            ClimateEntityStateAttribute.CURRENT_TEMPERATURE,
+            ClimateEntityStateAttribute.TEMPERATURE_UNIT,
         )
         await self.async_publish_attribute_if_exists(
             new_state,

@@ -2,9 +2,7 @@
 
 import logging
 
-from homeassistant.components.mqtt.const import (  # pylint: disable=home-assistant-component-root-import
-    CONF_STATE_TOPIC,
-)
+from homeassistant.components.mqtt.const import CONF_STATE_TOPIC  # pylint: disable=home-assistant-component-root-import
 from homeassistant.components.mqtt.water_heater import (  # pylint: disable=home-assistant-component-root-import
     CONF_CURRENT_TEMP_TOPIC,
     CONF_MODE_COMMAND_TOPIC,
@@ -15,6 +13,7 @@ from homeassistant.components.mqtt.water_heater import (  # pylint: disable=home
     CONF_TEMP_MAX,
     CONF_TEMP_MIN,
     CONF_TEMP_STATE_TOPIC,
+    CONF_TEMPERATURE_UNIT,
 )
 from homeassistant.components.water_heater import (
     SERVICE_SET_OPERATION_MODE,
@@ -38,7 +37,7 @@ from homeassistant.const import (
 
 from ..const import COMMAND_MODE, COMMAND_SET, COMMAND_TEMPERATURE
 from ..helpers.base_entity import DiscoveryEntity
-from ..utils import EntityInfo, add_config_command, build_topic
+from ..utils import EntityInfo, add_config_command, build_topic, get_temperature_unit
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -76,6 +75,8 @@ class DiscoveryItem(DiscoveryEntity):
         config[CONF_MODE_STATE_TOPIC] = build_topic(
             WaterHeaterStateAttribute.OPERATION_MODE
         )
+        if WaterHeaterStateAttribute.TEMPERATURE_UNIT in attributes:
+            config[CONF_TEMPERATURE_UNIT] = get_temperature_unit(self._hass, attributes)
 
     async def async_publish_state(self, new_state, mybase):
         """Publish the state for a water_heater."""
