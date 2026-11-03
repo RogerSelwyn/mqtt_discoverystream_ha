@@ -4,6 +4,8 @@ on:
   release:
     types: [published]
 
+permissions: {}
+
 jobs:
   update_requirements:
     name: Update requirements
@@ -20,6 +22,8 @@ jobs:
     name: Prepare release asset
     needs: update_requirements
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
     steps:
       - uses: "actions/checkout@v7"
       - name: Release Asset
@@ -32,7 +36,9 @@ jobs:
     name: Prepare release notes
     needs: release_zip_file
     runs-on: "ubuntu-latest"
-    steps:
+    permissions:
+      contents: write
+   steps:
       - uses: "actions/checkout@v7"
       - name: Release Notes
         uses: "rogerselwyn/actions/release-notes@main"
