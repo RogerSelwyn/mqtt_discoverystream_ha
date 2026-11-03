@@ -17,7 +17,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           component: mqtt_discoverystream_alt
-  
+
   release_zip_file:
     name: Prepare release asset
     needs: update_requirements
@@ -38,7 +38,7 @@ jobs:
     runs-on: "ubuntu-latest"
     permissions:
       contents: write
-   steps:
+    steps:
       - uses: "actions/checkout@v7"
       - name: Release Notes
         uses: "rogerselwyn/actions/release-notes@main"
