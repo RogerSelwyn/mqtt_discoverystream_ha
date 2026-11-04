@@ -1,5 +1,34 @@
 # Changelog
 
+## v3.8.0 (2026/11/04)
+### ✨ Enhancements
+- [Add stop command support for Lawn Mower](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/d4f5c0298a50e373e3fc16416977614ff27e61b9) - @RogerSelwyn
+- [Add Temperature Unit support](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/29bba4de92e6b5e9e93a4341a519d35170953165) - @RogerSelwyn
+
+### 🐛 Fixes
+- [Fix formatting error in release job](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f546d9a84cf0f6167fc22fccabd3f161501d56cc) - @RogerSelwyn
+- [Fix default_entity_id on mqtt discovery](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/39aa6a4b758fbe51168ee79afa3fc2a5ee40388f) - @RogerSelwyn
+
+### 🧰 Maintenance
+- [Migrate to probatio from voluptuous](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/a8bc10e4e6b6057e9dace90b8285dba0d4054a6c) - @RogerSelwyn
+- [Add category for marketplace](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c43d6f0e7232755fc81a41e6b68cb2dfa19f7f76) - @RogerSelwyn
+- [Update ruff formatting](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/edb4a033eae54d12306ddb59191127bf8aa1c7e6) - @RogerSelwyn
+- [Implement actions permissions](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/de257cb7bc2742b60bd0b05568dabf791219529c) - @RogerSelwyn
+- [Add write permissions to workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/5c288c1ec343c95363c0e71f9f7b66972ae56689) - @RogerSelwyn
+- [Update workflow](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/8e23441d4e918f6bdf03abc519897639bb347ff3) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [bump astral-sh/setup-uv from 10.2.0 to 10.3.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b7d822cb62a9748c10422f58f56fc5a99893e18c) - @dependabot[bot]
+- [bump ruff from 0.16.9 to 0.17.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4f801488b5a5bc6bdc58fc38020f06624f7f88fc) - @dependabot[bot]
+- [bump ruff from 0.17.2 to 0.17.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/2425a32c79ba47a79630e73cc2b6ac5d2a57ea8c) - @dependabot[bot]
+- [bump astral-sh/setup-uv from 10.3.2 to 10.3.3](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/fd00b4160feefc95043fdd3dd9dfefe5824eb437) - @dependabot[bot]
+
+### 🔖 Release
+- [Release v3.8.0](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c18f8211796a3796201a03ca95140b991729cde8) - @RogerSelwyn
+
+
+
+
 ## v3.7.1 (2026/10/06)
 ### 🐛 Fixes
 - [Revert change to probatio](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0ccc329a3590063af426c446d085f7cb8cfea5c8) - @RogerSelwyn
