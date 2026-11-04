@@ -55,6 +55,7 @@ from .const import (
     CONF_UNIQUE_ENTITY_PREFIX,
     CONF_UNIQUE_PREFIX,
     DOMAIN,
+    OUTPUT_ENTITIES,
     SUPPORTED_ENTITY_TYPE_COMMANDS,
 )
 from .utils import (
@@ -221,11 +222,13 @@ class Discovery:
     def _build_default_entity_id(self, entity_id):
         """Add the source namespace to a default entity ID when configured."""
 
+        domain, output_id = entity_id.split(".", 1)
+        if domain in OUTPUT_ENTITIES:
+            domain = OUTPUT_ENTITIES[domain]
         if ent_prefix := self._conf.get(CONF_UNIQUE_ENTITY_PREFIX):
-            domain, output_id = entity_id.split(".", 1)
             return f"{domain}.{ent_prefix}_{output_id}"
 
-        return entity_id
+        return f"{domain}.{output_id}"
 
     def _build_device(self, entity_id):  # sourcery skip: extract-method
         config_device = {}
