@@ -7,8 +7,22 @@ on:
 permissions: {}
 
 jobs:
+  update_requirements:
+    name: Update requirements
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
+    steps:
+      - uses: "actions/checkout@v7"
+      - name: Update requirements.txt
+        uses: "rogerselwyn/actions/update-requirements@main"
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          component: mqtt_discoverystream_alt
+
   release_zip_file:
     name: Prepare release asset
+    needs: update_requirements
     runs-on: "ubuntu-latest"
     permissions:
       contents: write
