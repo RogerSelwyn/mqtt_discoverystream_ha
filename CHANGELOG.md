@@ -7,6 +7,9 @@
 ### 🧰 Maintenance
 - [Configure Renovate and remove Dependabot](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/ae4d9cce92ad0fe273f5af4b4a2a43bc2cc00f64) - @RogerSelwyn
 - [Change where ATTR_HVAC_MODE is imported from](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/345d2042237961ac091cc09c36443030536fee35) - @RogerSelwyn
+- [Revert "maint: Update workflow"](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/46e9e209622158de0402341b02fc666298cf28b8) - @RogerSelwyn
+- [Add Home Assistant Marketplace badge to README](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b15ed1f637bc81f9edc2fc61169a2333132e0038) - @RogerSelwyn
+- [Add renovate.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0eabc956d7db9a8107932937414195ed1964dd7b) - @renovate[bot]
 
 ### ⬆️ Dependencies
 - [update dependency ruff to v0.17.4](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/e6eb008a3f412070a5db1820d2fb71999e66d1e8) - @renovate[bot]
@@ -14,13 +17,6 @@
 
 ### 🔖 Release
 - [Release v3.8.1](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/cd9420ade388dca5abe0d4e3398605fd95810a83) - @RogerSelwyn
-
-### Other
-- [Revert "maint: Update workflow"](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/46e9e209622158de0402341b02fc666298cf28b8) - @RogerSelwyn
-- [Add Home Assistant Marketplace badge to README](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/b15ed1f637bc81f9edc2fc61169a2333132e0038) - @RogerSelwyn
-- [Add renovate.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/0eabc956d7db9a8107932937414195ed1964dd7b) - @renovate[bot]
-
-
 
 
 ## v3.8.0 (2026/11/04)
