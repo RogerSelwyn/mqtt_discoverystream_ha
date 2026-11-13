@@ -3,6 +3,7 @@
 import logging
 
 from homeassistant.components.climate import (
+    ATTR_HVAC_MODE,
     PRESET_NONE,
     SERVICE_SET_FAN_MODE,
     SERVICE_SET_HUMIDITY,
@@ -15,7 +16,6 @@ from homeassistant.components.climate import (
     ClimateEntityStateAttribute,
 )
 from homeassistant.components.mqtt.climate import (  # pylint: disable=home-assistant-component-root-import
-    ATTR_HVAC_MODE,
     CONF_ACTION_TOPIC,
     CONF_CURRENT_HUMIDITY_TOPIC,
     CONF_CURRENT_TEMP_TOPIC,
