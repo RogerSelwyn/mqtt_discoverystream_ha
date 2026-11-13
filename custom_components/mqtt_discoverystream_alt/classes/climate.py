@@ -194,11 +194,6 @@ class DiscoveryItem(DiscoveryEntity):
         await self.async_publish_attribute_if_exists(
             new_state,
             mybase,
-            ClimateEntityStateAttribute.TEMPERATURE_UNIT,
-        )
-        await self.async_publish_attribute_if_exists(
-            new_state,
-            mybase,
             ClimateEntityStateAttribute.TARGET_TEMP_LOW,
         )
         await self.async_publish_attribute_if_exists(
@@ -208,6 +203,9 @@ class DiscoveryItem(DiscoveryEntity):
         )
         await self.async_publish_attribute_if_exists(
             new_state, mybase, ClimateEntityStateAttribute.PRESET_MODE
+        )
+        await self.async_publish_attribute_if_exists(
+            new_state, mybase, ClimateEntityStateAttribute.CURRENT_TEMPERATURE
         )
         await self.async_publish_attribute_if_exists(
             new_state, mybase, ClimateEntityStateAttribute.TARGET_TEMPERATURE
