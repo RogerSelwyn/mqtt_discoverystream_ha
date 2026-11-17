@@ -159,7 +159,10 @@ class Publisher:
 
     async def _async_schedule_publish(self, recalltime):  # pylint: disable=unused-argument
         _LOGGER.debug("Scheduled Discovery")
-        await self.async_publish_discovery_state()
+        try:
+            await self.async_publish_discovery_state()
+        except Exception:
+            _LOGGER.exception("Scheduled discovery failed; retrying at the next interval")
         async_call_later(
             self._hass,
             self._conf.get(CONF_REPUBLISH_TIME),
