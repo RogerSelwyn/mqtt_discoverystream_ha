@@ -1,5 +1,29 @@
 # Changelog
 
+## v3.8.2 (2026/11/21)
+### 🐛 Fixes
+- [keep scheduled discovery running after publish failures](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/4d3f507a85fb4a8ddc4791063addafc9f92a028a) - @rob1998
+
+### 🧰 Maintenance
+- [Update workflows](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/bcc28fa112612ac20b27970e9bc2d8dd71eee8d0) - @RogerSelwyn
+- [Update workflows](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/eb854481a5dc7a0a858543e561f82ed0735aa2b4) - @RogerSelwyn
+- [Minor ruff formatting](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/19f00376fbc911aecc3458f3ee19e97773ac02bc) - @RogerSelwyn
+- [Delete .coverage](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/6440ff6d0d3fc7cc39e7c4ad06cfe96b8963c9e0) - @RogerSelwyn
+
+### ⬆️ Dependencies
+- [update dependency ruff to v0.17.5 (#122)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/febb392dd9dcc2dbe00a120d2829be2d3934edcb) - @renovate[bot]
+- [update dependency ruff to v0.17.6 (#124)](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/593429bce4e8d3e11c03946ebbf19f21268c8efe) - @renovate[bot]
+
+### ✅ Test
+- [Add test config to project](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/48434d0e752f1c8f1ff04761faee5351f8ef91d6) - @RogerSelwyn
+
+### 🔖 Release
+- [Release v3.8.2](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/c099cf076e950b971359a5bcdd2385ddb575e3c5) - @RogerSelwyn
+- [Auto update manifest.json](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f1968edc979cd7d9af6daaac1f9d3a0761083ed0) - @actions-user
+
+
+
+
 ## v3.8.1 (2026/11/13)
 ### 🐛 Fixes
 - [Fix publication of current temperatire](https://github.com/RogerSelwyn/mqtt_discoverystream_ha/commit/f44e8e49fa3b1f043a03e2a818b49ebaf6d739fa) - @RogerSelwyn
