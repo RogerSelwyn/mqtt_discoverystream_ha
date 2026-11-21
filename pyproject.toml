@@ -514,3 +514,10 @@ split-on-trailing-comma = false
 
 [tool.ruff.lint.mccabe]
 max-complexity = 25
+
+[tool.pytest]
+testpaths = ["tests"]
+norecursedirs = [".git"]
+addopts = ["--strict-markers", "--cov=custom_components", "-p no:respx"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
