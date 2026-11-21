@@ -7,10 +7,9 @@ from datetime import timedelta
 import unittest
 from unittest.mock import AsyncMock, Mock, patch
 
-from homeassistant.exceptions import HomeAssistantError
-
 from custom_components.mqtt_discoverystream_alt.const import CONF_REPUBLISH_TIME
 from custom_components.mqtt_discoverystream_alt.publisher import Publisher
+from homeassistant.exceptions import HomeAssistantError
 
 
 class TestScheduledPublish(unittest.IsolatedAsyncioTestCase):
@@ -23,14 +22,10 @@ class TestScheduledPublish(unittest.IsolatedAsyncioTestCase):
         self.interval = timedelta(minutes=5)
         self.publisher._conf = {CONF_REPUBLISH_TIME: self.interval}
         self.publisher.async_publish_discovery_state = AsyncMock()
-        schedule_patch = patch(
-            "custom_components.mqtt_discoverystream_alt.publisher.async_call_later"
-        )
+        schedule_patch = patch("custom_components.mqtt_discoverystream_alt.publisher.async_call_later")
         self.addCleanup(schedule_patch.stop)
         self.schedule = schedule_patch.start()
-        logger_patch = patch(
-            "custom_components.mqtt_discoverystream_alt.publisher._LOGGER"
-        )
+        logger_patch = patch("custom_components.mqtt_discoverystream_alt.publisher._LOGGER")
         self.addCleanup(logger_patch.stop)
         self.logger = logger_patch.start()
 

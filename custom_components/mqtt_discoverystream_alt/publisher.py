@@ -162,7 +162,9 @@ class Publisher:
         try:
             await self.async_publish_discovery_state()
         except Exception:
-            _LOGGER.exception("Scheduled discovery failed; retrying at the next interval")
+            _LOGGER.exception(
+                "Scheduled discovery failed; retrying at the next interval"
+            )
         async_call_later(
             self._hass,
             self._conf.get(CONF_REPUBLISH_TIME),
